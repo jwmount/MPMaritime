@@ -5,7 +5,9 @@
 # Refs:   https://github.com/quandl/quandl_client.git
 #         https://www.quandl.com/data/LPG
 #         https://www.quandl.com/documentation#!/api/DELETE-api--version-permissions---format-_delete_2
-# 
+# Original attribute names
+#         Date,WS,Bunkers,PMT,Revenue,Port and Guards,Bunkers,Total Cost,Net Revenue,TCE,Compare,diff,%,PMT,$/bbl,Brent $,% Freight,,,,,
+
 require 'quandl/client'
 require 'csv'
 require 'pry'
@@ -23,11 +25,11 @@ code        = 'S2015'
   attributes = {
     :source_code  => source_code,   # root of database name
     :code         => code,          # dataset modifier of database name
-    :column_names => ['Date', 'WS','Bunkers','PMT'], #,    'Revenue','Port and Guards',    'Bunkers', 'Total Cost',   'Net Revenue',     'TCE','Compare', 'diff(%)','PMT($/bbl)','Brent$(%)', 'Freight'],
+    :column_names => ['Date', 'WS','Bunkers','PMT', 'Revenue'],
     :data         => [],
     :frequency    => 'daily',
     :name         => 'Crude Oil Metrics',
-    :private      => false,         # true do not show | false make visible
+    :private      => true,          # true do not show | false make visible
     :description  => 'Crude oil price metrics.'
   }
   d = Dataset.find("#{source_code}/#{code}")

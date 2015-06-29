@@ -6,6 +6,7 @@
 # Refs:   https://github.com/quandl/quandl_client.git
 #         https://www.quandl.com/data/LPG
 #         https://www.quandl.com/documentation#!/api/DELETE-api--version-permissions---format-_delete_2
+#         https://www.quandl.com/api/v1/datasets/OTNK/S2015.json?auth_token=Fjuscy9q5GfPCsa2vZsp
 # 
 require 'quandl/client'
 require 'csv'
@@ -33,7 +34,9 @@ Quandl::Client.token = ENV['QUANDL_TOKEN']
       day = dt[2]
       year = dt[0]
       date = month.to_s + '/' + dt[1] + '/' + dt[2]  #{}"#{m}/#{dt[1]}/#{dt[2]}"
-      data << [ date, row[1], row[2], row[3] ] 
+      data << [ date, row[1], row[2], row[3], row[4] ] 
+      #row[0] = date
+      #data << row
     end
     d.data = data
 
