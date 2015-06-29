@@ -1,5 +1,4 @@
 # #!/usr/local/bin/ruby
-# load.rb -- load the dataset data
 # CREATE THE DATASET OTNK/CRUDE
 # How to run this script:
 #         $ QUANDL_TOKEN=Z_FgEe3SYywKzHT7myYr ruby create.rb
@@ -16,7 +15,7 @@ Quandl::Client.use 'https://www.quandl.com/api/'
 Quandl::Client.token = ENV['QUANDL_TOKEN']
 
 source_code = 'OTNK'
-code        = 'CRUDE'
+code        = 'S2015'
 
 # if it exists, destroy it because this version creates it entirely.
 # NOTE:  a d.destroy costs a half hour delay to recreate the entry in the index
@@ -24,23 +23,23 @@ code        = 'CRUDE'
   attributes = {
     :source_code  => source_code,   # root of database name
     :code         => code,          # dataset modifier of database name
-    :column_names => ['Date', 'WTI', 'Brent'],
+    :column_names => ['Date', 'WS','Bunkers','PMT'], #,    'Revenue','Port and Guards',    'Bunkers', 'Total Cost',   'Net Revenue',     'TCE','Compare', 'diff(%)','PMT($/bbl)','Brent$(%)', 'Freight'],
     :data         => [],
     :frequency    => 'daily',
-    :name         => 'Crude Oil Prices',
+    :name         => 'Crude Oil Metrics',
     :private      => false,         # true do not show | false make visible
-    :description  => 'Crude oil price index.'
+    :description  => 'Crude oil price metrics.'
   }
   d = Dataset.find("#{source_code}/#{code}")
   d.destroy
 
-  # CREATE DATASET AND PUSH IT UP TO QUANDL
+# CREATE DATASET AND PUSH IT UP TO QUANDL
   d = Dataset.create(attributes)
-binding.pry
+  binding.pry
   begin
     d.save
-    puts "\nDataset #{d.source_code}/#{d.code} created.\n"
-  rescue
-    puts "\n---update to #{d.code} failed."
+    puts "\n\nDataset #{d.source_code}/#{d.code} created."
+  rescue => e
+    puts "\n\n---update to #{d.code} failed."
     puts "\n#{d.errors}\n#{@message}"
   end
