@@ -35,7 +35,6 @@ code        = 'S2015'
 
 # CREATE DATASET AND PUSH IT UP TO QUANDL
   d = Dataset.create(attributes)
-  binding.pry
   begin
     d.save
     puts "\n\nDataset #{d.source_code}/#{d.code} created."

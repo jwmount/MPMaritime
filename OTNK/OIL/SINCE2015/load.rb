@@ -12,15 +12,13 @@ require 'csv'
 require 'pry'
 include Quandl::Client
 Quandl::Client.use 'https://www.quandl.com/api/'
-Quandl::Client.token = ['QUANDL_TOKEN']
+Quandl::Client.token = ENV['QUANDL_TOKEN']
 
   source_code  = 'OTNK'
   code         = 'S2015'
   d            = Dataset.find("#{source_code}/#{code}")
   data         = []
   mons         = %w[Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec]
-
-  binding.pry
 
   if d.code.nil?
     puts "Dataset 'OTNK/SINCE2015' is empty or nil."
@@ -31,10 +29,11 @@ Quandl::Client.token = ['QUANDL_TOKEN']
     puts "data before loading:\n#{d.data.count}\n"
     CSV.foreach('data.csv') do |row|
       dt = row[0].split('-')
-      m = mons.index(dt[0]) + 1
-      row[0] = m + '/' + dt[0] + '/' + dt[2]  #{}"#{m}/#{dt[1]}/#{dt[2]}"
-      puts row.to_s
-      data << row 
+      month = mons.index(dt[1]) + 1
+      day = dt[2]
+      year = dt[0]
+      date = month.to_s + '/' + dt[1] + '/' + dt[2]  #{}"#{m}/#{dt[1]}/#{dt[2]}"
+      data << [ date, row[1], row[2], row[3] ] 
     end
     d.data = data
 
