@@ -32,8 +32,8 @@ data        = []
     :data         => [],
     :frequency    => 'daily',
     :name         => 'Crude Oil Prices',
-    :private      => false,         # true do not show | false make visible
-    :description  => 'Crude Oil Price index.'
+    :private      => true,         # true do not show | false make visible
+    :description  => 'Crude Oil Price indexes.'
   }
   d = Dataset.find("#{source_code}/#{code}")
   d.destroy

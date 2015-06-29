@@ -25,7 +25,7 @@ d            = Dataset.find "#{source_code}/#{code}"
   #
   d.description = 'Crude Oil prices. '
 
-  d.name = 'Crude Oil Prices'
+  d.name = 'Crude Oil Price Indeces'
   
   d.save
 

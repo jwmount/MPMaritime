@@ -12,7 +12,7 @@ require 'csv'
 require 'pry'
 include Quandl::Client
 Quandl::Client.use 'https://www.quandl.com/api/'
-Quandl::Client.token = ['QUANDL_TOKEN']
+Quandl::Client.token = ENV['QUANDL_TOKEN']
 
   source_code  = 'OTNK'
   code         = 'CRUDE'
