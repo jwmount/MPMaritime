@@ -6,7 +6,8 @@
 # Refs:   https://github.com/quandl/quandl_client.git
 #         https://www.quandl.com/data/LPG
 #         https://www.quandl.com/documentation#!/api/DELETE-api--version-permissions---format-_delete_2
-# 
+#         https://www.quandl.com/api/v1/datasets/OTNK/CRUDE.json?auth_token=Fjuscy9q5GfPCsa2vZsp
+
 require 'quandl/client'
 require 'csv'
 require 'pry'
@@ -28,7 +29,7 @@ Quandl::Client.token = ENV['QUANDL_TOKEN']
     dt = row[0].gsub(/,/, '').split 
     m = mons.index(dt[0]) + 1
     row[0] = "#{m}/#{dt[1]}/#{dt[2]}"
-    data << row 
+    data << [ row[0], row[1], row[2] ] 
   end
   d.data = data
 

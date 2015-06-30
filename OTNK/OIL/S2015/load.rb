@@ -29,12 +29,13 @@ Quandl::Client.token = ENV['QUANDL_TOKEN']
     # Convert from "2000-Jan-04",... to 1/4/2000,...
     puts "data before loading:\n#{d.data.count}\n"
     CSV.foreach('data.csv') do |row|
+      puts row[0]
       dt = row[0].split('-')
       month = mons.index(dt[1]) + 1
       day = dt[2]
-      year = dt[0]
+      year = dt[0].to_s
       date = month.to_s + '/' + dt[1] + '/' + dt[2]  #{}"#{m}/#{dt[1]}/#{dt[2]}"
-      data << [ date, row[1], row[2], row[3], row[4] ] 
+      data << [ date, row[1], row[2], row[3], row[4], row[5] ] 
       #row[0] = date
       #data << row
     end

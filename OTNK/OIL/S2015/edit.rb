@@ -14,20 +14,18 @@ include Quandl::Client
 Quandl::Client.use 'https://www.quandl.com/api/'
 Quandl::Client.token = ENV['QUANDL_TOKEN']
 
-source_code  = 'OTNK'
-code         = 'CRUDE'
-d            = Dataset.find "#{source_code}/#{code}"
-
-  puts "d.code will be edited."
-
+  source_code  = 'OTNK'
+  code         = 'S2015'
+  d            = Dataset.find "#{source_code}/#{code}"
   #
-  # EDIT attributes here
+  # EDIT attributes below here
   #
-  d.description = 'Crude Oil prices. '
+  d.description = 'Selected crude oil price metrics from 2000.'
 
-  d.name = 'Crude Oil Price Indeces'
+  d.name = 'Crude Oil Price Metrics'
+  d.private = false
   
   d.save
 
-  puts "Loaded #{d.source_code}/#{d.code}."
+  puts "Edited #{d.source_code}/#{d.code}."
   puts "--done."

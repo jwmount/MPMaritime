@@ -29,14 +29,14 @@ code        = 'CRUDE'
     :frequency    => 'daily',
     :name         => 'Crude Oil Prices',
     :private      => false,         # true do not show | false make visible
-    :description  => 'Crude oil price index.'
+    :description  => 'Crude oil price indexes.'
   }
   d = Dataset.find("#{source_code}/#{code}")
   d.destroy
 
   # CREATE DATASET AND PUSH IT UP TO QUANDL
   d = Dataset.create(attributes)
-binding.pry
+
   begin
     d.save
     puts "\nDataset #{d.source_code}/#{d.code} created.\n"
