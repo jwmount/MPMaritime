@@ -7,13 +7,14 @@
 # 
 require 'quandl/client'
 require 'csv'
+require 'pry'
 include Quandl::Client
 Quandl::Client.use 'https://www.quandl.com/api/'
 Quandl::Client.token = ENV['QUANDL_TOKEN']
 
-source_code = 'LPG'
-code        = 'VLGC_FR'
-data        = []
+  source_code  = 'LPG_R'
+  code         = 'RATES'
+  data         = []
 
 # CREATE THE DATASET LPG/VLGC_FR
 # if it exists, destroy it because this version creates it entirely.
@@ -22,21 +23,49 @@ data        = []
 #d = Dataset.find(code)
 #d.destroy
 
+=begin
+binding.pry
+# Rename Databases here
+s = Quandl::Client::Source.find('LPG')
+s.name = 'LPG_R'
+s.save
+
+s = Quandl::Client::Source.find('RTS')
+s.name = 'LPG_F'
+s.save
+
+
+d = Dataset.find('OTNK/CRUDE')
+d.name = 'New Name'
+d.save
+
+OR
+
+d = Dataset.find('OTNK/CRUDE')
+d.assign_attributes(:name => 'New Name')
+d.save
+=end
+
+# Now Continue
+
 # CREATE THE DATASET LPG/VLGC_FR
   attributes = {
     :source_code  => source_code,   # root of database name
     :code         => code,          # dataset modifier of database name
-    :column_names => ['Date', 'Spot Rates($/mo)'],
+    :column_names => ['Date', 'Spot Rates($/day)'],
     :data         => [],
     :frequency    => 'weekly',
     :name         => 'Very Large Fully Refrigerated Gas Carrier Spot Rates',
     #:private      => false,         # true do not show | false make visible
-    :description  => 'Very large Fully Refrigerated Gas Carrier vessels with capacity of 82,000 cbm or more.'
+    :description  => 'Very large Fully Refrigerated Gas Carrier vessels with capacity of 78,000 cbm or more.'
   }
-  d = Dataset.find("#{source_code}/#{code}")
-  d.destroy
+#  d = Dataset.find("#{source_code}/#{code}")
+#  d.destroy
   
-  d = Dataset.create(attributes)
+#  d = Dataset.create(attributes)\
+  d = Dataset.find( "#{source_code}/#{code}")
+  d.assign_attributes(:name => 'New Name')
+
   puts "#{d.code} with #{d.class.name}"
   puts d.data.class
 

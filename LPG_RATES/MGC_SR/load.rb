@@ -14,9 +14,10 @@ include Quandl::Client
 Quandl::Client.use 'https://www.quandl.com/api/'
 Quandl::Client.token = ENV['QUANDL_TOKEN']
 
-  code         = 'VLGC_FR'
-  data         = []
-  d            = Dataset.find code
+  source_code = 'LPG_R'
+  code        = 'MGC_SR'            # Dataset, EDIT this
+  data        = []
+  d           = Dataset.find("#{source_code}/#{code}")
 
   puts "d.code will be loaded from data.csv."
 
