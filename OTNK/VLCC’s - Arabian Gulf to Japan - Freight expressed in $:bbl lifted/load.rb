@@ -17,24 +17,21 @@ Quandl::Client.use 'https://www.quandl.com/api/'
 Quandl::Client.token = ENV['QUANDL_TOKEN']
 
   source_code  = 'OTNK'
-  code         = 'CRUDE'
+  code         = 'VLCC_TD3_DBBL'
   d            = Dataset.find("#{source_code}/#{code}")
   data         = []
   mons         = %w[Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec]
 
-  puts "data before loading:\n#{d.data.count}\n"
   # READ CSV VERSION OF DATA AND LOAD TO DATASET
   # Convert from "Jan 04, 2000",25.56,23.95, to 1/4/2000,25.56,23.95
   CSV.foreach('data.csv') do |row|
-    puts row.to_s
     dt = row[0].gsub(/,/, '').split 
     m = mons.index(dt[0]) + 1
     row[0] = "#{m}/#{dt[1]}/#{dt[2]}"
-    puts row[0], row[1]
-    data << [ row[0], row[1] ] 
+    data << [ row[0], row[1], row[2] ] 
   end
   d.data = data
-
+  puts data.to_s
   begin 
     d.save
     puts "Loaded #{d.data.count} into #{d.source_code}/#{d.code}. Had #{d.errors}."

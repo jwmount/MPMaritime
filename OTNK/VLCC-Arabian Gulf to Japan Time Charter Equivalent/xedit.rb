@@ -14,16 +14,16 @@ include Quandl::Client
 Quandl::Client.use 'https://www.quandl.com/api/'
 Quandl::Client.token = ENV['QUANDL_TOKEN']
 
-  source_code  = 'OTNK'
-  code         = 'CRUDE'
-  d            = Dataset.find "#{source_code}/#{code}"
+  source_code    = 'OTNK'
+  code           = 'VLCC_TD3-TCE'
+  d              = Dataset.find "#{source_code}/#{code}"
 
   #
   # EDIT attributes here
   #
-  d.description = 'West Texas Intermediate (WTI) of crude oil prices.'
+  d.description = 'West Texas Intermediate (WTI) and the Brent indeces of crude oil prices.'
 
-  d.name = 'Crude Oil Indexe'
+  d.name = 'Crude Oil Indexes'
   d.private = false;              # private determines if the database thumbnail appears or not.  No effect on permalink.
   d.save
 

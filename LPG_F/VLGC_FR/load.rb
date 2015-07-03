@@ -14,11 +14,11 @@ include Quandl::Client
 Quandl::Client.use 'https://www.quandl.com/api/'
 Quandl::Client.token = ENV['QUANDL_TOKEN']
 
+  source_code = 'LPG_F'
   code        = 'VLGC_FR_F'
   data        = []
   d           = Dataset.find code
 
-  puts "d.code will be loaded from #{file_in}."
 
 # READ CSV VERSION OF DATA AND LOAD TO DATASET
   CSV.foreach('data.csv') do |row|

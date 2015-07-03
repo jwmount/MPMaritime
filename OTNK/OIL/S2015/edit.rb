@@ -17,6 +17,14 @@ Quandl::Client.token = ENV['QUANDL_TOKEN']
   source_code  = 'OTNK'
   code         = 'S2015'
   d            = Dataset.find "#{source_code}/#{code}"
+
+  # REMOVE FOR NOW, July 2
+  d.destroy
+  code = 'CRUDE'
+  d = Dataset.find("#{source_code}/#{code}")
+  d.destroy
+  binding.pry #exit via this
+
   #
   # EDIT attributes below here
   #

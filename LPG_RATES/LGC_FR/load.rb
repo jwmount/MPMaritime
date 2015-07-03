@@ -19,16 +19,21 @@ Quandl::Client.token = ENV['QUANDL_TOKEN']
   data        = []
   d           = Dataset.find("#{source_code}/#{code}")
 
-  puts "d.code will be loaded from data.csv."
+  if d.exists?
+    # READ CSV VERSION OF DATA AND LOAD TO DATASET
+    puts "d.code will be loaded from data.csv."
 
-# READ CSV VERSION OF DATA AND LOAD TO DATASET
-  CSV.foreach('data.csv') do |row|
-    data << row 
-  end
-  puts data.to_s
-  d.data = data
+    CSV.foreach('data.csv') do |row| 
+      data << row 
+    end
+    puts data.to_s
+    d.data = data
    
-  d.save
+    d.save
 
-  puts "Loaded #{d.data.count} into #{d.source_code}/#{d.code}."
+    puts "Loaded #{d.data.count} into #{d.source_code}/#{d.code}."
+  else
+    "Load #{d.data.count} into #{d.source_code}/#{d.code}--FAILED."
+  end
+  
   puts "--done."

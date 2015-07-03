@@ -14,8 +14,9 @@ include Quandl::Client
 Quandl::Client.use 'https://www.quandl.com/api/'
 Quandl::Client.token = ENV['QUANDL_TOKEN']
 
-code        = 'CEGC_FR'
-d           = Dataset.find code
+  source_code = 'LPG_F'
+  code        = 'VLGC_FR_F'
+  d           = Dataset.find("#{source_code}/#{code}")
 
   puts "d.code will be edited."
 

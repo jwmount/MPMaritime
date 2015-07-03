@@ -16,6 +16,7 @@ include Quandl::Client
 Quandl::Client.use 'https://www.quandl.com/api/'
 Quandl::Client.token = ENV['QUANDL_TOKEN']
 
+
 source_code = 'OTNK'
 code        = 'S2015'
 

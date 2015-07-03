@@ -10,11 +10,13 @@ Quandl::Client.token = ENV['QUANDL_TOKEN']
 
 include Quandl::Client
 
+binding.pry
+
 # Find by Database name, as in www.quandle.com/data/LPG
 database = Source.find('Oil Tankers')
 puts "Old name:  #{database.name}" # Mpm LPG Placeholder
 database.name = 'OTNK'
-database.description = 'Crude and related  tankers, updated daily.' 
+database.description = 'Oil Tanker Spot Freight Rates.' 
 database.save
 puts 'New name: ' + database.name
 

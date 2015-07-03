@@ -13,7 +13,7 @@ Quandl::Client.use 'https://www.quandl.com/api/'
 Quandl::Client.token = ENV['QUANDL_TOKEN']
 
   source_code  = 'LPG_R'
-  code         = 'RATES'
+  code         = 'VLGC_FR'
   data         = []
 
 # CREATE THE DATASET LPG/VLGC_FR

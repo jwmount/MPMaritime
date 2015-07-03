@@ -24,19 +24,17 @@ code        = 'CRUDE'
   attributes = {
     :source_code  => source_code,   # root of database name
     :code         => code,          # dataset modifier of database name
-    :column_names => ['Date', 'WTI', 'Brent'],
+    :column_names => ['Date', 'WTI($/bbl)'],
     :data         => [],
     :frequency    => 'daily',
-    :name         => 'Crude Oil Prices',
+    :name         => 'Oil Tanker Spot Freight Rates',
     :private      => false,         # true do not show | false make visible
-    :description  => 'Crude oil price indexes.'
+    :description  => 'WTI index.'
   }
+  # FIND OR CREATE DATASET AND PUSH IT UP TO QUANDL
   d = Dataset.find("#{source_code}/#{code}")
-  d.destroy
-
-  # CREATE DATASET AND PUSH IT UP TO QUANDL
-  d = Dataset.create(attributes)
-
+  d = Dataset.create(attributes) if d.name.nil?
+    
   begin
     d.save
     puts "\nDataset #{d.source_code}/#{d.code} created.\n"
