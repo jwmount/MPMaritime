@@ -14,18 +14,18 @@ Quandl::Client.use 'https://www.quandl.com/api/'
 Quandl::Client.token = ENV['QUANDL_TOKEN']
 
   # ATTRIBUTES FOR CREATES AND EDITS
-  code            = 'LGC_FR'
+  code            = 'MGC_FR'
   data            = []
-  source_code     = 'PG_R'
+  source_code     = 'LPG_R'
   attributes = {
     :source_code  => source_code,   # root of database name
     :code         => code,          # dataset modifier of database name
     :column_names => ['Date', '$/day'],
     :data         => [],
     :frequency    => 'weekly',
-    :name         => 'Large Gas Carriers, Fully Refrigerated--Spot Market Rates',
+    :name         => 'Medium Gas Carriers, Fully Refrigerated--Spot Market Rates',
     :private      => false,         # true do not show | false make visible
-    :description  => "Vessels of 55,000 cbm or larger. The principal routes for LGC vessels are from the Black Sea to the USA and from West Africa to the USA. Most of the LGC fleet is employed for transporting ammonia.  See also 'Large Gas Carrier--Fleet Statistics.'"
+    :description  => "Vessels of 55,000 cbm or larger. The principal routes for MGC vessels are from the Black Sea to the USA and from West Africa to the USA. Most of the LGC fleet is employed for transporting ammonia.  See also 'Medium Gas Carrier--Fleet Statistics.'"
   }
   
   d = Dataset.find( "#{source_code}/#{code}")

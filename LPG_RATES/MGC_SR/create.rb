@@ -19,25 +19,33 @@ Quandl::Client.token = ENV['QUANDL_TOKEN']
 # NOTE:  a d.destroy costs a half hour delay to recreate the entry in the index
 # TEST:  www.quandle.com/data/LPG/VGC_SR  
 
-source_code = 'LPG_R'
-code        = 'MGC_SR'
+source_code       = 'LPG_R'
+code              = 'MGC_SR'
 
 # CREATE THE DATASET LPG_R/MGC_FR
   attributes = {
     :source_code  => source_code,             
     :code         => code,              
-    :column_names => ['Date', 'Spot Rates($/mo)'],
+    :column_names => ['Date', '$/day'],
     :data         => [],
     :frequency    => 'weekly',
     :name         => 'Medium Gas Carriers, Semi Refrigerated--Spot Market Rates',
-    :private      => false,         # true do not show in index, does not appear in API calls
-    :description  => 'Vessels of around 22,000 cbm.'
+    :private      => false,         # true do not show, does not appear in API calls
+    :description  => "Vessels of 35,000 cbm or larger.  See also 'Medium Gas Carriers, Semi Refrigerated--Fleet Statistics.'"
   }
-  d = Dataset.find("#{source_code}/#{code}")
-  d.destroy
+d = Dataset.find( "#{source_code}/#{code}")
+  if d.name.nil?
+    d = Dataset.create(attributes)
+  else
+    d.assign_attributes(attributes)
+  end
 
-  d = Dataset.create(attributes)
-  d.save
+# PUSH IT UP TO QUANDL
+  begin
+    d.save
+    puts "Dataset #{d.code} created."
+  rescue => e
+    warn e.message
+    puts "---update to #{d.code} failed."
+  end
 
-  puts "created and saved dataset #{attributes[:source_code]}/#{attributes[:code]}."
-  puts "--done."

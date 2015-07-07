@@ -23,9 +23,7 @@ Quandl::Client.token = ENV['QUANDL_TOKEN']
     # IF Dataset exists, edit as requested below and save it.
     puts "d.code will be edited."
 
-    d.description  = 'Vessel capacity of around 55,000 cbm. '
-    d.description += 'The principal routes for LGC vessels are from the Black Sea to the USA and from West Africa to the USA. Most of the LGC fleet is employed for transporting ammonia' 
-    d.description += 'See also Large Gas Carrier--Fleet Statistics.'
+"Vessel capacity of around 55,000 cbm. The principal routes for LGC vessels are from the Black Sea to the USA and from West Africa to the USA. Most of the LGC fleet is employed for transporting ammonia.  See also Large Gas Carrier--Fleet Statistics.'"
 
     d.name         = 'Large Gas Carriers, Fully Refrigerated--'
     d.name        += "Spot Market Rates"

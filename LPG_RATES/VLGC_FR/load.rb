@@ -2,7 +2,7 @@
 # load.rb -- load the dataset data
 # Purpose:  Create dataset for small gas carrier, semi-refrigerated fleet.
 # How to run this script:
-#         $ QUANDL_TOKEN=Z_FgEe3SYywKzHT7myYr ruby load.rb (CR)
+#         $ QUANDL_TOKEN=Z_FgEe3SYywKzHT7myYr ruby load.rb
 # Refs:   https://github.com/quandl/quandl_client.git
 #         https://www.quandl.com/data/LPG
 #         https://www.quandl.com/documentation#!/api/DELETE-api--version-permissions---format-_delete_2

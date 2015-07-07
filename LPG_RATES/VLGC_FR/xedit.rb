@@ -19,8 +19,6 @@ Quandl::Client.token = ENV['QUANDL_TOKEN']
   d            = Dataset.find("#{source_code}/#{code}")
 
   puts "d.code will be edited."
-
-  binding.pry
   
   #
   # EDIT attributes here
@@ -29,7 +27,7 @@ Quandl::Client.token = ENV['QUANDL_TOKEN']
   d.description += 'The principal routes for LGC vessels are from the Black Sea to the USA and from West Africa to the USA. Most of the LGC fleet is employed for transporting ammonia.  '
   d.description += "See also 'Very Large Gas Carrier--Fleet History.'"
 
-  d.name = 'Very Large Gas Carrier, Fully Refrigerated--'
+  d.name = 'Very Large Gas Carriers, Fully Refrigerated--'
   d.name += "Spot Market Rates"
   
   d.save

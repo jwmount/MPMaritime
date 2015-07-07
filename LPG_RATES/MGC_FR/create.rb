@@ -26,12 +26,12 @@ code        = 'MGC_FR'
   attributes = {
     :source_code  => source_code,             
     :code         => code,              
-    :column_names => ['Date', 'Spot Rates($/mo)'],
+    :column_names => ['Date', '$/day'],
     :data         => [],
     :frequency    => 'weekly',
     :name         => 'Medium Gas Carriers, Fully Refrigerated--Spot Market Rates',
     :private      => true,         # true do not show, does not appear in API calls
-    :description  => 'Vessels of around 35,000 cbm.'
+    :description  => "Vessels of 35,000 cbm or larger.  See also 'Medium Gas Carriers, Fully Refrigerated--Fleet Statistics.'"
   }
   d = Dataset.find("#{source_code}/#{code}")
   d.destroy
