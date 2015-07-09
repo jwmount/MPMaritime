@@ -33,14 +33,12 @@ Quandl::Client.token = ENV['QUANDL_TOKEN']
     CSV.foreach(filename) do |row| 
       flag = !flag                             if row[0] == 'Date'
       qc << row[1]                             if row[0].is_a? String and row[0].include? "Quandl:"
+      puts "#{qc[0]} found and uploaded."      if row[0].is_a? String and row[0].include? "Quandl:"
       fl.puts (qc + row).join('|') + "\n"      if !qc.empty? and flag and row[0] != 'Date'
     end #CSV
 
     fl.close
-
-    #keep a copy and send to Quandl
-    #open('quandl.txt', 'a') { |file| file.puts new_qf }  # "w" to replace file
-    ftps.puttextfile(quandl_file, "data/#{quandl_file}")
+    ftps.puttextfile(quandl_file, "data/#{quandl_file}") # keep a copy and send one to Quandl
    
   end #glob
   
