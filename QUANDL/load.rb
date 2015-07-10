@@ -16,7 +16,8 @@ include Quandl::Client
 Quandl::Client.use 'https://www.quandl.com/api/'
 Quandl::Client.token = ENV['QUANDL_TOKEN']
 
-  quandl_file = '_data.txt'
+  quandl_file_prefix = '_data_'
+  hdr = "Quandl Code|Date|Value"
 
   ftps = DoubleBagFTPS.new
   ftps.ssl_context = DoubleBagFTPS.create_ssl_context(:verify_mode => OpenSSL::SSL::VERIFY_NONE)
@@ -28,17 +29,21 @@ Quandl::Client.token = ENV['QUANDL_TOKEN']
   Dir.glob("DATA/*.csv").each do |filename|
     qc = []
     flag = false
-    fl = File.open(quandl_file, 'a')
+    qfilename = quandl_file_prefix + filename.gsub(/DATA\//,'')
+    puts qfilename
+    fl = File.open(qfilename, 'a')
+    fl.puts hdr
 
     CSV.foreach(filename) do |row| 
+
       flag = !flag                             if row[0] == 'Date'
       qc << row[1]                             if row[0].is_a? String and row[0].include? "Quandl:"
-      puts "#{qc[0]} found and uploaded."      if row[0].is_a? String and row[0].include? "Quandl:"
+      puts "#{qc[0]} loaded to #{qfilename}."  if row[0].is_a? String and row[0].include? "Quandl:"
       fl.puts (qc + row).join('|') + "\n"      if !qc.empty? and flag and row[0] != 'Date'
     end #CSV
 
     fl.close
-    ftps.puttextfile(quandl_file, "data/#{quandl_file}") # keep a copy and send one to Quandl
+    ftps.puttextfile(qfilename, "data/#{qfilename}") # keep a copy and send one to Quandl
    
   end #glob
   
