@@ -1,8 +1,9 @@
-# to run this script, 
-#    $ QUANDL_TOKEN=Z_FgEe3SYywKzHT7myYr ruby setup.rb   use with john_mount/ em: john.w.mount@iCloud
-# Usage:  https://github.com/quandl/quandl_client.git
-#         https://www.quandl.com/data/LPG
-# 
+# to run this script (use with john_mount/ em: john.w.mount@iCloud)
+#    $ QUANDL_TOKEN=Z_FgEe3SYywKzHT7myYr ruby setup.rb   
+# Refs:   https://github.com/quandl/quandl_client.git
+#         https://www.quandl.com/data/LPG_F
+#         https://www.quandl.com/documentation#!/api/DELETE-api--version-permissions---format-_delete_2
+#
 # Design Intent:  Run this script without arguments.
 # 1.  Edit datasets.  Can create new datasets and or change existing ones.  No deletes.  No data loads.
 # 2.  Remember updates to DB index are asynch with variable long time lines.  30 mins not unusual.
@@ -16,29 +17,35 @@ include Quandl::Client
 Quandl::Client.use 'https://www.quandl.com/api/'
 Quandl::Client.token = ENV['QUANDL_TOKEN']
 
-datasets = [ {source_code: 'OTNK', code: 'VLCC_TD3_TCE', name: 'VLCC - Arabian Gulf to Japan(TD3) - Spot Market Freight Rate(TCE)',
+binding.pry
+
+datasets = [ {source_code: 'OTNK', code: 'VLCC_TD3_TCE', 
+              name: 'VLCC - Arabian Gulf to Japan(TD3) - Spot Market Freight Rate, time charter equivalent(TCE)',
    	          column_names: ['Date', '$/day'], data: [], frequency: 'weekly', private: false,         # true do not show | false make visible
               description: "TD3: 265000 mt Ras Tanura/Chiba laydays canceling 15/30 days in advance max age 15 years.  The calculation includes a weather margin of 5% and bunkers based on Singapore 380 CST. 2.5% total commission."
               #description: "VLCC or Very Large Crude Carriers are some of the largest cargo vessels in the world. VLCC have a size ranging between 180,000 to 320,000 DWT. They are capable of passing through the Suez Canal in Egypt, and as a result are used extensively around the North Sea, Mediterranean and West Africa. VLCC are very large shipping vessels with typical dimensions between 300 to 330 meters in length, 58 meters beam and 31 meters draft. They are known for their flexibility in using terminals and can operate in ports with some depth limitations.  These vessels are primarily used for long-haul crude transportation from the Persian Gulf to countries in Europe, Asia and North America.  These freight statistics specifically apply to route TD3 (VLCCs carrying crude oil  from the Arabian Gulf to Japan). "              
              },
 
-             {source_code: 'OTNK', code: 'VLCC_TD3_PMT', name: 'VLCC - Arabian Gulf to Japan(TD3) - Spot Market Freight Rate(PMT) $/ton',
+             {source_code: 'OTNK', code: 'VLCC_TD3_PMT', 
+              name: 'VLCC - Arabian Gulf to Japan(TD3) - Spot Market Freight Rate, dollars per ton(PMT)',
    	          column_names: ['Date', '$/day'], data: [], frequency: 'weekly', private: false,         # true do not show | false make visible
               description: "TD3: 265000 mt Ras Tanura/Chiba laydays canceling 15/30 days in advance max age 15 years.  The calculation includes a weather margin of 5% and bunkers based on Singapore 380 CST. 2.5% total commission."
               #description: "VLCC or Very Large Crude Carriers are some of the largest cargo vessels in the world. VLCC have a size ranging between 180,000 to 320,000 DWT. They are capable of passing through the Suez Canal in Egypt, and as a result are used extensively around the North Sea, Mediterranean and West Africa. VLCC are very large shipping vessels with typical dimensions between 300 to 330 meters in length, 58 meters beam and 31 meters draft. They are known for their flexibility in using terminals and can operate in ports with some depth limitations.  These vessels are primarily used for long-haul crude transportation from the Persian Gulf to countries in Europe, Asia and North America.  These freight statistics specifically apply to route TD3 (VLCCs carrying crude oil  from the Arabian Gulf to Japan). "              
              },
 
-             {source_code: 'OTNK', code: 'VLCC_TD3_DBBL', name: 'VLCC - Arabian Gulf to Japan(TD3) - Spot Market Freight Rate($/bbl)',
+             {source_code: 'OTNK', code: 'VLCC_TD3_DBBL', 
+              name: 'VLCC - Arabian Gulf to Japan(TD3) - Spot Market Freight Rate, dollars per barrel(DBBL)',
    	          column_names: ['Date', '$/day'], data: [], frequency: 'weekly', private: false,         # true do not show | false make visible
               description: "TD3: 265000 mt Ras Tanura/Chiba laydays canceling 15/30 days in advance max age 15 years.  The calculation includes a weather margin of 5% and bunkers based on Singapore 380 CST. 2.5% total commission."
               #description: "VLCC or Very Large Crude Carriers are some of the largest cargo vessels in the world. VLCC have a size ranging between 180,000 to 320,000 DWT. They are capable of passing through the Suez Canal in Egypt, and as a result are used extensively around the North Sea, Mediterranean and West Africa. VLCC are very large shipping vessels with typical dimensions between 300 to 330 meters in length, 58 meters beam and 31 meters draft. They are known for their flexibility in using terminals and can operate in ports with some depth limitations.  These vessels are primarily used for long-haul crude transportation from the Persian Gulf to countries in Europe, Asia and North America.  These freight statistics specifically apply to route TD3 (VLCCs carrying crude oil  from the Arabian Gulf to Japan). "              
              },
 
-             {source_code: 'OTNK', code: 'VLCC_TD3_PCF', name: 'VLCC - Arabian Gulf to Japan(TD3) - Spot Market Freight Rate(PCF) percent of total cargo value',
+             {source_code: 'OTNK', code: 'VLCC_TD3_PCF', 
+              name: 'VLCC - Arabian Gulf to Japan(TD3) - Spot Market Freight Rate, percent of total cargo value(PCF)',
    	          column_names: ['Date', '$/day'], data: [], frequency: 'weekly', private: false,         # true do not show | false make visible
               description: "TD3: 265000 mt Ras Tanura/Chiba laydays canceling 15/30 days in advance max age 15 years.  The calculation includes a weather margin of 5% and bunkers based on Singapore 380 CST. 2.5% total commission."
               #description: "VLCC or Very Large Crude Carriers are some of the largest cargo vessels in the world. VLCC have a size ranging between 180,000 to 320,000 DWT. They are capable of passing through the Suez Canal in Egypt, and as a result are used extensively around the North Sea, Mediterranean and West Africa. VLCC are very large shipping vessels with typical dimensions between 300 to 330 meters in length, 58 meters beam and 31 meters draft. They are known for their flexibility in using terminals and can operate in ports with some depth limitations.  These vessels are primarily used for long-haul crude transportation from the Persian Gulf to countries in Europe, Asia and North America.  These freight statistics specifically apply to route TD3 (VLCCs carrying crude oil  from the Arabian Gulf to Japan). "              
-             }
+             },
 =begin
              # VLCC TD4
              {source_code: 'OTNK', code: 'VLCC_TD4_TCE', name: 'Very Large Crude Carriers, TD4, TCE',
@@ -137,6 +144,22 @@ datasets = [ {source_code: 'OTNK', code: 'VLCC_TD3_TCE', name: 'VLCC - Arabian G
               description: "Route TD2 from MEG to Singapore, VLCC vessels of 260,000mt or larger."
              }
 =end
+             #
+             # LPG CARRIER DATABASES, LPG_R and LPG_F
+             #
+             # LPG -- Liquid Propane Gas Carriers
+             {source_code: 'LPG_R', code: 'VLGC_FR', 
+              name: 'VLGC - Very Large Liquid Propane Gas Carriers, Fully Refrigerated',
+              column_names: ['Date', '$/day'], data: [], frequency: 'weekly', 
+              private: false,         # true do not show | false make visible
+              description: "Vessels of 78,000 cbm or larger. The principal routes for LGC vessels are from the Black Sea to the USA and from West Africa to the USA. Most of the LGC fleet is employed for transporting ammonia.  See also 'Very Large Gas Carrier--Fleet History.'"
+             },
+             {source_code: 'LPG_F', code: 'VLGC_FR', 
+              name: 'VLGC - Very Large Liquid Propane Gas Carriers, Fully Refrigerated',
+              column_names: ['Date', 'Deliveries', 'Deliveries(cbm)', 'Demolitions', 'Demolitions(cbm)', 'New Orders', 'New Orders(cbm)'], 
+              private: false,         # true do not show | false make visible
+              description: "Vessels of 78,000 cbm or larger. The principal routes for LGC vessels are from the Black Sea to the USA and from West Africa to the USA. Most of the LGC fleet is employed for transporting ammonia.  See also 'Very Large Gas Carrier--Fleet History.'"
+             }
 		]
 
   # CREATE OR EDIT EACH DATASET  
