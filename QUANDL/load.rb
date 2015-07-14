@@ -11,7 +11,7 @@
 #         2.  Quandl key 'Quandl:' not found; message and drop file, count as not processed; malformed
 #         3.  Some sort of logging facility
 #         4.  Skip if date in future
-#         5.  Add capability to do multi-column loads needed for LPG_F Datasets
+#         5.  Add capability to do multi-column loads needed for LPG_F Datasets.
 #
 require 'quandl/client'
 require 'double_bag_ftps'

@@ -1,13 +1,13 @@
 # Quandl test bed
 # Note, can use command line pyy command using lines 7-13
-# QUANDL_TOKEN=Z_FgEe3SYywKzHT7myYr ruby quandl_pry.rb
+# QUANDL_TOKEN=Z_FgEe3SYywKzHT7myYr ruby pry.rb
 # Usage:  https://github.com/quandl/quandl_client.git
 #         https://www.quandl.com/data/<dbname>
 # 
 require 'quandl/client'
 require 'pry'
 
-Quandl::Client.use 'https://quandl.com/api/'
+Quandl::Client.use 'https://www.quandl.com/api/'
 Quandl::Client.token = ENV['QUANDL_TOKEN']
 
 include Quandl::Client

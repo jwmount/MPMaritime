@@ -5,7 +5,7 @@
 # 
 require 'quandl/client'
 
-Quandl::Client.use 'http://quandl.com/api/'
+Quandl::Client.use 'http://www.quandl.com/api/'
 Quandl::Client.token = ENV['QUANDL_TOKEN']
 
 include Quandl::Client

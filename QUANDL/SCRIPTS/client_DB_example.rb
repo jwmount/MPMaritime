@@ -6,18 +6,16 @@
 require 'quandl/client'
 require 'pry'
 
-Quandl::Client.use 'https://quandl.com/api/'
+Quandl::Client.use 'https://www.quandl.com/api/'
 Quandl::Client.token = ENV['QUANDL_TOKEN']
-
-
 include Quandl::Client
 
-binding.pry
+#binding.pry
 
 # Find by Database name, as in www.quandle.com/data/LPG_R
-database = Source.find('LPG_R')
-database.name = 'Liquid Propane Gas Carriers'
-database.description = 'Spot and Longer term Charter Rates for Gas Carrying vessels, updated weekly x.' 
-database.save
-puts 'New name: ' + database.name
+db = Quandl::Client::Source.find('LPG_R')
+db.name = 'Liquid Propane Gas Carriers'
+db.description = "Liquid Propane Gas Spot Market Rates"
+db.save
+puts db.name + ' Found and modified.'
 

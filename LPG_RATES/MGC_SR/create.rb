@@ -31,7 +31,7 @@ code              = 'MGC_SR'
     :frequency    => 'weekly',
     :name         => 'Medium Gas Carriers, Semi Refrigerated--Spot Market Rates',
     :private      => false,         # true do not show, does not appear in API calls
-    :description  => "Vessels of 35,000 cbm or larger.  See also 'Medium Gas Carriers, Semi Refrigerated--Fleet Statistics.'"
+    :description  => "Vessels of about 22,000 cbm.  See also 'Medium Gas Carriers, Semi Refrigerated--Fleet Statistics.'"
   }
 d = Dataset.find( "#{source_code}/#{code}")
   if d.name.nil?

@@ -31,9 +31,9 @@ binding.pry
     :column_names => ['Date', '$/day'],
     :data         => [],
     :frequency    => 'weekly',
-    :name         => 'Liquified Ethane Carriers--Spot Market Rates',
-    :private      => true,         # true do not show, does not appear in API calls
-    :description  => "Vessels of 10,000 cbm.  See also 'Liquified Ethane Carriers--Fleet Statistics.'"
+    :name         => 'Ethanol Carriers--Spot Market Rates',
+    :private      => false,         # true do not show, does not appear in API calls
+    :description  => "Vessels of 10,000 cbm.  See also 'Ethanol Carriers--Fleet Statistics.'"
   }
   d = Dataset.find("#{source_code}/#{code}")
   d.destroy
@@ -41,5 +41,5 @@ binding.pry
   d = Dataset.create(attributes)
   d.save
 
-  puts "created and saved dataset #{attributes[:source_code]}/#{attributes[:code]}."
+  puts "\tpermalink: www.quandl.com/data/#{attributes[:source_code]}/#{attributes[:code]}\n\n"
   puts "--done."

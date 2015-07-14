@@ -8,7 +8,8 @@
 # 1.  Edit datasets.  Can create new datasets and or change existing ones.  No deletes.  No data loads.
 # 2.  Remember updates to DB index are asynch with variable long time lines.  30 mins not unusual.
 # 3.  Verify results from permalinks in log.
-# Database: Crude Oil - Spot Freight Rates
+# Issues
+# 1.  Column_names cannot be changed in attributes[]. Thus ONLY way to do this is via a destroy - create sequence.
 
 require 'quandl/client'
 require 'pry'
@@ -16,8 +17,6 @@ include Quandl::Client
 
 Quandl::Client.use 'https://www.quandl.com/api/'
 Quandl::Client.token = ENV['QUANDL_TOKEN']
-
-binding.pry
 
 datasets = [ {source_code: 'OTNK', code: 'VLCC_TD3_TCE', 
               name: 'VLCC - Arabian Gulf to Japan(TD3) - Spot Market Freight Rate, time charter equivalent(TCE)',
@@ -154,14 +153,49 @@ datasets = [ {source_code: 'OTNK', code: 'VLCC_TD3_TCE',
               private: false,         # true do not show | false make visible
               description: "Vessels of 78,000 cbm or larger. The principal routes for LGC vessels are from the Black Sea to the USA and from West Africa to the USA. Most of the LGC fleet is employed for transporting ammonia.  See also 'Very Large Gas Carrier--Fleet History.'"
              },
+
+             #
+             # LPG_FLEET
+             #
              {source_code: 'LPG_F', code: 'VLGC_FR', 
               name: 'VLGC - Very Large Liquid Propane Gas Carriers, Fully Refrigerated',
               column_names: ['Date', 'Deliveries', 'Deliveries(cbm)', 'Demolitions', 'Demolitions(cbm)', 'New Orders', 'New Orders(cbm)'], 
               private: false,         # true do not show | false make visible
               description: "Vessels of 78,000 cbm or larger. The principal routes for LGC vessels are from the Black Sea to the USA and from West Africa to the USA. Most of the LGC fleet is employed for transporting ammonia.  See also 'Very Large Gas Carrier--Fleet History.'"
+             },
+             {source_code: 'LPG_F', code: 'LGC_FR', 
+              name: 'LGC - Large Liquid Propane Gas Carriers, Fully Refrigerated',
+              column_names: ['Date', 'Deliveries', 'Deliveries(cbm)', 'Demolitions', 'Demolitions(cbm)', 'New Orders', 'New Orders(cbm)'], 
+              private: false,         # true do not show | false make visible
+              description: "Vessels of 55,000 cbm or larger. The principal routes for LGC vessels are from the Black Sea to the USA and from West Africa to the USA. Most of the LGC fleet is employed for transporting ammonia.  See also 'Very Large Gas Carrier--Fleet History.'"
+             },
+             {source_code: 'LPG_F', code: 'MGC_FR', 
+              name: 'MLGC - Medium Liquid Propane Gas Carriers, Fully Refrigerated',
+              column_names: ['Date', 'Deliveries', 'Deliveries(cbm)', 'Demolitions', 'Demolitions(cbm)', 'New Orders', 'New Orders(cbm)'], 
+              private: false,         # true do not show | false make visible
+              description: "Vessels of 35,000 cbm or larger. The principal routes for LGC vessels are from the Black Sea to the USA and from West Africa to the USA. Most of the LGC fleet is employed for transporting ammonia.  See also 'Very Large Gas Carrier--Fleet History.'"
+             },
+             {source_code: 'LPG_F', code: 'MGC_SR', 
+              name: 'MGC - Medium Liquid Propane Gas Carriers, Semi Refrigerated',
+              column_names: ['Date', 'Deliveries', 'Deliveries(cbm)', 'Demolitions', 'Demolitions(cbm)', 'New Orders', 'New Orders(cbm)'], 
+              private: false,         # true do not show | false make visible
+              description: "Vessels of around 22,000 cbm. The principal routes for LGC vessels are from the Black Sea to the USA and from West Africa to the USA. Most of the LGC fleet is employed for transporting ammonia.  See also 'Very Large Gas Carrier--Fleet History.'"
+             },
+             {source_code: 'LPG_F', code: 'SGC_SR', 
+              name: 'SGC - Small Liquid Propane Gas Carriers, Semi Refrigerated',
+              column_names: ['Date', 'Deliveries', 'Deliveries(cbm)', 'Demolitions', 'Demolitions(cbm)', 'New Orders', 'New Orders(cbm)'], 
+              private: false,         # true do not show | false make visible
+              description: "Vessels of 6,000 cbm or larger. The principal routes for LGC vessels are from the Black Sea to the USA and from West Africa to the USA. Most of the LGC fleet is employed for transporting ammonia.  See also 'Very Large Gas Carrier--Fleet History.'"
+             },
+             {source_code: 'LPG_F', code: 'ETHGC', 
+              name: 'ETHGC - Ethanol Carriers',
+              column_names: ['Date', 'Deliveries', 'Deliveries(cbm)', 'Demolitions', 'Demolitions(cbm)', 'New Orders', 'New Orders(cbm)'], 
+              private: false,         # true do not show | false make visible
+              description: "Vessels of around 10,000 cbm. The principal routes for LGC vessels are from the Black Sea to the USA and from West Africa to the USA. Most of the LGC fleet is employed for transporting ammonia.  See also 'Very Large Gas Carrier--Fleet History.'"
              }
 		]
 
+    
   # CREATE OR EDIT EACH DATASET  
   datasets.each do |attributes|
 
@@ -175,7 +209,9 @@ datasets = [ {source_code: 'OTNK', code: 'VLCC_TD3_TCE',
          d.assign_attributes( :source_code  =>"#{attributes[ :source_code  ]}")
          d.assign_attributes( :code         =>"#{attributes[ :code         ]}")       
          d.assign_attributes( :name         =>"#{attributes[ :name         ]}")
+         d.errors
          d.assign_attributes( :column_names =>"#{attributes[ :column_names ]}")
+         d.errors
          d.assign_attributes( :data         =>"#{attributes[ :data         ]}")
          d.assign_attributes( :frequency    =>"#{attributes[ :frequency    ]}")
          d.assign_attributes( :private      =>"#{attributes[ :private      ]}")
@@ -199,6 +235,6 @@ datasets = [ {source_code: 'OTNK', code: 'VLCC_TD3_TCE',
       puts "\n---update to #{d.code} failed.\n\n"
     end #begin
 
-  end #setup.rb
+  end #datasets.each
 
 
