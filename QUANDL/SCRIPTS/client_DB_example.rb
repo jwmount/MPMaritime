@@ -13,9 +13,13 @@ include Quandl::Client
 #binding.pry
 
 # Find by Database name, as in www.quandle.com/data/LPG_R
-db = Quandl::Client::Source.find('LPG_R')
-db.name = 'Liquid Propane Gas Carriers'
-db.description = "Liquid Propane Gas Spot Market Rates"
+db = Quandl::Client::Source.find('LPG_F')
+	
+#binding.pry
+
+db.name = 'Liquified Petroleum Gas (LPG) Fleet Statistics'
+db.description = "Fleet Statistics by vessel class, updated weekly."
+
 db.save
 puts db.name + ' Found and modified.'
 
