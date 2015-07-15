@@ -143,6 +143,17 @@ datasets = [ {source_code: 'OTNK', code: 'VLCC_TD3_TCE',
               description: "Route TD2 from MEG to Singapore, VLCC vessels of 260,000mt or larger."
              }
 =end
+
+             #
+             # LNG CARRIER DATABASE
+             #
+             {source_code: 'LNG', code: 'CONV_R', 
+              name: 'CONV_R - Conventional Liquid Natural Gas (LNG) Carrier Spot Market Freight Rate',
+              column_names: ['Date', '$/day'], data: [], frequency: 'quarterly', 
+              private: false,         # true do not show | false make visible
+              description: "Conventional LNG carrier ... t.b.s."
+             },
+
              #
              # LPG CARRIER DATABASES, LPG_R and LPG_F
              #
