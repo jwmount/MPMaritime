@@ -147,11 +147,37 @@ datasets = [ {source_code: 'OTNK', code: 'VLCC_TD3_TCE',
              #
              # LNG CARRIER DATABASE
              #
+             # LNG Rates
              {source_code: 'LNG', code: 'CONV_R', 
               name: 'CONV_R - Conventional Liquid Natural Gas (LNG) Carrier Spot Market Freight Rate',
               column_names: ['Date', '$/day'], data: [], frequency: 'quarterly', 
               private: false,         # true do not show | false make visible
               description: "Conventional LNG carrier ... t.b.s."
+             },
+             # LNG Vessels
+             {source_code: 'LNG', code: 'CONV_V', 
+              name: 'CONV_V - Conventional Liquid Natural Gas (LNG) Carrier Vessels',
+              column_names: ['Date', 'Vessels'], data: [], frequency: 'quarterly', 
+              private: false,         # true do not show | false make visible
+              description: "Conventional LNG carrier vessels  ... t.b.s."
+             },
+             {source_code: 'LNG', code: 'CONV_NO', 
+              name: 'CONV_NO - Conventional Liquid Natural Gas (LNG) Carrier New Orders',
+              column_names: ['Date', 'Vessels'], data: [], frequency: 'quarterly', 
+              private: false,         # true do not show | false make visible
+              description: "Conventional LNG vessel New Orders  ... t.b.s."
+             },
+             {source_code: 'LNG', code: 'CONV_OB', 
+              name: 'CONV_OB - Conventional Liquid Natural Gas (LNG) Vessel Order Book',
+              column_names: ['Date', 'Vessels'], data: [], frequency: 'quarterly', 
+              private: false,         # true do not show | false make visible
+              description: "Conventional LNG vessel Order Book  ... t.b.s."
+             },
+             {source_code: 'LNG', code: 'CONV_D', 
+              name: 'CONV_D - Conventional Liquid Natural Gas (LNG) Vessel Deliveries',
+              column_names: ['Date', 'Vessels'], data: [], frequency: 'quarterly', 
+              private: false,         # true do not show | false make visible
+              description: "Conventional LNG vessels delivered  ... t.b.s."
              },
 
              #
