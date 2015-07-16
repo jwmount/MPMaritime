@@ -1,2 +1,0 @@
-# MPMaritime
-MPMaritime scripts
