@@ -188,16 +188,14 @@ datasets = [ {source_code: 'OTNK', code: 'VLCC_TD3_TCE',
               name: 'Very Large Liquid Propane Gas Carriers (VLGC), Fully Refrigerated',
               column_names: ['Date', '$/day'], data: [], frequency: 'weekly', 
               private: false,         # true do not show | false make visible
-              description: "The VLGC vessels primarily navigate the long routes from the countries in the Middle East region to Asia and from West Africa to the USA and Europe. The VLGCs primarily carry butane and propane.\n\nThe increasing demand for LPG especially in the Asia Pacific region is the primary driver bolstering the demand for very large gas carriers. Energy hungry countries such as Japan, China and India are the major centers for LPG imports. \n\nVLGC’s have cargo capacity in excess of 70,000 cbm. The cargo in the ships is carried at ambient pressure and in a fully-refrigerated condition. The vessels are fitted with a re-liquefaction plant that is capable of maintaining the temperature of the cargo.\n\nGas Carriers size classifications are subjective but generally place in the following size classes:\n•  Very Large Gas Carriers (VLGC) >70,000 cbm\n•  Large Gas Carriers (LGC)     50,000 - 70,000 cbm\n•  Medium Gas Carriers (MGC)     20,000 cbm - 40,000 cbm\n•  Small Gas Carriers       2,000 cbm - 20,000 cbm\n\nLPG is predominantly made up of propane and butane. It is also a colorless, clear fluid with no odor. It is carried either at these gases’ boiling point temperatures of -42.3º C (propane) and -0.5º C (butane), or under pressure at ambient temperature.\n\nSee also VLGC Fleet Statistics\n\n"
-             },
+              description: "VLGC vessels primarily navigate the long routes from the Middle East region to Asia and from West Africa to the USA and Europe. VLGCs primarily carry butane and propane.\n<p>\nIncreasing demand for LPG especially in the Asia Pacific region is the primary driver bolstering the demand for very large gas carriers. Energy hungry countries such as Japan, China and India are the major centers for LPG imports.\n<p>\nVLGC’s have cargo capacity in excess of 70,000 cbm. Cargo is carried at ambient pressure and in a fully-refrigerated condition. Vessels are fitted with a re-liquefaction plant that is capable of maintaining cargo temperature.\n<p>\nGas Carriers size classifications are subjective but generally place in the following size classes:\n<p>\n•  Very Large Gas Carriers (VLGC): \t >70,000 cbm\n<p>\n•  Large Gas Carriers (LGC):     \t\t50,000 - 70,000 cbm\n<p>\n•  Medium Gas Carriers (MGC):     \t\t20,000 cbm - 40,000 cbm\n<p>\n•  Small Gas Carriers (SGC):       \t\t2,000 cbm - 20,000 cbm\n<p>\nLPG is predominantly made up of propane and butane. It is a colorless, clear fluid with no odor. It is carried either at these gases’ boiling point temperatures of -42.3º C (propane) and -0.5º C (butane), or under pressure at ambient temperature.\n<p>\nSee also <a href='https://www.quandl.com/data/LPG_F'>VLGC Fleet Statistics</a>"
+              },
              # description per PY 07/16/15
              {source_code: 'LPG_R', code: 'LGC_SR', 
               name: 'Large Liquid Propane Gas Carriers (LGC), Fully Refrigerated',
               column_names: ['Date', '$/day'], data: [], frequency: 'weekly', 
               private: false,         # true do not show | false make visible
-              description: "Vessels sizes range from 50,000 to 70,000 cbm. The principal routes for LGC vessels are from the Black Sea to the USA and from West Africa to the USA. Most of the LGC fleet is employed for transporting ammonia.
-                            See also LGC Fleet Statistics.
-                            www.Quandl.com/data/LPG_R/VLGC_F"
+              description: "VLGC vessels primarily navigate the long routes from the Middle East region to Asia and from West Africa to the USA and Europe. VLGCs primarily carry butane and propane.\n<p>\nIncreasing demand for LPG especially in the Asia Pacific region is the primary driver bolstering the demand for very large gas carriers. Energy hungry countries such as Japan, China and India are the major centers for LPG imports.\n<p>\nVLGC’s have cargo capacity in excess of 70,000 cbm. Cargo is carried at ambient pressure and in a fully-refrigerated condition. Vessels are fitted with a re-liquefaction plant that is capable of maintaining cargo temperature.\n<p>\nGas Carriers size classifications are subjective but generally place in the following size classes:\n<p>\n•  Very Large Gas Carriers (VLGC): \t >70,000 cbm\n<p>\n•  Large Gas Carriers (LGC):     \t\t50,000 - 70,000 cbm\n<p>\n•  Medium Gas Carriers (MGC):     \t\t20,000 cbm - 40,000 cbm\n<p>\n•  Small Gas Carriers (SGC):       \t\t2,000 cbm - 20,000 cbm\n<p>\nLPG is predominantly made up of propane and butane. It is a colorless, clear fluid with no odor. It is carried either at these gases’ boiling point temperatures of -42.3º C (propane) and -0.5º C (butane), or under pressure at ambient temperature.\n<p>\nSee also <a href='https://www.quandl.com/data/LPG_F'>VLGC Fleet Statistics</a>"
              },
              # description per PY 07/16/15
              {source_code: 'LPG_R', code: 'SMGC_SR', 
@@ -207,16 +205,15 @@ datasets = [ {source_code: 'OTNK', code: 'VLCC_TD3_TCE',
               description: "SMGCs primarily operate on short distances and often carry olefins.  These vessels typically have a capacity of between 5,000 cbm and 20,000 cbm.\r\n\nSee also SMGC_SR Fleet Statistics"
              },
              # description per PY 07/16/15
-             {source_code: 'LPG_R', code: 'SMGC_SR', 
-              name: 'Lquid Ethanol Carrier (LEC)',
+             {source_code: 'LPG_R', code: 'ETHGC', 
+              name: 'Lquid Ethane Carrier (LEC)',
               column_names: ['Date', '$/day'], data: [], frequency: 'weekly', 
               private: false,         # true do not show | false make visible
-              description: "Vessels nominally sized around 10,000 cbm. Ethane is produced on an industrial scale from natural gas, and as a by-product of petroleum refining. Global ethane production was estimated at 55 million tons in 2013, the overwhelming majority in the Middle East and US. The primary use of ethane is in the chemical industry in the production of ethylene, which in 
-              turn is used to produce polyethylene, PVC, ethylene glycol and styrene.
-
-              Historically, ethane has been transported in small liquefied ethane/ethylene carriers (LECs)
-              designed and constructed to carry ethylene (boiling point -104°C) as well as ethane and other
-              ‘normal’ LPG cargoes. Currently there are only 29 LECs larger than 10,000 cbm, with the largest having a capacity of 22,000 cbm."
+              description: "Vessels nominally sized around 10,000 cbm. 
+                            <p>\n\nEthane is produced on an industrial scale from natural gas, and as a by-product of petroleum refining. Global ethane production was estimated at 55 million tons in 2013, the overwhelming majority in the Middle East and US.
+                            <p>The primary use of ethane is in the chemical industry in the production of ethylene, which in turn is used to produce polyethylene, PVC, ethylene glycol and styrene.
+                            <p>Historically, ethane has been transported in small liquefied ethane/ethylene carriers (LECs) designed and constructed to carry ethylene (boiling point -104°C) as well as ethane and other <i>normal</i> LPG cargoes. Currently there are only 29 LECs larger than 10,000 cbm, with the largest having a capacity of 22,000 cbm. 
+                            <p>See also <a href='www.quandl.com/data/LPG_R/ETHGC'>Liquified Ethane Carrier Fleet Statistics"
              
              # description per PY 07/16/15
              {source_code: 'LPG_R', code: 'MGC_SR', 
@@ -241,7 +238,7 @@ datasets = [ {source_code: 'OTNK', code: 'VLCC_TD3_TCE',
               name: 'Very Large Liquid Propane Gas Carriers (VLGC), Fully Refrigerated',
               column_names: ['Date', 'Deliveries', 'Deliveries(cbm)', 'Demolitions', 'Demolitions(cbm)', 'New Orders', 'New Orders(cbm)'], 
               private: false,         # true do not show | false make visible
-              description: "Vessels of 78,000 cbm or larger. The principal routes for LGC vessels are from the Black Sea to the USA and from West Africa to the USA. Most of the LGC fleet is employed for transporting ammonia.  See also 'Very Large Gas Carrier--Fleet History.'"
+              description: "VLGC vessels primarily navigate the long routes from the Middle East region to Asia and from West Africa to the USA and Europe. VLGCs primarily carry butane and propane.\n<p>\nIncreasing demand for LPG especially in the Asia Pacific region is the primary driver bolstering the demand for very large gas carriers. Energy hungry countries such as Japan, China and India are the major centers for LPG imports.\n<p>\nVLGC’s have cargo capacity in excess of 70,000 cbm. Cargo is carried at ambient pressure and in a fully-refrigerated condition. Vessels are fitted with a re-liquefaction plant that is capable of maintaining cargo temperature.\n<p>\nGas Carriers size classifications are subjective but generally place in the following size classes:\n<p>\n•  Very Large Gas Carriers (VLGC): \t >70,000 cbm\n<p>\n•  Large Gas Carriers (LGC):     \t\t50,000 - 70,000 cbm\n<p>\n•  Medium Gas Carriers (MGC):     \t\t20,000 cbm - 40,000 cbm\n<p>\n•  Small Gas Carriers (SGC):       \t\t2,000 cbm - 20,000 cbm\n<p>\nLPG is predominantly made up of propane and butane. It is a colorless, clear fluid with no odor. It is carried either at these gases’ boiling point temperatures of -42.3º C (propane) and -0.5º C (butane), or under pressure at ambient temperature.\n<p>\nSee also <a href='https://www.quandl.com/data/LPG_F'>VLGC Fleet Statistics</a>"
              },
              {source_code: 'LPG_F', code: 'LGC_FR', 
               name: 'Large Liquid Propane Gas Carriers (LGC), Fully Refrigerated',
@@ -273,12 +270,11 @@ datasets = [ {source_code: 'OTNK', code: 'VLCC_TD3_TCE',
               name: 'Liquid Ethanol Carriers (LEC)',
               column_names: ['Date', 'Deliveries', 'Deliveries(cbm)', 'Demolitions', 'Demolitions(cbm)', 'New Orders', 'New Orders(cbm)'], 
               private: false,         # true do not show | false make visible
-              description: "Vessels nominally sized around 10,000 cbm. Ethane is produced on an industrial scale from natural gas, and as a by-product of petroleum refining. Global ethane production was estimated at 55 million tons in 2013, the overwhelming majority in the Middle East and US. The primary use of ethane is in the chemical industry in the production of ethylene, which in 
-              turn is used to produce polyethylene, PVC, ethylene glycol and styrene.
-
-              Historically, ethane has been transported in small liquefied ethane/ethylene carriers (LECs)
-              designed and constructed to carry ethylene (boiling point -104°C) as well as ethane and other
-              ‘normal’ LPG cargoes. Currently there are only 29 LECs larger than 10,000 cbm, with the largest having a capacity of 22,000 cbm."
+              description: "Vessels nominally sized around 10,000 cbm. 
+                            <p>\n\nEthane is produced on an industrial scale from natural gas, and as a by-product of petroleum refining. Global ethane production was estimated at 55 million tons in 2013, the overwhelming majority in the Middle East and US.
+                            <p>The primary use of ethane is in the chemical industry in the production of ethylene, which in turn is used to produce polyethylene, PVC, ethylene glycol and styrene.
+                            <p>Historically, ethane has been transported in small liquefied ethane/ethylene carriers (LECs) designed and constructed to carry ethylene (boiling point -104°C) as well as ethane and other <i>normal</i> LPG cargoes. Currently there are only 29 LECs larger than 10,000 cbm, with the largest having a capacity of 22,000 cbm. 
+                             <p>See also <a href='www.quandl.com/data/LPG_R/ETHGC'>Liquified Ethane Carrier Fleet Statistics"
              }
 		]
 
