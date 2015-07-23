@@ -5,9 +5,6 @@
 # QUANDL_TOKEN=Z_FgEe3SYywKzHT7myYr ruby load.rb
 require 'pry'
 
-AVG_DSs = 8
-
-
 class Q_data
 
   @fn = ''
@@ -21,14 +18,18 @@ class Q_data
     @quandl_data_hdr = "Quandl Code|Date|Value"  
 
     qc = []
-    @qfilename = fn.gsub(/DATA\//,'')
+    @qfilename = fn.gsub(/DATA\//,'./QREADY/')
     @qfilename = @qfilename.gsub!(/.csv/,'.txt')
+
     fl = File.open(@qfilename, 'w')
     fl.puts @quandl_data_hdr 
   
     CSV.foreach(fn) do |row| 
+      if !@flag and row[0] == 'Date'
+        @flag = !@flag                           
+        next unless @flag
+      end
       puts "\t" + row.to_s
-      @flag = !@flag                           if row[0] == 'Date'
       qc << row[1]                             if row[0].is_a? String and row[0].include? "Quandl:"
       fl.puts (qc + row).join('|') + "\n"      if !qc.empty? and @flag and row[0] != 'Date'
     end #CSV
@@ -40,6 +41,7 @@ class Q_data
   end
 
   def wrap_up
+    puts fl.get.to_s
     puts 'Close _data'
   end
 
@@ -59,8 +61,9 @@ class Q_metadata
     @flag = false
 
     qc = []
-    @qfilename = fn.gsub(/DATA\//,'')
+    @qfilename = fn.gsub(/DATA\//,'./QREADY/')
     @qfilename = @qfilename.gsub!(/.csv/,'.txt')
+
     fl = File.open(@qfilename, 'w')
   
     CSV.foreach(fn) do |row| 
@@ -91,7 +94,7 @@ class Q_FTP
   @ft = ''
   @ftps = nil
 
-  def initialize ( limit )
+  def initialize
     @ftps = DoubleBagFTPS.new
     @ftps.ssl_context = DoubleBagFTPS.create_ssl_context(:verify_mode => OpenSSL::SSL::VERIFY_NONE)
     @ftps.connect('ftp.quandl.com')
@@ -118,7 +121,12 @@ class Q_FTP
   end
 
   def push( qfl )
-    @ftps.puttextfile(qfl, "data/#{qfl}") # keep a copy and send one to Quandl
+    begin
+      @ftps.puttextfile(qfl, "data/#{qfl}") # keep a copy and send one to Quandl
+      puts "\tpushed #{qfl}"
+    rescue
+      puts e.name
+    end
   end
 
   def wrap_up
