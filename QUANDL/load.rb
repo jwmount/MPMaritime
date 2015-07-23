@@ -39,6 +39,7 @@ qftp = Q_FTP.new
       qfl.compose(qftp.get_filename)
 
     # push the quandlfile to quandl
+    puts qfl.get_qfilename
     qftp.push(qfl.get_qfilename)
 
   end # files
