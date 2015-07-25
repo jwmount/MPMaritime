@@ -6,12 +6,16 @@
 # Refs:   https://github.com/quandl/quandl_client.git
 #         https://www.quandl.com/data/LPG_F
 #         https://www.quandl.com/documentation#!/api/DELETE-api--version-permissions---format-_delete_2
+# Usage:  Steps to load .csv files to Quandl
+#         1.  Put *_data*.csv and *_metadata*.csv in /DATA folder.
+#         2.  Execute ruby load.rb (see model command above)
 # Features Needed:
 #         1.  Message if there are no files to process; number of files processed
 #         2.  Quandl key 'Quandl:' not found; message and drop file, count as not processed; malformed
-#         3.  Some sort of logging facility
-#         4.  Skip if date in future
+#         3.  Some sort of logging facility, currently just writes qfl to QREADY folder.
+#         4.  Skip if date in future.
 #         5.  Add capability to do multi-column loads needed for LPG_F Datasets.
+#         6.  Capability to shift input folder or perhaps allow multiple folders, e.g. Quandl Master Folder in DropBox.
 #
 require 'quandl/client'
 require 'double_bag_ftps'
@@ -39,10 +43,11 @@ qftp = Q_FTP.new
       qfl.compose(qftp.get_filename)
 
     # push the quandlfile to quandl
-    puts qfl.get_qfilename
+    puts "\n\t" + qfl.get_qfilename
     qftp.push(qfl.get_qfilename)
 
   end # files
 
 qftp.wrap_up
+
 

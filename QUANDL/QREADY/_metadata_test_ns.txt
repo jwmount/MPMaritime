@@ -1,2 +1,0 @@
-Quandl Code|Name|Description
-DMOS/SMALL|Small Boats|Really personal vessels

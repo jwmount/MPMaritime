@@ -1,22 +1,20 @@
-Quandl Code,Name,Description
-DMOS, small boats,  Really small scale boats
-DMOS, somewhat larger boats, Takes two to carry these from A to B
-Crude Oil Freight Forward Agreements, no name 1, no description
-Crude Oil Seaborne Export/Import, no name 2, no description
-Oil Products Seaborne Import/Export, no name 3, no description
-Gasoline Seaborne Import/Export, no name 4, no description
-Naptha Seaborne Import?export, no name 5, no description
-Jet Fuel Seaborne Import/Export, no name 6, no description
-Met Coal Seaborne Import/Export, no name 7, no description
-Steam Coal Seaborne Import/Export, no name 8, no description
-Iron Ore Seaborne Import/Export, no name 9, no description
-Nickel Seaborne Import/Export, no name 10, no description
-Bauxite Seaborne Import/Export, no name 11, no description
-Dry Bulk Fleet Stats, no name 12, no description
-Bunker Fuel, no name 13, no description
-Tanker Prices - Secondhand, no name 14, no description
-Bulker Prices - Secondhand, no name 15, no description
-Containership Prices - Secondhand, no name 16, no description
-Tanker Prices - New, no name 17, no description
-Bulker Prices - New, no name 18, no description
-Containership Prices - New, no name 19, no description
+# Demo Data base series
+MPM_03,COFFA, Crude Oil Freight Forward Agreements, Demo - no description
+MPM_04,COSEI, Crude Oil Seaborne Export/Import, Demo - no description
+MPM_05,OPSIE, Oil Products Seaborne Import/Export, Demo - no description
+MPM_06,GSIE, Gasoline Seaborne Import/Export, Demo - no description
+MPM_07,NSIE, Naptha Seaborne Import/export, Demo - no description
+MPM_08,JFSIE, Jet Fuel Seaborne Import/Export, Demo - no description
+MPM_09,MCSIE, Met Coal Seaborne Import/Export, Demo - no description
+MPM_10,SCSIE, Steam Coal Seaborne Import/Export, Demo - no description
+MPM_11,IOSIE, Iron Ore Seaborne Import/Export, Demo - no description
+MPM_12,NSIE, Nickel Seaborne Import/Export, Demo - no description
+MPM_13,BSIE, Bauxite Seaborne Import/Export, Demo - no description
+MPM_14,DBFS, Dry Bulk Fleet Stats, Demo - no description
+MPM_15,BFUEL, Bunker Fuel, Demo - no description
+MPM_16,TPSEC, Tanker Prices - Secondhand, Demo - no description
+MPM_17,BPSEC, Bulker Prices - Secondhand, Demo - no description
+MPM_18,CONPS, Containership Prices - Secondhand, Demo - no description
+MPM_19,TPNEW, Tanker Prices - New, Demo - no description
+MPM_20,BPNEW, Bulker Prices - New, Demo - no description
+MPM_21,CPNEW, Containership Prices - New, Demo - no description

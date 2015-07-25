@@ -1,2 +1,3 @@
 Quandl Code|Name|Description|Frequency
-DMOS/SMALL|Small Boats|Really personal vessels|Daily
+DMOS/SMALL|Small Boats|Really personal vessels
+DMOS/SAIL|Ketch Rig to 60 feet|Yachts for the most part older design

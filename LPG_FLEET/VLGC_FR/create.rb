@@ -32,8 +32,6 @@ Quandl::Client.token = ENV['QUANDL_TOKEN']
     d            = Dataset.create(attributes)
   end
 
-  binding.pry
-
   d.save
   
   puts "created and saved dataset #{attributes[:source_code]}/#{attributes[:code]}."
