@@ -36,16 +36,16 @@ qftp = Q_FTP.new
 
     # next file in /DATA reservoir of _data and _metadata files
     qftp.set_filename( filename )
-
+    puts filename 
       # quandl file, actual class will vary by file type
       qfl = qftp.process
       # compose the quandl file 
       qfl.compose(qftp.get_filename)
 
-    # push the quandlfile to quandl
-    puts "\n\t" + qfl.get_qfilename
-    qftp.push(qfl.get_qfilename)
-
+      # push the quandlfile to quandl
+      # qftp.push(qfl.get_qfilename)
+      qfl.push
+      qfl.wrap_up
   end # files
 
 qftp.wrap_up

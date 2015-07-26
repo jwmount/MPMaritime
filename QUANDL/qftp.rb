@@ -8,13 +8,117 @@
 require 'Date'
 require 'pry'
 
-class Q_data
+#
+# CLASS Q_FTP ===========================================
+#
+class Q_FTP
+
+  @fn = ''
+  @f = ""
+  @ft = ''
+  @ftps = nil
+  @count = 0
+
+  def initialize
+    @count = 0
+    @ftps = DoubleBagFTPS.new
+    @ftps.ssl_context = DoubleBagFTPS.create_ssl_context(:verify_mode => OpenSSL::SSL::VERIFY_NONE)
+    @ftps.connect('ftp.quandl.com')
+    @ftps.login('mpm', 'LRvq2uncjce4Uw')
+    @ftps.passive = true
+#    @ftps.debug_mode = true
+
+    puts "\n\n\nCreate Quandl Demo\t\t\t#{$0}\n________________________________________________________"
+    puts "(c) Copyright 2009 VenueSoftware Corp. All Rights Reserved. \n\n"
+  end
+
+  def set_filename( fn )
+    @fn = fn
+  end
+
+  def get_filename
+    @fn
+  end
+
+  def process
+    puts "\n\tProcess: #{@fn}\n"
+    return Q_data.new()          if @fn.include?( '_data' )
+    return Q_metadata.new()      if @fn.include?( '_metadata' )
+    nil
+  end
+
+  def push qfilename
+
+    begin
+#      @ftps.puttextfile(qfl, "data/#{qfl}") # keep a copy and send one to Quandl
+      # push from loalfile to remote_file
+      @fn.gsub!(/DATA/,'data')
+      @ftps.puttextfile( qfilename, @fn )  # keep a copy and send one to Quandl"
+      puts "\tPushed: #{qfl}"
+    rescue Exception => e
+      puts "\nFAILED on push #{qfilename} to #{@fn} on Quandl.\t\t\t#{$0}\n\n_____________________________________________________"
+      puts e
+    end
+    @count += 1
+  end
+
+  def wrap_up
+    puts "\nCompleted #{@count} Quandl Loads\tat #{Time.now.to_s}\t\t#{$0}\n________________________________________________________\n\n"
+  end
+
+end # class Q_FTP
+
+#
+# CLASS Q_Meta ==========================================
+#
+class Q_metadata < Q_FTP
+  #@fn = ''
+  @qfilename = ''
+
+  def initialize
+  end
+
+  def push
+    super @qfilename
+  end
+
+  def compose(fn)
+    @flag = false
+
+    @qfilename = fn.gsub(/DATA\//,'QREADY/')
+    @qfilename = @qfilename.gsub!(/.csv/,'.txt')
+
+    fl = File.open(@qfilename, 'w')
+  
+    CSV.foreach(fn) do |row| 
+      puts "\t" + row.to_s
+      @flag = !@flag                      if row[0] == 'Quandl Code'
+      fl.puts (row).join('|') + "\n"      if @flag #and row[0] != 'Date'
+     end #CSV
+
+    fl.close
+  end
+
+  def get_qfilename
+    @qfilename
+  end
+
+  def wrap_up
+    puts "\tCompleted #{@qfilename}."
+  end
+end # Q_metadata
+
+class Q_data < Q_FTP
 
   #@fn = ''
   @qfilename = ''
   
   def get_qfilename
     @qfilename
+  end
+
+  def push
+    super @qfilename
   end
 
   def compose(fn)
@@ -70,102 +174,6 @@ class Q_data
   end
 
   def wrap_up
-    puts fl.get.to_s
-    puts 'Close _data'
   end
 
 end
-#
-# CLASS Q_Meta ==========================================
-#
-class Q_metadata
-  #@fn = ''
-  @qfilename = ''
-
-  def initialize
-  end
-
-  def compose(fn)
-    @flag = false
-
-    @qfilename = fn.gsub(/DATA\//,'QREADY/')
-    @qfilename = @qfilename.gsub!(/.csv/,'.txt')
-
-    fl = File.open(@qfilename, 'w')
-  
-    CSV.foreach(fn) do |row| 
-      puts "\t" + row.to_s
-      @flag = !@flag                      if row[0] == 'Quandl Code'
-      fl.puts (row).join('|') + "\n"      if @flag #and row[0] != 'Date'
-     end #CSV
-
-    fl.close
-  end
-
-  def get_qfilename
-    @qfilename
-  end
-
-  def wrap_up
-    puts 'Close _metadata'
-    super
-  end
-end # Q_metadata
-
-#
-# CLASS Q_FTP ===========================================
-#
-class Q_FTP
-
-  @fn = ''
-  @f = ""
-  @ft = ''
-  @ftps = nil
-
-  def initialize
-    @ftps = DoubleBagFTPS.new
-    @ftps.ssl_context = DoubleBagFTPS.create_ssl_context(:verify_mode => OpenSSL::SSL::VERIFY_NONE)
-    @ftps.connect('ftp.quandl.com')
-    @ftps.login('mpm', 'LRvq2uncjce4Uw')
-    @ftps.passive = true
-#    @ftps.debug_mode = true
-
-    puts "\n\n\nCreate Quandl Demo\t\t\t#{$0}\n________________________________________________________"
-    puts "(c) Copyright 2009 VenueSoftware Corp. All Rights Reserved. \n\n"
-  end
-
-  def set_filename( fn )
-    @fn = fn
-  end
-
-  def get_filename
-    @fn
-  end
-
-  def process
-    puts "\n\tProcess: #{@fn}\n"
-    return Q_data.new()          if @fn.include?( '_data' )
-    return Q_metadata.new()      if @fn.include?( '_metadata' )
-    nil
-  end
-
-  def push( qfl )
-
-    begin
-#      @ftps.puttextfile(qfl, "data/#{qfl}") # keep a copy and send one to Quandl
-      # push from loalfile to remote_file
-      @fn.gsub!(/DATA/,'data')
-      @ftps.puttextfile( qfl, @fn )  # keep a copy and send one to Quandl"
-      puts "\tPushed #{qfl}"
-    rescue Exception => e
-      puts "\nFAILED on push #{qfl} to #{@fn} on Quandl.\t\t\t#{$0}\n\n_____________________________________________________"
-      puts e
-    end
-  end
-
-  def wrap_up
-    puts "\nCompleted Quandl Load\tat #{Time.now.to_s}\t\t#{$0}\n________________________________________________________\n\n"
-  end
-    
-
-end # class QdlDB
