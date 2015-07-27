@@ -13,11 +13,8 @@ require 'pry'
 #
 class Q_FTP
 
-  @fn = ''
-  @f = ""
-  @ft = ''
   @ftps = nil
-  @count = 0
+  @filename = ''
 
   def initialize
     @count = 0
@@ -26,44 +23,55 @@ class Q_FTP
     @ftps.connect('ftp.quandl.com')
     @ftps.login('mpm', 'LRvq2uncjce4Uw')
     @ftps.passive = true
-#    @ftps.debug_mode = true
 
     puts "\n\n\nCreate Quandl Demo\t\t\t#{$0}\n________________________________________________________"
     puts "(c) Copyright 2009 VenueSoftware Corp. All Rights Reserved. \n\n"
   end
 
-  def set_filename( fn )
-    @fn = fn
+  # local file name, resides in DATA and is .csv.
+  def set_filename( f )
+    @filename = f
+    puts "\t" + @filename
   end
 
   def get_filename
-    @fn
+    @filename
+  end
+
+  def get_qfilename
+    fn = @filename.gsub(/DATA\//,'data/')
+    fn = fn.gsub!(/.csv/,'.txt')
+  end
+
+  def get_ready_filename
+    fn = get_filename
+    fn = fn.gsub!(/DATA\//,'READY/')
+    fn = fn.gsub!(/.csv/,'.txt')
   end
 
   def process
-    puts "\n\tProcess: #{@fn}\n"
-    return Q_data.new()          if @fn.include?( '_data' )
-    return Q_metadata.new()      if @fn.include?( '_metadata' )
+    fn = get_filename
+    puts "\n\tProcess: #{fn}\n"
+    return Q_data.new(fn)          if fn.include?( '_data' )
+    return Q_metadata.new(fn)      if fn.include?( '_metadata' )
     nil
   end
 
-  def push qfilename
-
+  # original file is @filename now, e.g. 
+  # "DATA/_dataETHGC Rates Master Sheet.csv"
+  def push
     begin
-#      @ftps.puttextfile(qfl, "data/#{qfl}") # keep a copy and send one to Quandl
-      # push from loalfile to remote_file
-      @fn.gsub!(/DATA/,'data')
-      @ftps.puttextfile( qfilename, @fn )  # keep a copy and send one to Quandl"
-      puts "\tPushed: #{qfl}"
+      # send qfilename file to quandl, d
+      @ftps.puttextfile( get_qfilename, get_ready_filename)  
+      puts "\tPushed: #{fn}"
     rescue Exception => e
-      puts "\nFAILED on push #{qfilename} to #{@fn} on Quandl.\t\t\t#{$0}\n\n_____________________________________________________"
+      puts "\nFAILED on push #{get_qfilename} to #{get_qfilename} on Quandl.\t\t\t#{$0}\n\n_____________________________________________________"
       puts e
     end
-    @count += 1
   end
 
-  def wrap_up
-    puts "\nCompleted #{@count} Quandl Loads\tat #{Time.now.to_s}\t\t#{$0}\n________________________________________________________\n\n"
+  def wrap_up count
+    puts "\nCompleted #{count} Quandl Loads\tat #{Time.now.to_s}\t\t#{$0}\n________________________________________________________\n\n"
   end
 
 end # class Q_FTP
@@ -72,25 +80,26 @@ end # class Q_FTP
 # CLASS Q_Meta ==========================================
 #
 class Q_metadata < Q_FTP
-  #@fn = ''
-  @qfilename = ''
 
-  def initialize
+  @filename = ''
+
+  def initialize( filename )
+    @filename = filename
   end
 
+
   def push
-    super @qfilename
+    super 
   end
 
   def compose(fn)
-    @flag = false
 
-    @qfilename = fn.gsub(/DATA\//,'QREADY/')
-    @qfilename = @qfilename.gsub!(/.csv/,'.txt')
+    qrfn = fn.gsub(/DATA\//,'QREADY/')
+    qrfn = @qfilename.gsub!(/.csv/,'.txt')
 
-    fl = File.open(@qfilename, 'w')
+    fl = File.open( qrfn, 'w' )
   
-    CSV.foreach(fn) do |row| 
+    CSV.foreach(fl) do |row| 
       puts "\t" + row.to_s
       @flag = !@flag                      if row[0] == 'Quandl Code'
       fl.puts (row).join('|') + "\n"      if @flag #and row[0] != 'Date'
@@ -99,41 +108,42 @@ class Q_metadata < Q_FTP
     fl.close
   end
 
-  def get_qfilename
-    @qfilename
-  end
-
-  def wrap_up
+  def wrap_up count
     puts "\tCompleted #{@qfilename}."
   end
 end # Q_metadata
 
+#
+# Q_data =========================================
+# 
 class Q_data < Q_FTP
 
-  #@fn = ''
-  @qfilename = ''
-  
-  def get_qfilename
-    @qfilename
+  @filename = ''
+
+  def initialize( filename )
+    @filename = filename
   end
 
   def push
-    super @qfilename
+    super
   end
 
+  # Composes the Quandle formated version of the DATA/*.csv file
   def compose(fn)
 
     @flag = false
     @quandl_data_hdr = "Quandl Code|Date|Value"  
 
     qc = []
-    @qfilename = fn.gsub(/DATA\//,'QREADY/')
-    @qfilename = @qfilename.gsub!(/.csv/,'.txt')
-
-    fl = File.open(@qfilename, 'w')
+    qfilename = @filename.gsub(/DATA\//,'QREADY/')
+    qfilename = qfilename.gsub!(/.csv/,'.txt')
+  
+     fl = File.open(qfilename, 'w')
     fl.puts @quandl_data_hdr 
   
+    # Read and handle each row of the file
     CSV.foreach(fn) do |row| 
+      # put row on command line as visual record
       puts "\t" + row.to_s
 
       # capture the Quandl code and skip line
@@ -169,11 +179,8 @@ class Q_data < Q_FTP
     fl.close
   end
 
-  def get_qfilename
-    @qfilename
-  end
-
-  def wrap_up
+  def wrap_up count
+    super count
   end
 
 end

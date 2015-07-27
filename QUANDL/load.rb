@@ -31,12 +31,13 @@ Quandl::Client.token = ENV['QUANDL_TOKEN']
 
 # quandl ftp object, argument is average number of datasets to create, future feater
 qftp = Q_FTP.new
+count = 0
 
   Dir.glob("DATA/*.csv").each do |filename|
-
+    count += 1
     # next file in /DATA reservoir of _data and _metadata files
     qftp.set_filename( filename )
-    puts filename 
+
       # quandl file, actual class will vary by file type
       qfl = qftp.process
       # compose the quandl file 
@@ -46,8 +47,9 @@ qftp = Q_FTP.new
       # qftp.push(qfl.get_qfilename)
       qfl.push
       qfl.wrap_up
+  
   end # files
 
-qftp.wrap_up
+#qftp.wrap_up count
 
 
