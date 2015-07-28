@@ -13,10 +13,11 @@ require 'pry'
 #
 class Q_FTP
 
-  @ftps = nil
   @filename = ''
 
-  def initialize
+  def initialize f
+
+    set_filename f
     @count = 0
     @ftps = DoubleBagFTPS.new
     @ftps.ssl_context = DoubleBagFTPS.create_ssl_context(:verify_mode => OpenSSL::SSL::VERIFY_NONE)
@@ -28,10 +29,14 @@ class Q_FTP
     puts "(c) Copyright 2009 VenueSoftware Corp. All Rights Reserved. \n\n"
   end
 
+  def get_ftps
+    @ftps
+  end
+
   # local file name, resides in DATA and is .csv.
   def set_filename( f )
     @filename = f
-    puts "\t" + @filename
+    puts "\t#{f}"
   end
 
   def get_filename
@@ -39,33 +44,37 @@ class Q_FTP
   end
 
   def get_qfilename
-    fn = @filename.gsub(/DATA\//,'data/')
+    f  = get_filename
+    fn = f.gsub(/DATA\//,'data/')
     fn = fn.gsub!(/.csv/,'.txt')
   end
 
   def get_ready_filename
-    fn = get_filename
-    fn = fn.gsub!(/DATA\//,'READY/')
+    f  = get_filename
+    fn = f.gsub(/DATA\//,'QREADY/')
     fn = fn.gsub!(/.csv/,'.txt')
   end
 
   def process
-    fn = get_filename
-    puts "\n\tProcess: #{fn}\n"
-    return Q_data.new(fn)          if fn.include?( '_data' )
-    return Q_metadata.new(fn)      if fn.include?( '_metadata' )
+    f = get_filename
+    puts "\n\tProcess: #{f}\n"
+    return Q_data.new(f)          if f.include?( '_data' )
+    return Q_metadata.new(f)      if f.include?( '_metadata' )
     nil
   end
 
   # original file is @filename now, e.g. 
   # "DATA/_dataETHGC Rates Master Sheet.csv"
   def push
+
     begin
-      # send qfilename file to quandl, d
-      @ftps.puttextfile( get_qfilename, get_ready_filename)  
-      puts "\tPushed: #{fn}"
+      # send to quandle.ftp.com, from_file, to_file
+      ftps = get_ftps
+      binding.pry
+      ftps.puttextfile( get_ready_filename, get_qfilename )  
+      puts "\tPushed: #{get_ready_filename} to #{get_qfilename}"
     rescue Exception => e
-      puts "\nFAILED on push #{get_qfilename} to #{get_qfilename} on Quandl.\t\t\t#{$0}\n\n_____________________________________________________"
+      puts "\nFAILED to push #{get_ready_qfilename} to #{get_qfilename} on Quandl.\t\t\t#{$0}\n\n_____________________________________________________"
       puts e
     end
   end
@@ -83,10 +92,14 @@ class Q_metadata < Q_FTP
 
   @filename = ''
 
-  def initialize( filename )
-    @filename = filename
+  def initialize( f )
+    set_filename f
+    super f
   end
 
+  def set_filename f
+    @filename = f
+  end
 
   def push
     super 
@@ -109,7 +122,7 @@ class Q_metadata < Q_FTP
   end
 
   def wrap_up count
-    puts "\tCompleted #{@qfilename}."
+    #puts "\tWrap-up #{@qfilename}."
   end
 end # Q_metadata
 
@@ -120,8 +133,13 @@ class Q_data < Q_FTP
 
   @filename = ''
 
-  def initialize( filename )
-    @filename = filename
+  def initialize( f )
+    set_filename f
+    super f
+  end
+
+  def set_filename f
+    @filename = f
   end
 
   def push
@@ -179,8 +197,8 @@ class Q_data < Q_FTP
     fl.close
   end
 
-  def wrap_up count
-    super count
+  def wrap_up
+   # super count
   end
 
 end
