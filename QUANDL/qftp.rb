@@ -8,6 +8,12 @@
 require 'Date'
 require 'pry'
 
+# Remove embed dbl quotes, not allowed by Quandl
+class String
+  def to_Qdl
+    gsub /\"/,"'"
+  end
+end
 #
 # CLASS Q_FTP ===========================================
 #
@@ -15,9 +21,9 @@ class Q_FTP
 
   @filename = ''
 
-  def initialize f
+  def initialize( f )
 
-    set_filename f
+    set_filename( f )
     @count = 0
     @ftps = DoubleBagFTPS.new
     @ftps.ssl_context = DoubleBagFTPS.create_ssl_context(:verify_mode => OpenSSL::SSL::VERIFY_NONE)
@@ -73,7 +79,7 @@ class Q_FTP
       ftps.puttextfile( get_ready_filename, get_qfilename )  
       puts "\tPushed: #{get_ready_filename} to #{get_qfilename}"
     rescue Exception => e
-      puts "\nFAILED to push #{get_ready_qfilename} to #{get_qfilename} on Quandl.\t\t\t#{$0}\n\n_____________________________________________________"
+      puts "\n\tFAILED to push #{get_ready_filename} to #{get_qfilename} on Quandl.\t\t\t#{$0}\n\n_____________________________________________________"
       puts e
     end
   end
@@ -88,34 +94,30 @@ class Q_metadata < Q_FTP
   @filename = ''
 
   def initialize( f )
-    set_filename f
-    super f
-  end
-
-  def set_filename f
-    @filename = f
+    super( f )
   end
 
   def push
     super 
   end
 
-  def compose #(fn)
+  def compose( fn )
+    @flag = false
+    @quandl_metadata_hdr = "Quandl Code|Name|Description"  
 
-    quandl_metadata_hdr = "Quandl Code|Name|Description"  
+    # filename to write
+    qrfn   = fn.gsub(/DATA\//,'QREADY/')
+    qrfn   = qrfn.gsub!(/.csv/,'.txt')
+    # file to write
+    fout   = File.open( qrfn, 'w' )
+  #  fout.puts @quandl_metadata_hdr
 
-    qrfn = @filename.gsub(/DATA\//,'QREADY/')
-    qrfn = qrfn.gsub!(/.csv/,'.txt')
-
-    fl = File.open( qrfn, 'w' )
-    fl.puts quandl_metadata_hdr
-
-    CSV.foreach(fl) do |row| 
+    CSV.foreach( fn ) do |row| 
       puts "\t" + row.to_s
-      fl.puts (row).join('|') + "\n"      if @flag #and row[0] != 'Date'
+      fout.puts (row).join('|') + "\n" #     if @flag #and row[0] != 'Date'
      end #CSV
 
-    fl.close
+    fout.close
   end
 
   def wrap_up
@@ -144,7 +146,7 @@ class Q_data < Q_FTP
   end
 
   # Composes the Quandle formated version of the DATA/*.csv file
-  def compose #(fn)
+  def compose( fn )
 
     @flag = false
     @quandl_data_hdr = "Quandl Code|Date|Value"  
@@ -157,15 +159,14 @@ class Q_data < Q_FTP
     fl.puts @quandl_data_hdr 
   
     # Read and handle each row of the file
-    CSV.foreach(fl) do |row| 
-      
+    CSV.foreach(fn) do |row| 
+      puts "\t" + row.to_s
       # strip out double quote characters 
       row.each do |r|
-        r.gsub!(/"/,"'")  unless r.nil?
+        r.to_Qdl unless r.nil?
+        #REMOVE r.gsub!(/"/,"'")  unless r.nil?
+        puts r
       end
-
-      # put row on command line as visual record
-      puts "\t" + row.to_s
 
       # capture the Quandl code and skip line
       if row[0].is_a? String and row[0].include? "Quandl:"

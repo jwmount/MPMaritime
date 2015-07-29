@@ -16,6 +16,7 @@
 #         4.  Skip if date in future.
 #         5.  Add capability to do multi-column loads needed for LPG_F Datasets.
 #         6.  Capability to shift input folder or perhaps allow multiple folders, e.g. Quandl Master Folder in DropBox.
+#         7.  q_metadata class does not handle comments, just has @flag
 #
 require 'quandl/client'
 require 'double_bag_ftps'
@@ -37,13 +38,12 @@ Quandl::Client.token = ENV['QUANDL_TOKEN']
     # next file in /DATA reservoir of _data and _metadata files
     qftp.set_filename( f )
 
-      # quandl file, actual class will vary by file type
+      # Process file being prepared for Quandl, actual class will vary by file type
       qfl = qftp.process
       # compose the quandl file 
-      qfl.compose#(qftp.get_filename)
+      qfl.compose (qftp.get_filename)
 
       # push the quandlfile to quandl
-      # qftp.push(qfl.get_qfilename)
       qfl.push
       qfl.wrap_up
   
