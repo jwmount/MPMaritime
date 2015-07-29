@@ -40,7 +40,7 @@ Quandl::Client.token = ENV['QUANDL_TOKEN']
       # quandl file, actual class will vary by file type
       qfl = qftp.process
       # compose the quandl file 
-      qfl.compose(qftp.get_filename)
+      qfl.compose#(qftp.get_filename)
 
       # push the quandlfile to quandl
       # qftp.push(qfl.get_qfilename)

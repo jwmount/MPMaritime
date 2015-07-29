@@ -100,20 +100,25 @@ class Q_metadata < Q_FTP
     super 
   end
 
-  def compose(fn)
+  def compose #(fn)
 
-    qrfn = fn.gsub(/DATA\//,'QREADY/')
-    qrfn = @qfilename.gsub!(/.csv/,'.txt')
+    quandl_metadata_hdr = "Quandl Code|Name|Description"  
+
+    qrfn = @filename.gsub(/DATA\//,'QREADY/')
+    qrfn = qrfn.gsub!(/.csv/,'.txt')
 
     fl = File.open( qrfn, 'w' )
-  
+    fl.puts quandl_metadata_hdr
+
     CSV.foreach(fl) do |row| 
       puts "\t" + row.to_s
-      @flag = !@flag                      if row[0] == 'Quandl Code'
       fl.puts (row).join('|') + "\n"      if @flag #and row[0] != 'Date'
      end #CSV
 
     fl.close
+  end
+
+  def wrap_up
   end
 
 end # Q_metadata
@@ -139,7 +144,7 @@ class Q_data < Q_FTP
   end
 
   # Composes the Quandle formated version of the DATA/*.csv file
-  def compose(fn)
+  def compose #(fn)
 
     @flag = false
     @quandl_data_hdr = "Quandl Code|Date|Value"  
@@ -152,7 +157,7 @@ class Q_data < Q_FTP
     fl.puts @quandl_data_hdr 
   
     # Read and handle each row of the file
-    CSV.foreach(fn) do |row| 
+    CSV.foreach(fl) do |row| 
       
       # strip out double quote characters 
       row.each do |r|
@@ -193,6 +198,9 @@ class Q_data < Q_FTP
 
     end #CSV
     fl.close
+  end
+
+  def wrap_up
   end
 
 end
