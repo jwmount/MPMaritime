@@ -70,7 +70,6 @@ class Q_FTP
     begin
       # send to quandle.ftp.com, from_file, to_file
       ftps = get_ftps
-      binding.pry
       ftps.puttextfile( get_ready_filename, get_qfilename )  
       puts "\tPushed: #{get_ready_filename} to #{get_qfilename}"
     rescue Exception => e
@@ -79,14 +78,10 @@ class Q_FTP
     end
   end
 
-  def wrap_up count
-    puts "\nCompleted #{count} Quandl Loads\tat #{Time.now.to_s}\t\t#{$0}\n________________________________________________________\n\n"
-  end
-
 end # class Q_FTP
 
 #
-# CLASS Q_Meta ==========================================
+# CLASS Q_Metadata ==========================================
 #
 class Q_metadata < Q_FTP
 
@@ -121,9 +116,6 @@ class Q_metadata < Q_FTP
     fl.close
   end
 
-  def wrap_up count
-    #puts "\tWrap-up #{@qfilename}."
-  end
 end # Q_metadata
 
 #
@@ -156,11 +148,17 @@ class Q_data < Q_FTP
     qfilename = @filename.gsub(/DATA\//,'QREADY/')
     qfilename = qfilename.gsub!(/.csv/,'.txt')
   
-     fl = File.open(qfilename, 'w')
+    fl = File.open(qfilename, 'w')
     fl.puts @quandl_data_hdr 
   
     # Read and handle each row of the file
     CSV.foreach(fn) do |row| 
+      
+      # strip out double quote characters 
+      row.each do |r|
+        r.gsub!(/"/,"'")  unless r.nil?
+      end
+
       # put row on command line as visual record
       puts "\t" + row.to_s
 
@@ -195,10 +193,6 @@ class Q_data < Q_FTP
 
     end #CSV
     fl.close
-  end
-
-  def wrap_up
-   # super count
   end
 
 end

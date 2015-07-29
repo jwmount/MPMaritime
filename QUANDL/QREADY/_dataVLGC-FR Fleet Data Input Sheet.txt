@@ -315,7 +315,7 @@ LPG_R/VLGC_FR|2010-03-28|0|0|0|0|0|0|Fearnley Weekly Report pdf dated March 24, 
 LPG_R/VLGC_FR|2010-04-04|||||||Missing
 LPG_R/VLGC_FR|2010-04-11|0|0|0|0|0|0|Fearnley Weekly Report pdf dated April 7, 2010
 LPG_R/VLGC_FR|2010-04-18|0|0|0|0|0|0|Fearnley Weekly Report pdf dated April 14, 2010
-LPG_R/VLGC_FR|2010-04-25|0|0|0|0|0|0|Fearnley Weekly Report pdf dated April 21, 2010 (Vessels reprogrammed and nominated under COA's ect, "accessible" fleet shrunk)
+LPG_R/VLGC_FR|2010-04-25|0|0|0|0|0|0|Fearnley Weekly Report pdf dated April 21, 2010 (Vessels reprogrammed and nominated under COA's ect, 'accessible' fleet shrunk)
 LPG_R/VLGC_FR|2010-05-02|0|0|0|0|0|0|Fearnley Weekly Report pdf dated April 28, 2010
 LPG_R/VLGC_FR|2010-05-09|0|0|0|0|0|0|Fearnley Weekly Report pdf dated May 5, 2010
 LPG_R/VLGC_FR|2010-05-16|0|0|0|0|0|0|Fearnley Weekly Report pdf dated May 12, 2010
@@ -334,7 +334,7 @@ LPG_R/VLGC_FR|2010-08-08|0|0|0|0|0|0|Fearnley Weekly Report pdf dated August 4, 
 LPG_R/VLGC_FR|2010-08-15|0|0|0|0|0|0|Fearnley Weekly Report pdf dated August 11, 2010
 LPG_R/VLGC_FR|2010-08-22|0|0|0|0|0|0|Fearnley Weekly Report pdf dated August 18, 2010
 LPG_R/VLGC_FR|2010-08-29|0|0|0|0|0|0|Fearnley Weekly Report pdf dated August 25, 2010
-LPG_R/VLGC_FR|2010-09-05|0|0|0|0|0|0|Fearnley Weekly Report pdf dated September 1, 2010 (Chartered Extra information "The major owners control some 10/12 VLGCs")
+LPG_R/VLGC_FR|2010-09-05|0|0|0|0|0|0|Fearnley Weekly Report pdf dated September 1, 2010 (Chartered Extra information 'The major owners control some 10/12 VLGCs')
 LPG_R/VLGC_FR|2010-09-12|0|0|0|0|0|0|Fearnley Weekly Report pdf dated September 8, 2010
 LPG_R/VLGC_FR|2010-09-19|0|0|0|0|0|0|Fearnley Weekly Report pdf dated September 15, 2012
 LPG_R/VLGC_FR|2010-09-26|0|0|0|0|0|0|Fearnley Weekly Report pdf dated September 22, 2010
@@ -546,8 +546,8 @@ LPG_R/VLGC_FR|2014-08-31|||||||Missing
 LPG_R/VLGC_FR|2014-09-07|0|0|0|0|4|336,000|Fearnley Weekly Report pdf dated September 3, 2014,  Newbuilding Contracts, pg 2 (number is 2+2 which could be the contract is adding onto a previous one, B Mitsubishi, Owner is Cido) 2017 all are LPGs
 LPG_R/VLGC_FR|2014-09-14|0|0|0|0|0|0|Fearnley Weekly Report pdf dated September 10, 2014
 LPG_R/VLGC_FR|2014-09-21|0|0|0|0|2|168,000|Fearnley Weekly Report pdf dated September 17, 2014, Newbuilding Contracts, pg 3 (Asain, 2, 2017 all are LPGs)
-LPG_R/VLGC_FR|2014-09-28|0|0|0|0|2|168,000|Fearnley Weekly Report pdf dated September 24, 2014, Newbuilding Contracts, pg 2 (Pdf name "Sept29") (Aurora, 2, 2016 all are LPGs)
-LPG_R/VLGC_FR|2014-10-05|0|0|0|0|1|83,000|Fearnley Weekly Report pdf dated October 1, 2014, Newbuilding Contracts, pg 2 (Astomos Energy 1, "2h16" 2016? all are LPGs)
+LPG_R/VLGC_FR|2014-09-28|0|0|0|0|2|168,000|Fearnley Weekly Report pdf dated September 24, 2014, Newbuilding Contracts, pg 2 (Pdf name 'Sept29') (Aurora, 2, 2016 all are LPGs)
+LPG_R/VLGC_FR|2014-10-05|0|0|0|0|1|83,000|Fearnley Weekly Report pdf dated October 1, 2014, Newbuilding Contracts, pg 2 (Astomos Energy 1, '2h16' 2016? all are LPGs)
 LPG_R/VLGC_FR|2014-10-12|0|0|0|0|0|0|Fearnley Weekly Report pdf dated October 8, 2014
 LPG_R/VLGC_FR|2014-10-19|||||||Missing
 LPG_R/VLGC_FR|2014-10-26|||||||Missing
