@@ -1,0 +1,19 @@
+School:,Round Hill, Geneva, Switzerland
+Input Sheet:,Score Data,,,,
+Grade Level:, 3
+Frequency:,Weekly (Friday),,,,
+Quandl:,KIDSAT/BARBARA
+,,,,,
+Conventions,,,,,
+  Put the dates and scores here, one per column
+,,,,,
+,,,,,
+Date,Score,t.b.d.,t.b.d.,t.b.d.,Sources
+1/2/2008,2
+1/16/2008,3
+1/23/2008,2
+1/30/2008,4
+2/6/2008,1
+2/13/2008,3
+2/20/2008,5
+2/27/2008,3

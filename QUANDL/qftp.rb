@@ -5,7 +5,7 @@
 # QUANDL_TOKEN=Z_FgEe3SYywKzHT7myYr ruby load.rb
 # http://ruby-doc.org/stdlib-2.2.2/libdoc/net/ftp/rdoc/Net/FTP.html#method-i-puttextfile
 
-require 'Date'
+require 'date'
 require 'pry'
 
 # Remove embed dbl quotes, not allowed by Quandl
@@ -113,8 +113,9 @@ class Q_metadata < Q_FTP
   #  fout.puts @quandl_metadata_hdr
 
     CSV.foreach( fn ) do |row| 
+      next if row.empty? or row[0].include?('#')  # Skip blank row or comments
       puts "\t" + row.to_s
-      fout.puts (row).join('|') + "\n" #     if @flag #and row[0] != 'Date'
+      fout.puts (row).join('|') + "\n"
      end #CSV
 
     fout.close
@@ -160,12 +161,11 @@ class Q_data < Q_FTP
   
     # Read and handle each row of the file
     CSV.foreach(fn) do |row| 
+      next if row.empty? or row.include?('#')   # Skip blank or comment row
       puts "\t" + row.to_s
       # strip out double quote characters 
       row.each do |r|
         r.to_Qdl unless r.nil?
-        #REMOVE r.gsub!(/"/,"'")  unless r.nil?
-        puts r
       end
 
       # capture the Quandl code and skip line
@@ -187,12 +187,12 @@ class Q_data < Q_FTP
 
       # this is data so construct the Quandl structured row and put in fl
       begin
-        dt = Date.parse( row[0] )
+        dt = row[0].gsub('/','-')
       rescue
-        puts 'Invalid date, skipped row'
+        puts "\tInvalid date: #{dt}; skipped row."
         next
       end
-
+    
       # construct line as array joined with '|'
       line = [ qc, dt, row[1..row.count] ]
       fl.puts (line).join('|') + "\n" #     if !qc.empty? and @flag and row[0] != 'Date'

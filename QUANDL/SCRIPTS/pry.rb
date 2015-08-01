@@ -16,6 +16,16 @@ Quandl::Client.token = ENV['QUANDL_TOKEN']
 
 include Quandl::Client
 
+cn = [ "Date", "Shared Attention", "Circle of Communication", "Elab. Ideas", "Bridges", "Ideas & Emotions"]
+["BARBARA", "TONY", "JOHN", "LAUREN", "PETA"].each do |student|
+	d = Dataset.create(:source_code=>"KIDSAT", :code=>"#{student}",
+		:name=>"#{student} - Observation Record",
+		:column_names=>[ "Date", "Shared Attention", "Circle of Communication", "Elab. Ideas", "Bridges", "Ideas & Emotions"],
+		:privacy=>false, :description=>'t.b.d.'
+		)
+	puts d.to_s
+    d.save
+end
 
 desc = "**Capesize**
 
