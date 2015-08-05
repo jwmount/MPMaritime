@@ -1,2 +1,2 @@
 Quandl Code|Name|Description
-KIDSAT/SCHSCORE|Kids Attuned School Observation History|Observations from awhile ago to now...
+LPG_R/MGC_FR|Medium Gas Carriers (MGC), Fully Refrigerated|Semi-pressurized and semi refrigerated ships consist of a refrigerated plant with a high design pressure for tanks capable of transporting up to 22,000 cbm.  See also MGC_FR Fleet Statistics.

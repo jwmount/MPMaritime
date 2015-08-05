@@ -28,4 +28,7 @@ Quandl Code,Name,Description
 
 #OTKR_R/VLCC_TD3_BK,VLCC - Arabian Gulf to Japan(TD3) - BOOK, VLCC - Arabian # Gulf to Japan(TD3) - BOOK
 #OTKR_R/VLCC_TD3_BKSZ,VLCC - Arabian Gulf to Japan(TD3) - BOOK (CBM), VLCC - # Arabian Gulf to Japan(TD3) - BOOK (CBM)
-
+#
+# LPG_R
+#
+LPG_R/MGC_FR,"Medium Gas Carriers (MGC), Fully Refrigerated","Semi-pressurized and semi refrigerated ships consist of a refrigerated plant with a high design pressure for tanks capable of transporting up to 22,000 cbm.  See also MGC_FR Fleet Statistics."

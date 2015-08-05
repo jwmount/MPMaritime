@@ -16,6 +16,7 @@ Quandl::Client.token = ENV['QUANDL_TOKEN']
 
 include Quandl::Client
 
+=begin
 cn = [ "Date", "Shared Attention", "Circle of Communication", "Elab. Ideas", "Bridges", "Ideas & Emotions"]
 ["BARBARA", "TONY", "JOHN", "LAUREN", "PETA"].each do |student|
 	d = Dataset.create(:source_code=>"KIDSAT", :code=>"#{student}",
@@ -54,6 +55,7 @@ The term Handysize applies to the smallest vessel class and range from 10,000 to
 35,000 DWT. These smaller Handysize and Handymax vessels are the workhorses of the dry 
 bulk market, and they have the highest rate of growth."
 
+
 #db = Quandl::Client::Source.find('MPM_01')
 #db.code = 'BNKR_F'
 #db.save
@@ -62,9 +64,8 @@ bulk market, and they have the highest rate of growth."
 #vlgc   = Dataset.find('OTKR/VLGC_FR')
 #d.description = desc
 #cols = ['Date', '$/day']
+=end
 binding.pry
-
-d.save
 
 =begin
 # 

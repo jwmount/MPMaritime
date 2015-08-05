@@ -30,9 +30,15 @@ include Quandl::Client
 Quandl::Client.use 'https://www.quandl.com/api/'
 Quandl::Client.token = ENV['QUANDL_TOKEN']
 
+
 @count = 0
 
-  Dir.glob("DATA/*.csv").each do |f|
+# Handle the Quandl file name files, this processes _metadata before _data files.
+["_metadata", "_data"].each do |fstem|
+  puts "\n\n#{fstem} files --------------------------\n"
+
+  Dir.glob("DATA/*#{fstem}*.csv").each do |f|
+
     qftp = Q_FTP.new f
     @count += 1
     # next file in /DATA reservoir of _data and _metadata files
@@ -40,14 +46,16 @@ Quandl::Client.token = ENV['QUANDL_TOKEN']
 
       # Process file being prepared for Quandl, actual class will vary by file type
       qfl = qftp.process
+     
       # compose the quandl file 
       qfl.compose (qftp.get_filename)
-
+      
       # push the quandlfile to quandl
       qfl.push
       qfl.wrap_up
   
   end # files
+end # Qdl file name look
 
 puts "\nCompleted load to Quandle, loaded #{@count} files\n_______________________________________\n"
 
