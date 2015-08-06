@@ -14,9 +14,8 @@
 #         2.  Quandl key 'Quandl:' not found; message and drop file, count as not processed; malformed
 #         3.  Some sort of logging facility, currently just writes qfl to QREADY folder.
 #         4.  Skip if date in future.
-#         5.  Add capability to do multi-column loads needed for LPG_F Datasets.
-#         6.  Capability to shift input folder or perhaps allow multiple folders, e.g. Quandl Master Folder in DropBox.
-#         7.  q_metadata class does not handle comments, just has @flag
+#         7.  Capability to shift input folder or perhaps allow multiple folders, e.g. Quandl Master Folder in DropBox.
+#         8.  q_metadata class does not handle comments, just has @flag
 #
 require 'quandl/client'
 require 'double_bag_ftps'
@@ -36,7 +35,7 @@ Quandl::Client.token = ENV['QUANDL_TOKEN']
 # Handle the Quandl file name files, this processes _metadata before _data files.
 ["_metadata", "_data"].each do |fstem|
   puts "\n\n#{fstem} files --------------------------\n"
-
+  
   Dir.glob("DATA/*#{fstem}*.csv").each do |f|
 
     qftp = Q_FTP.new f
