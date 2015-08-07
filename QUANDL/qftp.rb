@@ -169,7 +169,7 @@ class Q_data < Q_FTP
 
       # capture the Quandl code and skip line
       if row[0].is_a? String and row[0].include? "Quandl:"
-        qc << row[1]               
+        qc << row[1]           
         next
       end
       
