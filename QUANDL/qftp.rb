@@ -24,7 +24,6 @@ class Q_FTP
   def initialize( f )
 
     set_filename( f )
-    @count = 0
     @ftps = DoubleBagFTPS.new
     @ftps.ssl_context = DoubleBagFTPS.create_ssl_context(:verify_mode => OpenSSL::SSL::VERIFY_NONE)
     @ftps.connect('ftp.quandl.com')
@@ -42,7 +41,6 @@ class Q_FTP
   # local file name, resides in DATA and is .csv.
   def set_filename( f )
     @filename = f
-    puts "\t#{f}"
   end
 
   def get_filename

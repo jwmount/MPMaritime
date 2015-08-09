@@ -3,19 +3,19 @@
 # Purpose:  Create dataset for small gas carrier, semi-refrigerated fleet.
 # How to run this script:
 #         $ QUANDL_TOKEN=Z_FgEe3SYywKzHT7myYr ruby load.rb
+#         $ curl "https://www.quandl.com/api/v3/datasets/OTKR_R/VLCC_TD3_TCE.csv?api_key=Z_FgEe3SYywKzHT7myYr"
 # Refs:   https://github.com/quandl/quandl_client.git
 #         https://www.quandl.com/data/LPG_F
 #         https://www.quandl.com/documentation#!/api/DELETE-api--version-permissions---format-_delete_2
 # Usage:  Steps to load .csv files to Quandl
-#         1.  Put *_data*.csv and *_metadata*.csv in /DATA folder.
+#         1.  Put *_data*.csv and *_metadata*.csv files in /DATA folder.
 #         2.  Execute ruby load.rb (see model command above)
 # Features Needed:
-#         1.  Message if there are no files to process; number of files processed
-#         2.  Quandl key 'Quandl:' not found; message and drop file, count as not processed; malformed
-#         3.  Some sort of logging facility, currently just writes qfl to QREADY folder.
-#         4.  Skip if date in future.
-#         7.  Capability to shift input folder or perhaps allow multiple folders, e.g. Quandl Master Folder in DropBox.
-#         8.  q_metadata class does not handle comments, just has @flag
+#         1.  Some sort of logging facility, currently just writes qfl to QREADY folder.
+#         2.  Skip if date in future.
+#         3.  Capability to shift input folder or perhaps allow multiple folders, e.g. Quandl Master Folder in DropBox.
+#         4.  q_metadata class does not handle comments, just has @flag
+#         5.  count
 #
 require 'quandl/client'
 require 'double_bag_ftps'
@@ -38,8 +38,16 @@ Quandl::Client.token = ENV['QUANDL_TOKEN']
   
   Dir.glob("DATA/*#{fstem}*.csv").each do |f|
 
+    # Verify that file contains a Quandl: key, FAIL & next if not.
+    s = File.new( f ).gets
+    if !s.include?('Quandl:')
+      puts "\nFAIL, NO QUANDL KEY FOUND in #{f}.  Not processed.\n\n"
+      next
+    end
+
     qftp = Q_FTP.new f
     @count += 1
+
     # next file in /DATA reservoir of _data and _metadata files
     qftp.set_filename( f )
 
