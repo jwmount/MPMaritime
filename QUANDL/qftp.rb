@@ -82,6 +82,14 @@ class Q_FTP
     end
   end
 
+  # Verify that file contains a Quandl: key, FAIL & next if not.
+  def has_quandl_key? f=get_filename
+    s = File.new( get_filename ).gets
+    flag = s.include?('Quandl:')
+    puts "\nFAIL, NO QUANDL KEY FOUND in #{f}.  Not processed.\n\n" unless flag
+    flag
+  end
+
 end # class Q_FTP
 
 #
@@ -116,6 +124,10 @@ class Q_metadata < Q_FTP
      end #CSV
 
     fout.close
+  end
+
+  def has_quandl_key?
+    true                   # actually doesn't need it
   end
 
   def wrap_up
@@ -196,6 +208,10 @@ class Q_data < Q_FTP
 
     end #CSV
     fl.close
+  end
+
+  def has_quandl_key?
+    true                   # actually doesn't need it
   end
 
   def wrap_up

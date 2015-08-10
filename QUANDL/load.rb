@@ -32,28 +32,11 @@ Quandl::Client.token = ENV['QUANDL_TOKEN']
 
 @count = 0
 
-# Verify that file contains a Quandl: key, FAIL & next if not.
-def has_quandl_key? f
-  s = File.new( f ).gets
-  flag = s.include?('Quandl:')
-  puts "\nFAIL, NO QUANDL KEY FOUND in #{f}.  Not processed.\n\n" unless flag
-  flag
-end
-
 # Handle the Quandl file name files, this processes _metadata before _data files.
 ["_metadata", "_data"].each do |fstem|
   puts "\n\n#{fstem} files --------------------------\n"
   
   Dir.glob("DATA/*#{fstem}*.csv").each do |f|
-
-    next unless has_quandl_key? f
-
-    # Verify that file contains a Quandl: key, FAIL & next if not.
-    s = File.new( f ).gets
-    if !s.include?('Quandl:')
-      puts "\nFAIL, NO QUANDL KEY FOUND in #{f}.  Not processed.\n\n"
-      next
-    end
 
     qftp = Q_FTP.new f
     @count += 1
@@ -63,6 +46,8 @@ end
 
       # Process file being prepared for Quandl, actual class will vary by file type
       qfl = qftp.process
+
+      next unless qfl.has_quandl_key?
      
       # compose the quandl file 
       qfl.compose (qftp.get_filename)

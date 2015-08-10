@@ -16,17 +16,8 @@ Quandl::Client.token = ENV['QUANDL_TOKEN']
 
 include Quandl::Client
 
+
 =begin
-cn = [ "Date", "Shared Attention", "Circle of Communication", "Elab. Ideas", "Bridges", "Ideas & Emotions"]
-["BARBARA", "TONY", "JOHN", "LAUREN", "PETA"].each do |student|
-	d = Dataset.create(:source_code=>"KIDSAT", :code=>"#{student}",
-		:name=>"#{student} - Observation Record",
-		:column_names=>[ "Date", "Shared Attention", "Circle of Communication", "Elab. Ideas", "Bridges", "Ideas & Emotions"],
-		:privacy=>false, :description=>'t.b.d.'
-		)
-	puts d.to_s
-    d.save
-end
 
 desc = "**Capesize**
 
@@ -65,7 +56,33 @@ bulk market, and they have the highest rate of growth."
 #d.description = desc
 #cols = ['Date', '$/day']
 =end
+
+=begin
+d = Dataset.find("OTKR_R/VLCC_TD3_PMT")
+d.assign_attributes(:source_code => 'OTKR_R',
+	                :code        => 'VLCC_TD3_PMT',
+                    :name        => 'VLCC - Arabian Gulf to Japan (TD3) - Spot Freight Rate - as $/mt (PMT)',
+                    :column_names=> ["Date", "%/mt"],
+                    :from_date   => "2000-Jan-04",
+                    :to_date     => "2015-Jun-04",
+                    :description => 'VLCC - Arabian Gulf to Japan (TD3) - Spot Freight Rate - as $/mt (PMT)',
+	                :private     => false
+	                )
+=end	                
+d = Dataset.find("OTKR_R/VLCC_TD3_PCF")
+d.assign_attributes(:source_code => 'OTKR_R',
+	                :code        => 'VLCC_TD3_PCF',
+                    :name        => 'VLCC - Arabian Gulf to Japan (TD3) - Spot Freight Rate - as % of cargo value (PCF)',
+                    :column_names=> ["Date", "% Cargo Value"],
+                    :from_date   => "2000-Jan-04",
+                    :to_date     => "2015-Jun-04",
+                    :description => 'VLCC - Arabian Gulf to Japan (TD3) - Spot Freight Rate - as % of cargo value (PCF)',
+	                :private     => false
+	                )
 binding.pry
+d.save
+puts d.errors
+puts d.error_messages
 
 =begin
 # 
