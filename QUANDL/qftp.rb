@@ -141,7 +141,8 @@ end # Q_metadata
 class Q_data < Q_FTP
 
   @filename = ''
-
+  @column_list = []
+  
   def initialize( f )
     set_filename f
     super f
@@ -170,6 +171,7 @@ class Q_data < Q_FTP
   
     # Read and handle each row of the file
     CSV.foreach(fn) do |row| 
+
       next if row.empty? or row.include?('#')   # Skip blank or comment row
       puts "\t" + row.to_s
       # strip out double quote characters 
@@ -183,9 +185,10 @@ class Q_data < Q_FTP
         next
       end
       
-      # turn flag on if a string and value of first word is 'Date'
+      # turn on flag if a string and value of first word is 'Date'
       if row[0].is_a? String and row[0] == "Date"
         @flag = !@flag
+        @column_list = set_column_list row
         next
       end
 
@@ -203,7 +206,10 @@ class Q_data < Q_FTP
       end
     
       # construct line as array joined with '|'
-      line = [ qc, dt, row[1..row.count] ]
+      #line = [ qc, dt, row[1..row.count] ]
+      line = ""
+      @column_list.each { |i| line = [ qc, dt, row[i] ] }
+#      line = [ qc, dt, row["#{@column_list}"] ]  # 
       fl.puts (line).join('|') + "\n" #     if !qc.empty? and @flag and row[0] != 'Date'
 
     end #CSV
@@ -212,6 +218,17 @@ class Q_data < Q_FTP
 
   def has_quandl_key?
     true                   # actually doesn't need it
+  end
+
+# If we have ARGV values, setup column selector array
+  # imagine, [1,3,6] are the ones we want
+
+  def set_column_list colnames
+    list = []
+    ARGV.each do |cn|
+      list << colnames.index(cn) 
+    end
+    list
   end
 
   def wrap_up

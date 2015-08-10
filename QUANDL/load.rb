@@ -40,7 +40,6 @@ Quandl::Client.token = ENV['QUANDL_TOKEN']
 
     qftp = Q_FTP.new f
     @count += 1
-
     # next file in /DATA reservoir of _data and _metadata files
     qftp.set_filename( f )
 
@@ -48,7 +47,7 @@ Quandl::Client.token = ENV['QUANDL_TOKEN']
       qfl = qftp.process
 
       next unless qfl.has_quandl_key?
-     
+      
       # compose the quandl file 
       qfl.compose (qftp.get_filename)
       

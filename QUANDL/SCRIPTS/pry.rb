@@ -57,6 +57,7 @@ bulk market, and they have the highest rate of growth."
 #cols = ['Date', '$/day']
 =end
 
+# This stanza resets each of the four Datasets of OTKR_R
 =begin
 d = Dataset.find("OTKR_R/VLCC_TD3_PMT")
 d.assign_attributes(:source_code => 'OTKR_R',
@@ -68,7 +69,7 @@ d.assign_attributes(:source_code => 'OTKR_R',
                     :description => 'VLCC - Arabian Gulf to Japan (TD3) - Spot Freight Rate - as $/mt (PMT)',
 	                :private     => false
 	                )
-=end	                
+	                
 d = Dataset.find("OTKR_R/VLCC_TD3_PCF")
 d.assign_attributes(:source_code => 'OTKR_R',
 	                :code        => 'VLCC_TD3_PCF',
@@ -79,14 +80,40 @@ d.assign_attributes(:source_code => 'OTKR_R',
                     :description => 'VLCC - Arabian Gulf to Japan (TD3) - Spot Freight Rate - as % of cargo value (PCF)',
 	                :private     => false
 	                )
-binding.pry
+
+d = Dataset.find("OTKR_R/VLCC_TD3_DBBL")
+d.assign_attributes(:source_code => 'OTKR_R',
+	                :code        => 'VLCC_TD3_DBBL',
+                    :name        => 'VLCC - Arabian Gulf to Japan (TD3) - Spot Freight Rate - as $/bbl',
+                    :column_names=> ["Date", "$/bbl"],
+                    :from_date   => "2000-Jan-04",
+                    :to_date     => "2015-Jun-04",
+                    :description => 'VLCC - Arabian Gulf to Japan (TD3) - Spot Freight Rate - as %/bbl',
+	                :private     => false
+	                )
+=end
+d = Dataset.find("OTKR_R/VLCC_TD3_TCE")
+d.assign_attributes(:source_code => 'OTKR_R',
+	                :code        => 'VLCC_TD3_TCE',
+                    :name        => 'VLCC - Arabian Gulf to Japan (TD3) - Spot Freight Rate (TCE)',
+                    :column_names=> ["Date", "$/day"],
+                    :from_date   => "2000-Jan-04",
+                    :to_date     => "2015-Jun-04",
+                    :description => 'VLCC - Arabian Gulf to Japan (TD3) - Spot Freight Rate (TCE)',
+	                :private     => false
+	                )
+#binding.pry
 d.save
-puts d.errors
-puts d.error_messages
+if d.errors.any?
+	puts d.errors
+    puts d.error_messages
+else
+	puts "No errors."
+end
 
 =begin
 # 
-# In this case, find the databsase and rename the dataset
+# Find the databsase and rename it
 #
 d = Dataset.find('LPG/LPG_M')
 puts d.name
