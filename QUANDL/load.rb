@@ -2,7 +2,7 @@
 # load.rb -- load the dataset data
 # Purpose:  Create dataset for small gas carrier, semi-refrigerated fleet.
 # How to run this script:
-#         $ QUANDL_TOKEN=Z_FgEe3SYywKzHT7myYr ruby load.rb
+#         $ QUANDL_TOKEN=Z_FgEe3SYywKzHT7myYr ruby load.rb colname1, colname2, ...
 #         $ curl "https://www.quandl.com/api/v3/datasets/OTKR_R/VLCC_TD3_TCE.csv?api_key=Z_FgEe3SYywKzHT7myYr"
 # Refs:   https://github.com/quandl/quandl_client.git
 #         https://www.quandl.com/data/LPG_F
@@ -15,7 +15,6 @@
 #         2.  Skip if date in future.
 #         3.  Capability to shift input folder or perhaps allow multiple folders, e.g. Quandl Master Folder in DropBox.
 #         4.  q_metadata class does not handle comments, just has @flag
-#         5.  count
 #
 require 'quandl/client'
 require 'double_bag_ftps'

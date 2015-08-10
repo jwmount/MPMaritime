@@ -206,11 +206,13 @@ class Q_data < Q_FTP
       end
     
       # construct line as array joined with '|'
-      #line = [ qc, dt, row[1..row.count] ]
       line = ""
-      @column_list.each { |i| line = [ qc, dt, row[i] ] }
-#      line = [ qc, dt, row["#{@column_list}"] ]  # 
-      fl.puts (line).join('|') + "\n" #     if !qc.empty? and @flag and row[0] != 'Date'
+      if @column_list.empty?
+        line = [ qc, dt, row[1..row.count] ]
+      else
+        @column_list.each { |i| line = [ qc, dt, row[i] ] }
+      end
+      fl.puts (line).join('|') + "\n"
 
     end #CSV
     fl.close
