@@ -17,9 +17,11 @@ class OptparseExample
     # The options specified on the command line will be collected in *options*.
     # We set default values here.
     options = OpenStruct.new
-    options.nosend = false
-    options.files  = '*'
-    options.verbose = false
+    options.nosend     = false
+    options.directory  = 'DATA'
+    options.columns    = ['Value']
+    options.file       = ''
+    options.verbose    = false
 
     opt_parser = OptionParser.new do |opts|
       opts.banner = "Usage: load.rb [options]"
@@ -27,8 +29,20 @@ class OptparseExample
       opts.separator ""
       opts.separator "Specific options:"
 
+      # directory where files will be read from
+      opts.on("-d", "--dir",
+              "Directory where to find files to load, default: #{options.directory}") do |dir|
+              options.dir = 'DATA'
+      end
+
       # nosend: do not transmit to Quandl
-      opts.on("-ns", "--nosend",
+      opts.on("-f", "--file",
+              "File to send to Quandl") do |nosend|
+              options.file = ''
+      end
+
+      # nosend: do not transmit to Quandl
+      opts.on("-n", "--nosend",
               "Do not send file to Quandl if given") do |nosend|
               options.nosend = true
       end
