@@ -20,9 +20,9 @@ end
 class Q_FTP
 
   @filename = ''
+  @options = nil
 
   def initialize( f )
-
     set_filename( f )
     @ftps = DoubleBagFTPS.new
     @ftps.ssl_context = DoubleBagFTPS.create_ssl_context(:verify_mode => OpenSSL::SSL::VERIFY_NONE)
@@ -208,10 +208,16 @@ class Q_data < Q_FTP
       # construct line as array joined with '|'
       line = ""
       if @column_list.empty?
+
+        # No arguments given on command case, handle all items in row
         line = [ qc, dt, row[1..row.count] ]
+
       else
+
+        # Named items were given on command, do them only.
         @column_list.each { |i| line = [ qc, dt, row[i] ] }
       end
+      
       fl.puts (line).join('|') + "\n"
 
     end #CSV

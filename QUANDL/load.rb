@@ -23,13 +23,14 @@ require 'uri'
 require 'pry'
 
 require './qftp.rb'
+require './optex.rb'
 
 include Quandl::Client
 Quandl::Client.use 'https://www.quandl.com/api/'
 Quandl::Client.token = ENV['QUANDL_TOKEN']
 
-
 @count = 0
+@options = OptparseExample.parse(ARGV)
 
 # Handle the Quandl file name files, this processes _metadata before _data files.
 ["_metadata", "_data"].each do |fstem|
@@ -39,6 +40,7 @@ Quandl::Client.token = ENV['QUANDL_TOKEN']
 
     qftp = Q_FTP.new f
     @count += 1
+    
     # next file in /DATA reservoir of _data and _metadata files
     qftp.set_filename( f )
 
@@ -51,12 +53,22 @@ Quandl::Client.token = ENV['QUANDL_TOKEN']
       qfl.compose (qftp.get_filename)
       
       # push the quandlfile to quandl
-      qfl.push
+      qfl.push  unless @options.nosend
       qfl.wrap_up
   
-  end # files
+  end # read files
 end # Qdl file name look
 
-puts "\nCompleted load to Quandle, loaded #{@count} files\n_______________________________________\n"
+#
+# Wrap up -- varies by arguments set
+#
+puts "Processed #{@count} files."
+case
+when @options.nosend
+  puts "Nothing sent to Quandl because --nosend was set."
+else
+  puts "\nCompleted load to Quandle. \n_______________________________________\n"
+end
+
 
 
