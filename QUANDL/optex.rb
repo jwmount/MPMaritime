@@ -17,10 +17,9 @@ class OptparseExample
     # The options specified on the command line will be collected in *options*.
     # We set default values here.
     options = OpenStruct.new
-    options.nosend     = false
+    options.send       = false
     options.directory  = 'DATA'
-    options.columns    = ['Value']
-    options.file       = ''
+    options.columns    = ['Value']            # key as csv list, e.g. 'TCE, PMT'
     options.verbose    = false
 
     opt_parser = OptionParser.new do |opts|
@@ -30,26 +29,26 @@ class OptparseExample
       opts.separator "Specific options:"
 
       # directory where files will be read from
-      opts.on("-d", "--dir",
-              "Directory where to find files to load, default: #{options.directory}") do |dir|
-              options.dir = 'DATA'
+      opts.on("-d", "--dir DIRECTORY",
+              "Directory where to find files to load, default: #{options.directory}") do |d|
+              options[:directory] = d
       end
 
       # nosend: do not transmit to Quandl
-      opts.on("-f", "--file",
-              "File to send to Quandl") do |nosend|
-              options.file = ''
+      opts.on("-f", "--file FILESPEC", 
+              "File to send to Quandl") do |f|
+              options[:file] = f
       end
 
       # nosend: do not transmit to Quandl
-      opts.on("-n", "--nosend",
-              "Do not send file to Quandl if given") do |nosend|
-              options.nosend = true
+      opts.on("-s", "--[no-]send",
+              "Do not send file to Quandl if false") do |s|
+              options.send = s
       end
               
-      # List of arguments.
-      opts.on("--list x,y,z", Array, "Example 'list' of arguments") do |list|
-        options.list = list
+      # List of columns.
+      opts.on("-c", "--cols COLUMNS", "Selected columns, requires -f, Example: TCE PMT") do |cols|
+        options[:columns] = cols
       end
 
       # Keyword completion.  We are specifying a specific set of arguments (CODES

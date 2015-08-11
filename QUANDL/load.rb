@@ -35,8 +35,10 @@ Quandl::Client.token = ENV['QUANDL_TOKEN']
 # Handle the Quandl file name files, this processes _metadata before _data files.
 ["_metadata", "_data"].each do |fstem|
   puts "\n\n#{fstem} files --------------------------\n"
-  
-  Dir.glob("DATA/*#{fstem}*.csv").each do |f|
+
+  # prepare a filespec and process each file it covers  
+  fspec = [@options.directory, '/*', fstem, '*.csv'].join
+  Dir.glob(fspec).each do |f|
 
     qftp = Q_FTP.new f
     @count += 1
@@ -46,6 +48,7 @@ Quandl::Client.token = ENV['QUANDL_TOKEN']
 
       # Process file being prepared for Quandl, actual class will vary by file type
       qfl = qftp.process
+      qfl.set_options(@options)
 
       next unless qfl.has_quandl_key?
       

@@ -20,7 +20,6 @@ end
 class Q_FTP
 
   @filename = ''
-  @options = nil
 
   def initialize( f )
     set_filename( f )
@@ -98,11 +97,20 @@ end # class Q_FTP
 class Q_metadata < Q_FTP
 
   @filename = ''
+  @options
 
   def initialize( f )
     super( f )
   end
 
+def set_options o
+    @options = open
+  end
+
+  def get_options
+    @options
+  end
+  
   def push
     super 
   end
@@ -119,7 +127,7 @@ class Q_metadata < Q_FTP
  
     CSV.foreach( fn ) do |row| 
       next if row.empty? or row[0].include?('#')  # Skip blank row or comments
-      puts "\t" + row.to_s
+      puts "\t" + row.to_s if @options.verbose
       fout.puts (row).join('|') + "\n"
      end #CSV
 
@@ -142,6 +150,7 @@ class Q_data < Q_FTP
 
   @filename = ''
   @column_list = []
+  @options = nil
   
   def initialize( f )
     set_filename f
@@ -150,6 +159,14 @@ class Q_data < Q_FTP
 
   def set_filename f
     @filename = f
+  end
+
+  def set_options o
+    @options = o
+  end
+
+  def get_options
+    @options
   end
 
   def push
@@ -163,7 +180,9 @@ class Q_data < Q_FTP
     @quandl_data_hdr = "Quandl Code|Date|Value"  
 
     qc = []
-    qfilename = @filename.gsub(/DATA\//,'QREADY/')
+    dir = get_options.directory
+  
+    qfilename = @filename.gsub(/"#{dir}"\//,'QREADY/')
     qfilename = qfilename.gsub!(/.csv/,'.txt')
   
     fl = File.open(qfilename, 'w')
@@ -173,7 +192,7 @@ class Q_data < Q_FTP
     CSV.foreach(fn) do |row| 
 
       next if row.empty? or row.include?('#')   # Skip blank or comment row
-      puts "\t" + row.to_s
+      puts "\t" + row.to_s 
       # strip out double quote characters 
       row.each do |r|
         r.to_Qdl unless r.nil?
@@ -188,7 +207,7 @@ class Q_data < Q_FTP
       # turn on flag if a string and value of first word is 'Date'
       if row[0].is_a? String and row[0] == "Date"
         @flag = !@flag
-        @column_list = set_column_list row
+        @column_list = set_column_list( row )
         next
       end
 
@@ -229,17 +248,18 @@ class Q_data < Q_FTP
   end
 
 # If we have ARGV values, setup column selector array
-  # imagine, [1,3,6] are the ones we want
+# imagine, [1,3,6] are the ones we want
 
   def set_column_list colnames
     list = []
-    ARGV.each do |cn|
+    get_options.columns.split(', ').each do |cn|
       list << colnames.index(cn) 
     end
     list
   end
 
   def wrap_up
+    puts "Done.  #{@column_list}"
   end
 
 end
