@@ -90,7 +90,7 @@ class Q_FTP
   end
 
   def wrap_up
-    puts "\nDone.\n_______________________________________\n"
+    puts "\nDone. \n_______________________________________\n"
     puts "(c) Copyright 2009 VenueSoftware Corp. All Rights Reserved. \n\n"
 
   end
@@ -204,7 +204,6 @@ class Q_data < Q_FTP
   def compose( fn )
 
     @flag = false
-    @quandl_data_hdr = ["Quandl Code", "Date", get_options[:columns].split(', ')].join('|')
 
     qc = []
     dir = get_options.directory
@@ -212,8 +211,8 @@ class Q_data < Q_FTP
     qfilename = @filename.gsub( "#{dir}",'QREADY' )
     qfilename = qfilename.gsub!( ".csv", ".txt" )
 
+    # Open the output file
     fl = File.open(qfilename, 'w')
-    fl.puts @quandl_data_hdr 
   
     # Read and handle each row of the file
     CSV.foreach(fn) do |row| 
@@ -232,9 +231,12 @@ class Q_data < Q_FTP
       end
       
       # turn on flag if a string and value of first word is 'Date'
+      # Remove nil elements in row using .compact!
+      # Then compose the output line as '|' columns
       if row[0].is_a? String and row[0] == "Date"
         @flag = !@flag
-        @column_list = set_column_list( row )
+        row.compact
+        fl.puts ["Quandl Code", "Date", row[1..row.count]].join('|')
         next
       end
 
@@ -251,27 +253,9 @@ class Q_data < Q_FTP
         next
       end
     
-      # construct line as array joined with '|'
-      line = ""
-      if get_options[:columns].empty?
-
-        # No arguments given on command case, handle all items in row
-        line = [ qc, dt, row[1..row.count] ]
-
-      else
-
-        # Named items were given on command, do them only.
-        # Example, "PMT, PCE" => [3,9]
-        line = [ qc, dt]
-        set_column_list( row[1..row.count])
-        @column_list.each do |i|
-          line << row[i]
-          #line << [ qc, dt, row[i] ].join('|') 
-        end        
-      end
-      
-      fl.puts line.join('|')
-      inc_sent
+      # construct output row as array joined with '|'
+      row.compact!
+      fl.puts [qc,row[0..row.count]].join('|')
 
     end #CSV
     fl.close
@@ -283,14 +267,6 @@ class Q_data < Q_FTP
 
   # If we have ARGV values, setup column selector array
   # imagine, [1,3,6] are the ones we want
-
-  def set_column_list colnames
-    list = []
-    get_options.columns.split(', ').each do |cn|
-      list << colnames.index(cn) 
-    end
-    list 
-  end
 
   def wrap_up
     puts "Sent #{get_sent} _data files."

@@ -7,8 +7,30 @@ require 'pp'
 
 class OptparseArguments
 
-  CODES = %w[iso-2022-jp shift_jis euc-jp utf8 binary]
+  def self.validate(options)
+    
+    # Validations
+    # File not specified
+    #   use 'value' and column 2..count
+    #   use header names and all columns
+    #   use map, e.g. hash of selected columns
+    # -names
+  end
+
+end
+
+class OptparseArguments
+
+  # Default argument values 
+
+  CODES        = %w[iso-2022-jp shift_jis euc-jp utf8 binary]
   CODE_ALIASES = { "jis" => "iso-2022-jp", "sjis" => "shift_jis" }
+  COLUMNS      = []
+  DIRECTORY    = 'DATA'
+  FILE         = nil
+  SEND         = false
+  VERBOSE      = false
+
 
   #
   # Return a structure describing the options.
@@ -17,10 +39,10 @@ class OptparseArguments
     # The options specified on the command line will be collected in *options*.
     # We set default values here.
     options = OpenStruct.new
-    options.send       = false                # No, do not send
-    options.directory  = 'DATA'               # Can be anywhere if overridden
-    options.columns    = 'Value'              # key as csv list, e.g. 'TCE, PMT'
-    options.verbose    = false                # Say as little as necessary
+    options.send       = SEND                 # No, do not send
+    options.directory  = DIRECTORY            # Can be anywhere if overridden
+    options.file       = FILE                 # Process all files in .directory
+    options.verbose    = VERBOSE              # Say as little as necessary
 
     opt_parser = OptionParser.new do |opts|
       opts.banner = "Usage: load.rb [options]"
@@ -36,7 +58,7 @@ class OptparseArguments
 
       # nosend: do not transmit to Quandl
       opts.on("-f", "--file FILESPEC", 
-              "File to send to Quandl") do |f|
+              "File to send to Quandl; Required if -c is used.") do |f|
               options[:file] = f
       end
 
@@ -46,11 +68,6 @@ class OptparseArguments
               options.send = s
       end
               
-      # List of columns.
-      opts.on("-c", "--columns COLUMNS", "Selected columns, requires -f, Example: TCE PMT") do |c|
-        options[:columns] = c 
-      end
-
       # Keyword completion.  We are specifying a specific set of arguments (CODES
       # and CODE_ALIASES - notice the latter is a Hash), and the user may provide
       # the shortest unambiguous text.
@@ -88,9 +105,11 @@ class OptparseArguments
       end
     end
 
-    opt_parser.parse!(args)
+    opt_parser.parse!(args)    
+    validate(options)
     options
   end  # parse()
+
 
 end  # class OptparseArguments
 

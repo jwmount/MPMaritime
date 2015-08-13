@@ -10,11 +10,19 @@
 # Usage:  Steps to load .csv files to Quandl
 #         1.  Put *_data*.csv and *_metadata*.csv files in /DATA folder.
 #         2.  Execute ruby load.rb (see model command above)
+#         3.  Remove unwanted columns by removing hdr column names
+#             Example:  names Alpha, Beta, Charley and you don't want Beta, use
+#                       Alpha,,Charley
+#         4.  To rename columns to work better as legends, rename them, e.g.
+#             Example:  Alpha, $/bbl, Charley
+#         5.  Load will always process contents of folder.  So o focus on a 
+#             specific file, put it alone in a target directory,
+#             Example:  $ load.rb -d SpecialData
+#         6.  To see other command line parameters, load.rb -h or load.rb --help
 # Features Needed:
 #         1.  Some sort of logging facility, currently just writes qfl to QREADY folder.
 #         2.  Skip if date in future.
-#         3.  Capability to shift input folder or perhaps allow multiple folders, e.g. Quandl Master Folder in DropBox.
-#         4.  q_metadata class does not handle comments, just has @flag
+#         3.  q_metadata class does not handle comments, just has @flag
 #
 require 'quandl/client'
 require 'double_bag_ftps'
