@@ -5,7 +5,7 @@ require 'optparse/time'
 require 'ostruct'
 require 'pp'
 
-class OptparseExample
+class OptparseArguments
 
   CODES = %w[iso-2022-jp shift_jis euc-jp utf8 binary]
   CODE_ALIASES = { "jis" => "iso-2022-jp", "sjis" => "shift_jis" }
@@ -17,10 +17,10 @@ class OptparseExample
     # The options specified on the command line will be collected in *options*.
     # We set default values here.
     options = OpenStruct.new
-    options.send       = false
-    options.directory  = 'DATA'
-    options.columns    = ['Value']            # key as csv list, e.g. 'TCE, PMT'
-    options.verbose    = false
+    options.send       = false                # No, do not send
+    options.directory  = 'DATA'               # Can be anywhere if overridden
+    options.columns    = 'Value'              # key as csv list, e.g. 'TCE, PMT'
+    options.verbose    = false                # Say as little as necessary
 
     opt_parser = OptionParser.new do |opts|
       opts.banner = "Usage: load.rb [options]"
@@ -41,14 +41,14 @@ class OptparseExample
       end
 
       # nosend: do not transmit to Quandl
-      opts.on("-s", "--[no-]send",
-              "Do not send file to Quandl if false") do |s|
+      opts.on("-s", "--[no-]send NOSEND",
+              "Send file to Quandl") do |s|
               options.send = s
       end
               
       # List of columns.
-      opts.on("-c", "--cols COLUMNS", "Selected columns, requires -f, Example: TCE PMT") do |cols|
-        options[:columns] = cols
+      opts.on("-c", "--columns COLUMNS", "Selected columns, requires -f, Example: TCE PMT") do |c|
+        options[:columns] = c 
       end
 
       # Keyword completion.  We are specifying a specific set of arguments (CODES
@@ -92,7 +92,7 @@ class OptparseExample
     options
   end  # parse()
 
-end  # class OptparseExample
+end  # class OptparseArguments
 
 
 

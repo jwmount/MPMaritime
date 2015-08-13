@@ -22,6 +22,8 @@ class Q_FTP
   @filename = ''
 
   def initialize( f )
+
+    #puts "\n\n\nLoad Quandl Dataset\t\t\t#{$0}\n________________________________________________________"
     set_filename( f )
     @ftps = DoubleBagFTPS.new
     @ftps.ssl_context = DoubleBagFTPS.create_ssl_context(:verify_mode => OpenSSL::SSL::VERIFY_NONE)
@@ -29,8 +31,6 @@ class Q_FTP
     @ftps.login('mpm', 'LRvq2uncjce4Uw')
     @ftps.passive = true
 
-    puts "\n\n\nCreate Quandl Demo\t\t\t#{$0}\n________________________________________________________"
-    puts "(c) Copyright 2009 VenueSoftware Corp. All Rights Reserved. \n\n"
   end
 
   def get_ftps
@@ -60,7 +60,7 @@ class Q_FTP
 
   def process
     f = get_filename
-    puts "\n\tProcess: #{f}\n"
+    puts "\nProcess: #{f}\n"
     return Q_data.new(f)          if f.include?( '_data' )
     return Q_metadata.new(f)      if f.include?( '_metadata' )
     nil
@@ -89,6 +89,12 @@ class Q_FTP
     flag
   end
 
+  def wrap_up
+    puts "\nDone.\n_______________________________________\n"
+    puts "(c) Copyright 2009 VenueSoftware Corp. All Rights Reserved. \n\n"
+
+  end
+
 end # class Q_FTP
 
 #
@@ -97,13 +103,22 @@ end # class Q_FTP
 class Q_metadata < Q_FTP
 
   @filename = ''
-  @options
+  @options = nil
+  @sent = 0
 
   def initialize( f )
     super( f )
   end
 
-def set_options o
+  def inc_sent
+    @sent += 1
+  end
+
+  def get_sent
+    @sent
+  end
+
+  def set_options o
     @options = open
   end
 
@@ -112,7 +127,7 @@ def set_options o
   end
   
   def push
-    super 
+    super if get_options[:send]
   end
 
   def compose( fn )
@@ -127,7 +142,7 @@ def set_options o
  
     CSV.foreach( fn ) do |row| 
       next if row.empty? or row[0].include?('#')  # Skip blank row or comments
-      puts "\t" + row.to_s if @options.verbose
+      puts "\t" + row.to_s if get_options[:verbose]
       fout.puts (row).join('|') + "\n"
      end #CSV
 
@@ -139,6 +154,8 @@ def set_options o
   end
 
   def wrap_up
+    puts "Sent #{get_sent} _metadata files."
+    super
   end
 
 end # Q_metadata
@@ -151,10 +168,20 @@ class Q_data < Q_FTP
   @filename = ''
   @column_list = []
   @options = nil
+  @sent = 0
   
   def initialize( f )
     set_filename f
+    inc_sent
     super f
+  end
+
+  def inc_sent
+    @sent ||= +1
+  end
+
+  def get_sent
+    @sent
   end
 
   def set_filename f
@@ -170,21 +197,21 @@ class Q_data < Q_FTP
   end
 
   def push
-    super
+    super if get_options[:send]
   end
 
   # Composes the Quandle formated version of the DATA/*.csv file
   def compose( fn )
 
     @flag = false
-    @quandl_data_hdr = "Quandl Code|Date|Value"  
+    @quandl_data_hdr = ["Quandl Code", "Date", get_options[:columns].split(', ')].join('|')
 
     qc = []
     dir = get_options.directory
   
-    qfilename = @filename.gsub(/"#{dir}"\//,'QREADY/')
-    qfilename = qfilename.gsub!(/.csv/,'.txt')
-  
+    qfilename = @filename.gsub( "#{dir}",'QREADY' )
+    qfilename = qfilename.gsub!( ".csv", ".txt" )
+
     fl = File.open(qfilename, 'w')
     fl.puts @quandl_data_hdr 
   
@@ -192,7 +219,7 @@ class Q_data < Q_FTP
     CSV.foreach(fn) do |row| 
 
       next if row.empty? or row.include?('#')   # Skip blank or comment row
-      puts "\t" + row.to_s 
+      puts "\t" + row.to_s if get_options[:verbose]
       # strip out double quote characters 
       row.each do |r|
         r.to_Qdl unless r.nil?
@@ -226,7 +253,7 @@ class Q_data < Q_FTP
     
       # construct line as array joined with '|'
       line = ""
-      if @column_list.empty?
+      if get_options[:columns].empty?
 
         # No arguments given on command case, handle all items in row
         line = [ qc, dt, row[1..row.count] ]
@@ -234,10 +261,17 @@ class Q_data < Q_FTP
       else
 
         # Named items were given on command, do them only.
-        @column_list.each { |i| line = [ qc, dt, row[i] ] }
+        # Example, "PMT, PCE" => [3,9]
+        line = [ qc, dt]
+        set_column_list( row[1..row.count])
+        @column_list.each do |i|
+          line << row[i]
+          #line << [ qc, dt, row[i] ].join('|') 
+        end        
       end
       
-      fl.puts (line).join('|') + "\n"
+      fl.puts line.join('|')
+      inc_sent
 
     end #CSV
     fl.close
@@ -247,19 +281,20 @@ class Q_data < Q_FTP
     true                   # actually doesn't need it
   end
 
-# If we have ARGV values, setup column selector array
-# imagine, [1,3,6] are the ones we want
+  # If we have ARGV values, setup column selector array
+  # imagine, [1,3,6] are the ones we want
 
   def set_column_list colnames
     list = []
     get_options.columns.split(', ').each do |cn|
       list << colnames.index(cn) 
     end
-    list
+    list 
   end
 
   def wrap_up
-    puts "Done.  #{@column_list}"
+    puts "Sent #{get_sent} _data files."
+    super
   end
 
 end

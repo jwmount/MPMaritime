@@ -29,19 +29,19 @@ include Quandl::Client
 Quandl::Client.use 'https://www.quandl.com/api/'
 Quandl::Client.token = ENV['QUANDL_TOKEN']
 
-@count = 0
-@options = OptparseExample.parse(ARGV)
+@data_count = 0
+@meta_count = 0
+@options = OptparseArguments.parse(ARGV)
 
 # Handle the Quandl file name files, this processes _metadata before _data files.
 ["_metadata", "_data"].each do |fstem|
-  puts "\n\n#{fstem} files --------------------------\n"
+  puts "\n\n#{fstem} files"
 
   # prepare a filespec and process each file it covers  
   fspec = [@options.directory, '/*', fstem, '*.csv'].join
   Dir.glob(fspec).each do |f|
 
     qftp = Q_FTP.new f
-    @count += 1
     
     # next file in /DATA reservoir of _data and _metadata files
     qftp.set_filename( f )
@@ -56,7 +56,7 @@ Quandl::Client.token = ENV['QUANDL_TOKEN']
       qfl.compose (qftp.get_filename)
       
       # push the quandlfile to quandl
-      qfl.push  unless @options.nosend
+      qfl.push  if qfl.get_options[:send]
       qfl.wrap_up
   
   end # read files
@@ -65,13 +65,7 @@ end # Qdl file name look
 #
 # Wrap up -- varies by arguments set
 #
-puts "Processed #{@count} files."
-case
-when @options.nosend
-  puts "Nothing sent to Quandl because --nosend was set."
-else
-  puts "\nCompleted load to Quandle. \n_______________________________________\n"
-end
+
 
 
 
