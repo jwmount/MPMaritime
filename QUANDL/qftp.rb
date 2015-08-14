@@ -13,6 +13,8 @@ class String
   def to_Qdl
     gsub /\"/,"'"
   end
+  def to_mask
+  end
 end
 #
 # CLASS Q_FTP ===========================================
@@ -160,117 +162,3 @@ class Q_metadata < Q_FTP
 
 end # Q_metadata
 
-#
-# Q_data =========================================
-# 
-class Q_data < Q_FTP
-
-  @filename = ''
-  @column_list = []
-  @options = nil
-  @sent = 0
-  
-  def initialize( f )
-    set_filename f
-    inc_sent
-    super f
-  end
-
-  def inc_sent
-    @sent ||= +1
-  end
-
-  def get_sent
-    @sent
-  end
-
-  def set_filename f
-    @filename = f
-  end
-
-  def set_options o
-    @options = o
-  end
-
-  def get_options
-    @options
-  end
-
-  def push
-    super if get_options[:send]
-  end
-
-  # Composes the Quandle formated version of the DATA/*.csv file
-  def compose( fn )
-
-    @flag = false
-
-    qc = []
-    dir = get_options.directory
-  
-    qfilename = @filename.gsub( "#{dir}",'QREADY' )
-    qfilename = qfilename.gsub!( ".csv", ".txt" )
-
-    # Open the output file
-    fl = File.open(qfilename, 'w')
-  
-    # Read and handle each row of the file
-    CSV.foreach(fn) do |row| 
-
-      next if row.empty? or row.include?('#')   # Skip blank or comment row
-      puts "\t" + row.to_s if get_options[:verbose]
-      # strip out double quote characters 
-      row.each do |r|
-        r.to_Qdl unless r.nil?
-      end
-
-      # capture the Quandl code and skip line
-      if row[0].is_a? String and row[0].include? "Quandl:"
-        qc << row[1]           
-        next
-      end
-      
-      # turn on flag if a string and value of first word is 'Date'
-      # Remove nil elements in row using .compact!
-      # Then compose the output line as '|' columns
-      if row[0].is_a? String and row[0] == "Date"
-        @flag = !@flag
-        row.compact
-        fl.puts ["Quandl Code", "Date", row[1..row.count]].join('|')
-        next
-      end
-
-      # skip line until either 'Quandl:' or 'Date'
-      unless @flag
-        next
-      end
-
-      # this is data so construct the Quandl structured row and put in fl
-      begin
-        dt = row[0].gsub('/','-')
-      rescue
-        puts "\tInvalid date: #{dt}; skipped row."
-        next
-      end
-    
-      # construct output row as array joined with '|'
-      row.compact!
-      fl.puts [qc,row[0..row.count]].join('|')
-
-    end #CSV
-    fl.close
-  end
-
-  def has_quandl_key?
-    true                   # actually doesn't need it
-  end
-
-  # If we have ARGV values, setup column selector array
-  # imagine, [1,3,6] are the ones we want
-
-  def wrap_up
-    puts "Sent #{get_sent} _data files."
-    super
-  end
-
-end

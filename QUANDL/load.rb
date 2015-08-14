@@ -31,6 +31,7 @@ require 'uri'
 require 'pry'
 
 require './qftp.rb'
+require './qdata.rb'
 require './optex.rb'
 
 include Quandl::Client
