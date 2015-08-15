@@ -65,13 +65,13 @@ class Q_FTP
     puts "\nProcess: #{f}\n"
     return Q_data.new(f)          if f.include?( '_data' )
     return Q_metadata.new(f)      if f.include?( '_metadata' )
+    return Q_kids.new(f)          if f.include?( '_kids' )
     nil
   end
 
   # original file is @filename now, e.g. 
   # "DATA/_dataETHGC Rates Master Sheet.csv"
   def push
-
     begin
       # send to quandle.ftp.com, from_file, to_file
       ftps = get_ftps
@@ -98,67 +98,4 @@ class Q_FTP
   end
 
 end # class Q_FTP
-
-#
-# CLASS Q_Metadata ==========================================
-#
-class Q_metadata < Q_FTP
-
-  @filename = ''
-  @options = nil
-  @sent = 0
-
-  def initialize( f )
-    super( f )
-  end
-
-  def inc_sent
-    @sent += 1
-  end
-
-  def get_sent
-    @sent
-  end
-
-  def set_options o
-    @options = open
-  end
-
-  def get_options
-    @options
-  end
-  
-  def push
-    super if get_options[:send]
-  end
-
-  def compose( fn )
-
-    @quandl_metadata_hdr = "Quandl Code|Name|Description"  
-
-    # filename to write
-    qrfn   = fn.gsub(/DATA\//,'QREADY/')
-    qrfn   = qrfn.gsub!(/.csv/,'.txt')
-    # file to write
-    fout   = File.open( qrfn, 'w' )
- 
-    CSV.foreach( fn ) do |row| 
-      next if row.empty? or row[0].include?('#')  # Skip blank row or comments
-      puts "\t" + row.to_s if get_options[:verbose]
-      fout.puts (row).join('|') + "\n"
-     end #CSV
-
-    fout.close
-  end
-
-  def has_quandl_key?
-    true                   # actually doesn't need it
-  end
-
-  def wrap_up
-    puts "Sent #{get_sent} _metadata files."
-    super
-  end
-
-end # Q_metadata
 

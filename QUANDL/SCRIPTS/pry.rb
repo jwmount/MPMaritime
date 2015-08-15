@@ -91,7 +91,6 @@ d.assign_attributes(:source_code => 'OTKR_R',
                     :description => 'VLCC - Arabian Gulf to Japan (TD3) - Spot Freight Rate - as %/bbl',
 	                :private     => false
 	                )
-=end
 d = Dataset.find("OTKR_R/VLCC_TD3_TCE")
 d.assign_attributes(:source_code => 'OTKR_R',
 	                :code        => 'VLCC_TD3_TCE',
@@ -102,7 +101,8 @@ d.assign_attributes(:source_code => 'OTKR_R',
                     :description => 'VLCC - Arabian Gulf to Japan (TD3) - Spot Freight Rate (TCE)',
 	                :private     => false
 	                )
-#binding.pry
+=end
+binding.pry
 d.save
 if d.errors.any?
 	puts d.errors

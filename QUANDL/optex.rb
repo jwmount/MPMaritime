@@ -63,9 +63,8 @@ class OptparseArguments
       end
 
       # nosend: do not transmit to Quandl
-      opts.on("-s", "--[no-]send NOSEND",
-              "Send file to Quandl") do |s|
-              options.send = s
+      opts.on("-s", "--[no-]send", "Send file to Quandl") do |s|
+              options[:send] = s
       end
               
       # Keyword completion.  We are specifying a specific set of arguments (CODES

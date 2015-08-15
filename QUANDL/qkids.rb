@@ -1,5 +1,5 @@
-# qdata.rb -- Quandl Load _data files.
-# If _data:  look for Quandl: key, if present, use as Quandl Code
+# kdata.rb -- Quandl Load _kids files.
+# If _kids:  look for Quandl: key, if present, use as Quandl Code
 # QUANDL_TOKEN=Z_FgEe3SYywKzHT7myYr ruby load.rb
 # http://ruby-doc.org/stdlib-2.2.2/libdoc/net/ftp/rdoc/Net/FTP.html#method-i-puttextfile
 
@@ -12,15 +12,10 @@ class String
     gsub /\"/,"'"
   end
 end #String
-class Array
-  def to_q
-    compact!
-  end
-end #Array
 #
-# Q_data =========================================
+# Q_kids =========================================
 # 
-class Q_data < Q_FTP
+class Q_kids < Q_FTP
 
   # Instance variables
   @filename = ''
@@ -31,14 +26,6 @@ class Q_data < Q_FTP
     set_filename f
     inc_sent
     super f
-  end
-
-  # for each item in hdr that's not nil, save the index in @selection
-  def set_selection_list r
-    @selection = []
-    r.each_with_index do |item, i|
-      @selection << i unless item.nil?    
-    end
   end
 
   def inc_sent
@@ -100,11 +87,15 @@ class Q_data < Q_FTP
       # turn on flag if a string and value of first word is 'Date'
       # Remove nil elements in row using .compact!
       # Then compose the output line as '|' columns
-      if row[0].is_a? String and row[0] == "Date"
+      if row[0].is_a? String and row[2] == "date"
         @flag = !@flag
-        set_selection_list row
-        row.compact!
-        fl.puts ["Quandl Code", "Date", row[1..row.count]].join('|')
+        fl.puts ["Quandl Code", 
+        	"Date", 
+        	"Shared Attention",
+        	"Engagement",
+        	"Circle of Communication",
+        	"Check Box",
+        	"Building Bridges"].join('|')
         next
       end
 
@@ -115,21 +106,59 @@ class Q_data < Q_FTP
 
       # this is data so construct the Quandl structured row and put in fl
       begin
-        dt = row[0].gsub('/','-')
+        dt = row[2].gsub('/','-')
       rescue
         puts "\tInvalid date: #{dt}; skipped row."
         next
       end
     
-      # construct output row as array joined with '|'
-      # we have Date, nil, nil, PMT, ... TCE, nil, ... nil, nil...
-      # we want 0,3,9
-      # to get  Date|PMT|TCE
+      # construct line as array joined with '|'
+      line = [ qc, dt ]
+      # Shared Attention [1..4]
+      line << [ 1 ]       if row[5] == "Yes"
+      line << [ 2 ]       if row[6] == "Yes"
+      line << [ 3 ]       if row[7] == "Yes"
+      line << [ 4 ]       if row[8] == "Yes"
+      line << [ 5 ]       if row[9] == "Yes"
 
-      @line = []
-      @selection.each_with_index { |i| @line << row[i] }
-      fl.puts [qc, @line].join("|")
-      #fl.puts [qc,row[0..row.count]].join('|')
+      # Engagement
+      line << [ 1 ]       if row[10] == "Yes"
+      line << [ 2 ]       if row[11] == "Yes"
+      line << [ 3 ]       if row[12] == "Yes"
+      line << [ 4 ]       if row[13] == "Yes"
+      line << [ 5 ]       if row[14] == "Yes"
+
+      # Circle of Communication
+      line << [ 1 ]       if row[15] == "Yes"
+      line << [ 2 ]       if row[16] == "Yes"
+      line << [ 3 ]       if row[17] == "Yes"
+      line << [ 4 ]       if row[18] == "Yes"
+      line << [ 5 ]       if row[19] == "Yes"
+
+      # Check Box
+      line << [ 0 ]
+      line << [ 1 ]       if row[20] == "Yes"
+      line << [ 2 ]       if row[21] == "Yes"
+      line << [ 3 ]       if row[22] == "Yes"
+      line << [ 4 ]       if row[23] == "Yes"
+      line << [ 5 ]       if row[24] == "Yes"
+
+      # Elaborating Ideas
+      line << [ 1 ]       if row[25] == "Yes"
+      line << [ 2 ]       if row[26] == "Yes"
+      line << [ 3 ]       if row[27] == "Yes"
+      line << [ 4 ]       if row[28] == "Yes"
+      line << [ 5 ]       if row[29] == "Yes"
+
+      # Building Bridges
+      line << [ 1 ]       if row[30] == "Yes"
+      line << [ 2 ]       if row[31] == "Yes"
+      line << [ 3 ]       if row[32] == "Yes"
+      line << [ 4 ]       if row[33] == "Yes"
+      line << [ 5 ]       if row[34] == "Yes"
+
+
+      fl.puts (line).join('|') + "\n" #     if !qc.empty? and @flag and row[0] != 'Date'
 
     end #CSV
     fl.close
@@ -143,7 +172,7 @@ class Q_data < Q_FTP
   # imagine, [1,3,6] are the ones we want
 
   def wrap_up
-    puts "Sent #{get_sent} _data files."
+    puts "Sent #{get_sent} _kids files."
     super
   end
 

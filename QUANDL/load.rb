@@ -2,7 +2,7 @@
 # load.rb -- load the dataset data
 # Purpose:  Create dataset for small gas carrier, semi-refrigerated fleet.
 # How to run this script:
-#         $ QUANDL_TOKEN=Z_FgEe3SYywKzHT7myYr ruby load.rb colname1, colname2, ...
+#         $ QUANDL_TOKEN=Z_FgEe3SYywKzHT7myYr ruby load.rb
 #         $ curl "https://www.quandl.com/api/v3/datasets/OTKR_R/VLCC_TD3_TCE.csv?api_key=Z_FgEe3SYywKzHT7myYr"
 # Refs:   https://github.com/quandl/quandl_client.git
 #         https://www.quandl.com/data/LPG_F
@@ -33,6 +33,11 @@ require 'pry'
 require './qftp.rb'
 require './qdata.rb'
 require './optex.rb'
+require './qkids.rb'
+require './qmeta.rb'
+require './qmethods.rb'
+
+#Module1.helloworld("Jim")
 
 include Quandl::Client
 Quandl::Client.use 'https://www.quandl.com/api/'
@@ -43,7 +48,7 @@ Quandl::Client.token = ENV['QUANDL_TOKEN']
 @options = OptparseArguments.parse(ARGV)
 
 # Handle the Quandl file name files, this processes _metadata before _data files.
-["_metadata", "_data"].each do |fstem|
+["_metadata", "_data", "_kids"].each do |fstem|
   puts "\n\n#{fstem} files"
 
   # prepare a filespec and process each file it covers  
@@ -64,8 +69,8 @@ Quandl::Client.token = ENV['QUANDL_TOKEN']
       # compose the quandl file 
       qfl.compose (qftp.get_filename)
       
-      # push the quandlfile to quandl
-      qfl.push  if qfl.get_options[:send]
+      # push to quandl
+      qfl.push  if @options[:send]
       qfl.wrap_up
   
   end # read files
