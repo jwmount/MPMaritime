@@ -13,8 +13,6 @@ class String
   def to_Qdl
     gsub /\"/,"'"
   end
-  def to_mask
-  end
 end
 #
 # CLASS Q_FTP ===========================================

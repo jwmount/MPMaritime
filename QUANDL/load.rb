@@ -35,13 +35,12 @@ require './qdata.rb'
 require './optex.rb'
 require './qkids.rb'
 require './qmeta.rb'
-require './qmethods.rb'
-
-#Module1.helloworld("Jim")
 
 include Quandl::Client
 Quandl::Client.use 'https://www.quandl.com/api/'
 Quandl::Client.token = ENV['QUANDL_TOKEN']
+
+# Remove embed dbl quotes, not allowed by Quandl
 
 @data_count = 0
 @meta_count = 0

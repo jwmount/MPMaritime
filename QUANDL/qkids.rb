@@ -3,15 +3,27 @@
 # QUANDL_TOKEN=Z_FgEe3SYywKzHT7myYr ruby load.rb
 # http://ruby-doc.org/stdlib-2.2.2/libdoc/net/ftp/rdoc/Net/FTP.html#method-i-puttextfile
 
+require 'quandl/client'
 require 'date'
 require 'pry'
+require 'csv'
 
-# Remove embed dbl quotes, not allowed by Quandl
+def say(word)
+  require 'debug'
+  puts word + ' to begin debugging.'
+end
+say 'Time'
+
 class String
-  def to_Qdl
-    gsub /\"/,"'"
+  def to_Qdt
+    a = self.split('/')
+    mm = "%02d" % a[0]
+    dd = "%02d" % a[1]
+    yyyy = ["20", a[2]].join
+    [yyyy,mm,dd].join('-')
   end
 end #String
+
 #
 # Q_kids =========================================
 # 
@@ -52,7 +64,7 @@ class Q_kids < Q_FTP
   def push
     super
   end
-
+  
   # Composes the Quandle formated version of the DATA/*.csv file
   def compose( fn )
 
@@ -67,10 +79,14 @@ class Q_kids < Q_FTP
     # Open the output file
     fl = File.open(qfilename, 'w')
   
+
     # Read and handle each row of the file
     CSV.foreach(fn) do |row| 
-
-      next if row.empty? or row.include?('#')   # Skip blank or comment row
+      
+      # Skip blank or comment row
+      next if row.empty?
+      next if row[0].include?( '#' )
+        
       puts "\t" + row.to_s if get_options[:verbose]
       # strip out double quote characters 
       row.each do |r|
@@ -78,35 +94,58 @@ class Q_kids < Q_FTP
       end
 
       # capture the Quandl code and skip line
-      if row[0].is_a? String and row[0].include? "Quandl:"
-        qc << row[1]           
+#      if row[0].is_a? String && row[0].include?( "Quandl:" )
+      if row[0].include?( "Quandl:" )
+        qc = row[1]           
         next
       end
       
-      # HDR row (MASK)
-      # turn on flag if a string and value of first word is 'Date'
-      # Remove nil elements in row using .compact!
-      # Then compose the output line as '|' columns
-      if row[0].is_a? String and row[2] == "date"
-        @flag = !@flag
-        fl.puts ["Quandl Code", 
-        	"Date", 
-        	"Shared Attention",
-        	"Engagement",
-        	"Circle of Communication",
-        	"Check Box",
-        	"Building Bridges"].join('|')
-        next
-      end
-
+      # turn flag on if a string and value of first word is 'file'
       # skip line until either 'Quandl:' or 'Date'
-      unless @flag
+      # then construct the Quandl HDR
+      if row[0] == "file"
+        @flag = !@flag
+
+        d = Dataset.find( qc )
+        d.destroy
+
+        # Ensure column names are present and correct
+        # Using _metadata does not create column_names      
+        attributes = {
+          :source_code => 'MPM_04',
+          :code        => 'Geneva715',
+          :name        => 'School Wide Observations',
+          :column_names=> ["Date", 
+            "Shared Attention", "Engagement", 
+            "Circles of Comm","Check Box", 
+            "Elab. Ideas", "Bridges",
+            "Ideas & Emotions"],
+          :frequency   => "onthly",
+          :from_date   => "2015-Mar-01",
+          :to_date     => "2015-Aug-31",
+          :description => 't.b.a.',
+          :private     => false,
+          :premium     => true
+          }
+        fl.puts [ "#{attributes[:source_code]}/#{attributes[:code]}",
+                  attributes[:column_names]].join('|')
+
+        # Create the Quandl Dataset
+        d = Dataset.create(attributes)
+        d.save
+        pp d
+        puts d.errors
+        puts d.error_messages
         next
-      end
+
+      end #if
+
 
       # this is data so construct the Quandl structured row and put in fl
       begin
-        dt = row[2].gsub('/','-')
+        #dt in row[2] is mm/dd/yyyy not padded, convert 
+        # 5/12/15 to 2015-05-12
+        dt = row[2].to_Qdt
       rescue
         puts "\tInvalid date: #{dt}; skipped row."
         next
@@ -156,7 +195,6 @@ class Q_kids < Q_FTP
       line << [ 3 ]       if row[32] == "Yes"
       line << [ 4 ]       if row[33] == "Yes"
       line << [ 5 ]       if row[34] == "Yes"
-
 
       fl.puts (line).join('|') + "\n" #     if !qc.empty? and @flag and row[0] != 'Date'
 
