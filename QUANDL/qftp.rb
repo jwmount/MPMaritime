@@ -14,6 +14,12 @@ class String
     gsub /\"/,"'"
   end
 end
+def say(word)
+  require 'debug'
+  puts word + ' to begin debugging.'
+end
+#say 'Time'
+
 #
 # CLASS Q_FTP ===========================================
 #
@@ -69,7 +75,7 @@ class Q_FTP
 
   # original file is @filename now, e.g. 
   # "DATA/_dataETHGC Rates Master Sheet.csv"
-  def push
+  def push 
     begin
       # send to quandle.ftp.com, from_file, to_file
       ftps = get_ftps

@@ -12,7 +12,7 @@ def say(word)
   require 'debug'
   puts word + ' to begin debugging.'
 end
-say 'Time'
+#say 'Time'
 
 class String
   # create a Quandl conforming date from Kidsat format135
@@ -53,6 +53,20 @@ class Q_kids < Q_FTP
     @filename = f
   end
 
+  def get_qfilename
+    f  = get_filename
+    fn = f.gsub(/DATA\//,'data/')
+    fn = fn.gsub!( "_kids", "_data")
+    fn = fn.gsub!(/.csv/,'.txt')
+  end
+  
+  def get_ready_filename
+    f  = get_filename
+    fn = f.gsub(/DATA\//,'QREADY/')
+    fn = fn.gsub!( "_kids", "_data")
+    fn = fn.gsub!(/.csv/,'.txt')
+  end
+
   # from load.rb @options for use here
   def set_options o
     @options = o
@@ -62,8 +76,18 @@ class Q_kids < Q_FTP
     @options
   end
 
+  # Push to Quandl ftp server
+  # Can not use super method as does not get grf right
   def push
-    super
+    begin
+      # send to quandle.ftp.com, from_file, to_file
+      ftps = get_ftps
+      ftps.puttextfile( get_ready_filename, get_qfilename )  
+      puts "\tPushed: #{get_ready_filename} to #{get_qfilename}"
+    rescue Exception => e
+      puts "\n\tFAILED to push #{get_ready_filename} to #{get_qfilename} on Quandl.\t\t\t#{$0}\n\n_____________________________________________________"
+      puts e
+    end
   end
   
   # Composes the Quandle formated version of the DATA/*.csv file
@@ -73,10 +97,7 @@ class Q_kids < Q_FTP
 
     qc = []
     dir = get_options.directory
-  
-    qfilename = @filename.gsub( "#{dir}",'QREADY' )
-    qfilename = qfilename.gsub!( "_kids", "_data")
-    qfilename = qfilename.gsub!( ".csv", ".txt" )
+    qfilename = get_ready_filename
 
     # Open the output file
     fl = File.open(qfilename, 'w')

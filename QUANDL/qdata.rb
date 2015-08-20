@@ -12,11 +12,13 @@ class String
     gsub /\"/,"'"
   end
 end #String
+
 class Array
   def to_q
     compact!
   end
 end #Array
+
 #
 # Q_data =========================================
 # 
@@ -62,7 +64,7 @@ class Q_data < Q_FTP
     @options
   end
 
-  def push
+  def push 
     super
   end
 
