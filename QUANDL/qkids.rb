@@ -15,6 +15,7 @@ end
 say 'Time'
 
 class String
+  # create a Quandl conforming date from Kidsat format135
   def to_Qdt
     a = self.split('/')
     mm = "%02d" % a[0]
@@ -74,6 +75,7 @@ class Q_kids < Q_FTP
     dir = get_options.directory
   
     qfilename = @filename.gsub( "#{dir}",'QREADY' )
+    qfilename = qfilename.gsub!( "_kids", "_data")
     qfilename = qfilename.gsub!( ".csv", ".txt" )
 
     # Open the output file
@@ -114,30 +116,30 @@ class Q_kids < Q_FTP
         attributes = {
           :source_code => 'MPM_04',
           :code        => 'Geneva715',
-          :name        => 'School Wide Observations',
+          :name        => 'All School Wide Observations',
           :column_names=> ["Date", 
             "Shared Attention", "Engagement", 
             "Circles of Comm","Check Box", 
             "Elab. Ideas", "Bridges",
             "Ideas & Emotions"],
-          :frequency   => "onthly",
-          :from_date   => "2015-Mar-01",
-          :to_date     => "2015-Aug-31",
+          :frequency   => "monthly",
+          :from_date   => "2015-03-01",
+          :to_date     => "2015-08-31",
           :description => 't.b.a.',
           :private     => false,
           :premium     => true
           }
-        fl.puts [ "#{attributes[:source_code]}/#{attributes[:code]}",
-                  attributes[:column_names]].join('|')
 
-        # Create the Quandl Dataset
+        # Create the Quandl Dataset and save it
         d = Dataset.create(attributes)
         d.save
         pp d
         puts d.errors
         puts d.error_messages
-        next
 
+        fl.puts ["Quandl Code", attributes[:column_names]].join('|')
+
+        next
       end #if
 
 

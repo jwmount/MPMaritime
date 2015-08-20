@@ -47,7 +47,7 @@ Quandl::Client.token = ENV['QUANDL_TOKEN']
 @options = OptparseArguments.parse(ARGV)
 
 # Handle the Quandl file name files, this processes _metadata before _data files.
-["_metadata", "_data", "_kids"].each do |fstem|
+["_data", "_kids","_metadata"].each do |fstem|
   puts "\n\n#{fstem} files"
 
   # prepare a filespec and process each file it covers  

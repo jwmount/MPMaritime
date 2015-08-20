@@ -1,0 +1,9 @@
+Quandl Code|Date|Shared Attention|Engagement|Circles of Comm|Check Box|Elab. Ideas|Bridges|Ideas & Emotions
+MPM_04/Geneva715|2015-05-12|1|2|2|0|2|1|1
+MPM_04/Geneva715|2015-04-12|3|1|1|0|1|1|1
+MPM_04/Geneva715|2015-07-12|4|4|4|0|4|4|4
+MPM_04/Geneva715|2015-07-13|2|3|3|0|3|4|3
+MPM_04/Geneva715|2015-06-11|2|2|4|0|4|2|2
+MPM_04/Geneva715|2015-06-12|1|3|2|0|2|3|2
+MPM_04/Geneva715|2015-03-11|1|2|2|0|2|1|1
+MPM_04/Geneva715|2015-03-12|3|5|1|5|0|1|5
