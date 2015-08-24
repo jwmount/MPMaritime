@@ -12,7 +12,7 @@ def say(word)
   require 'debug'
   puts word + ' to begin debugging.'
 end
-#say 'Time'
+say 'Time'
 
 class String
   # create a Quandl conforming date from Kidsat format135
@@ -34,7 +34,9 @@ class Q_kids < Q_FTP
   @filename = ''
   @options = nil
   @sent = 0
-  
+  @observations = {}
+
+
   def initialize( f )
     set_filename f
     inc_sent
@@ -94,10 +96,13 @@ class Q_kids < Q_FTP
   def compose( fn )
 
     @flag = false
+    @observations = {}
 
-    qc = []
-    dir = get_options.directory
+
+    qc        = []
+    dir       = get_options.directory
     qfilename = get_ready_filename
+
 
     # Open the output file
     fl = File.open(qfilename, 'w')
@@ -105,7 +110,7 @@ class Q_kids < Q_FTP
 
     # Read and handle each row of the file
     CSV.foreach(fn) do |row| 
-      
+
       # Skip blank or comment row
       next if row.empty?
       next if row[0].include?( '#' )
@@ -136,7 +141,7 @@ class Q_kids < Q_FTP
         # Using _metadata does not create column_names      
         attributes = {
           :source_code => 'MPM_04',
-          :code        => 'Geneva715',
+          :code        => "#{qc}",
           :name        => 'All School Wide Observations',
           :column_names=> ["Date", 
             "Shared Attention", "Engagement", 
@@ -219,10 +224,23 @@ class Q_kids < Q_FTP
       line << [ 4 ]       if row[33] == "Yes"
       line << [ 5 ]       if row[34] == "Yes"
 
+      obs = { dt => line  }
+      if @observations.has_key?(dt)
+        puts 'has the key, dedup them'
+      else
+        @observations.merge!(obs)
+        puts 'does NOT have key'
+      end
+
       fl.puts (line).join('|') + "\n" #     if !qc.empty? and @flag and row[0] != 'Date'
 
     end #CSV
+    # dedup = { k==date, [ count, [array of totals] ] }
+    # dedup = { 2015-6-15, [ 2, [ 2, 4, 8, 6, 7, 5, 4] ] }
+    # returns { 2015-6-15, [ 2, [ 1, 2, 8, 3, 3.5, 2.5, 2 ] ] }
     fl.close
+    #lines.dedup!(line)
+    #lines.each {|l| fl.puts (l).join('|') }
   end
 
   def has_quandl_key?
