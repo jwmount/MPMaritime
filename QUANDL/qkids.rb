@@ -222,11 +222,12 @@ class Q_kids < Q_FTP
       line << 4       if row[33] == "Yes"
       line << 5       if row[34] == "Yes"
 
+      # dedup = { count, k==date, array of totals] }
+      # dedup = { 2, 2015-6-15,  2, 4, 8, 6, 7, 5, 4  }
       if @observations.has_key?(dt)
         puts "#{dt} key value exists, dedup them"
         @observations[dt][0] += 1
         (3..9).each_with_index do |ix| 
-          puts ix, ix-1
           @observations[dt][ix] += line[ix]
         end
       else
@@ -239,19 +240,11 @@ class Q_kids < Q_FTP
 
     end #CSV
     
-    # dedup = { k==date, [ count, [array of totals] ] }
-    # dedup = { 2, 2015-6-15,  2, 4, 8, 6, 7, 5, 4] ] }
-    # returns { 2015-6-15, [ 2, [ 1, 2, 8, 3, 3.5, 2.5, 2 ] ] }
-
     @observations.each do |obs|
-        obs[1][3] /= obs[1][0].to_f
-        obs[1][4] /= obs[1][0].to_f
-        obs[1][5] /= obs[1][0].to_f
-        obs[1][6] /= obs[1][0].to_f
-        obs[1][7] /= obs[1][0].to_f
-        obs[1][8] /= obs[1][0].to_f
-        obs[1][9] /= obs[1][0].to_f
-      fl.puts (obs).join('|')
+      duplicates = obs[1][0].to_f
+      o = obs.flatten.drop(2)
+      (2..8).each_with_index {|ix| o[ix] /= duplicates }
+      fl.puts (o).join('|')
     end
     fl.close
     #lines.dedup!(line)
