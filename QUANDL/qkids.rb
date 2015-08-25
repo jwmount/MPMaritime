@@ -97,8 +97,6 @@ class Q_kids < Q_FTP
 
     @flag = false
     @observations = {}
-
-
     qc        = []
     dir       = get_options.directory
     qfilename = get_ready_filename
@@ -180,64 +178,81 @@ class Q_kids < Q_FTP
       end
     
       # construct line as array joined with '|'
-      line = [ qc, dt ]
+      line = [ 0, qc, dt ]
       # Shared Attention [1..4]
-      line << [ 1 ]       if row[5] == "Yes"
-      line << [ 2 ]       if row[6] == "Yes"
-      line << [ 3 ]       if row[7] == "Yes"
-      line << [ 4 ]       if row[8] == "Yes"
-      line << [ 5 ]       if row[9] == "Yes"
+      line << 1       if row[5] == "Yes"
+      line << 2       if row[6] == "Yes"
+      line << 3       if row[7] == "Yes"
+      line << 4       if row[8] == "Yes"
+      line << 5       if row[9] == "Yes"
 
       # Engagement
-      line << [ 1 ]       if row[10] == "Yes"
-      line << [ 2 ]       if row[11] == "Yes"
-      line << [ 3 ]       if row[12] == "Yes"
-      line << [ 4 ]       if row[13] == "Yes"
-      line << [ 5 ]       if row[14] == "Yes"
+      line << 1       if row[10] == "Yes"
+      line << 2       if row[11] == "Yes"
+      line << 3       if row[12] == "Yes"
+      line << 4       if row[13] == "Yes"
+      line << 5       if row[14] == "Yes"
 
       # Circle of Communication
-      line << [ 1 ]       if row[15] == "Yes"
-      line << [ 2 ]       if row[16] == "Yes"
-      line << [ 3 ]       if row[17] == "Yes"
-      line << [ 4 ]       if row[18] == "Yes"
-      line << [ 5 ]       if row[19] == "Yes"
+      line << 1       if row[15] == "Yes"
+      line << 2       if row[16] == "Yes"
+      line << 3       if row[17] == "Yes"
+      line << 4       if row[18] == "Yes"
+      line << 5       if row[19] == "Yes"
 
       # Check Box
-      line << [ 0 ]
-      line << [ 1 ]       if row[20] == "Yes"
-      line << [ 2 ]       if row[21] == "Yes"
-      line << [ 3 ]       if row[22] == "Yes"
-      line << [ 4 ]       if row[23] == "Yes"
-      line << [ 5 ]       if row[24] == "Yes"
+      line << 0
+      line << 1      if row[20] == "Yes"
+      line << 2      if row[21] == "Yes"
+      line << 3      if row[22] == "Yes"
+      line << 4      if row[23] == "Yes"
+      line << 5      if row[24] == "Yes"
 
       # Elaborating Ideas
-      line << [ 1 ]       if row[25] == "Yes"
-      line << [ 2 ]       if row[26] == "Yes"
-      line << [ 3 ]       if row[27] == "Yes"
-      line << [ 4 ]       if row[28] == "Yes"
-      line << [ 5 ]       if row[29] == "Yes"
+      line <<  1       if row[25] == "Yes"
+      line <<  2       if row[26] == "Yes"
+      line <<  3       if row[27] == "Yes"
+      line <<  4       if row[28] == "Yes"
+      line <<  5       if row[29] == "Yes"
 
       # Building Bridges
-      line << [ 1 ]       if row[30] == "Yes"
-      line << [ 2 ]       if row[31] == "Yes"
-      line << [ 3 ]       if row[32] == "Yes"
-      line << [ 4 ]       if row[33] == "Yes"
-      line << [ 5 ]       if row[34] == "Yes"
+      line << 1       if row[30] == "Yes"
+      line << 2       if row[31] == "Yes"
+      line << 3       if row[32] == "Yes"
+      line << 4       if row[33] == "Yes"
+      line << 5       if row[34] == "Yes"
 
-      obs = { dt => line  }
       if @observations.has_key?(dt)
-        puts 'has the key, dedup them'
+        puts "#{dt} key value exists, dedup them"
+        @observations[dt][0] += 1
+        (3..9).each_with_index do |ix| 
+          puts ix, ix-1
+          @observations[dt][ix] += line[ix]
+        end
       else
-        @observations.merge!(obs)
-        puts 'does NOT have key'
+        puts "#{dt} key does NOT exist, will be merged in."
+        @observations.merge!( {dt => line } )
+        @observations[dt][0] += 1
       end
-
-      fl.puts (line).join('|') + "\n" #     if !qc.empty? and @flag and row[0] != 'Date'
+      
+      #fl.puts (line).join('|') + "\n" #     if !qc.empty? and @flag and row[0] != 'Date'
 
     end #CSV
+    
     # dedup = { k==date, [ count, [array of totals] ] }
-    # dedup = { 2015-6-15, [ 2, [ 2, 4, 8, 6, 7, 5, 4] ] }
+    # dedup = { 2, 2015-6-15,  2, 4, 8, 6, 7, 5, 4] ] }
     # returns { 2015-6-15, [ 2, [ 1, 2, 8, 3, 3.5, 2.5, 2 ] ] }
+
+    @observations.each do |obs|
+        obs[1][3] /= obs[1][0].to_f
+        obs[1][4] /= obs[1][0].to_f
+        obs[1][5] /= obs[1][0].to_f
+        obs[1][6] /= obs[1][0].to_f
+        obs[1][7] /= obs[1][0].to_f
+        obs[1][8] /= obs[1][0].to_f
+        obs[1][9] /= obs[1][0].to_f
+      fl.puts (obs).join('|')
+    end
     fl.close
     #lines.dedup!(line)
     #lines.each {|l| fl.puts (l).join('|') }
