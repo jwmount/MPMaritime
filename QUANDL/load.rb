@@ -1,4 +1,4 @@
-# #!/usr/local/bin/ruby
+#!/usr/local/bin/ruby
 # load.rb -- load the dataset data
 # Purpose:  Create dataset for small gas carrier, semi-refrigerated fleet.
 # How to run this script:

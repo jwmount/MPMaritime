@@ -8,12 +8,19 @@ require 'date'
 require 'pry'
 require 'csv'
 
+#
+# Ruby Debug class,  to use, uncomment say and have at it.  
+#
 def say(word)
   require 'debug'
   puts word + ' to begin debugging.'
 end
-say 'Time'
+#say 'Time'
 
+#
+# to_Qdt -- used to clean up date format produced by Adobe
+#           Adobe date syntax breaks the Quandl import process
+#
 class String
   # create a Quandl conforming date from Kidsat format135
   def to_Qdt
@@ -31,14 +38,12 @@ end #String
 class Q_kids < Q_FTP
 
   # Instance variables
-  @filename = ''
   @options = nil
   @sent = 0
   @observations = {}
 
 
   def initialize( f )
-    set_filename f
     inc_sent
     super f
   end
@@ -49,10 +54,6 @@ class Q_kids < Q_FTP
 
   def get_sent
     @sent
-  end
-
-  def set_filename f
-    @filename = f
   end
 
   def get_qfilename
@@ -247,9 +248,7 @@ class Q_kids < Q_FTP
       fl.puts (o).join('|')
     end
     fl.close
-    #lines.dedup!(line)
-    #lines.each {|l| fl.puts (l).join('|') }
-  end
+  end # compose
 
   def has_quandl_key?
     true                   # actually doesn't need it

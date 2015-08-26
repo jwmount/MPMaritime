@@ -25,6 +25,7 @@ end
 #
 class Q_FTP
 
+  # Input file being processed for any of the file type objects
   @filename = ''
 
   def initialize( f )
