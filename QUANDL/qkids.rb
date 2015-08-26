@@ -96,11 +96,25 @@ class Q_kids < Q_FTP
   # Composes the Quandle formated version of the DATA/*.csv file
   def compose( fn )
 
-    @flag = false
-    @observations = {}
-    qc        = []
-    dir       = get_options.directory
-    qfilename = get_ready_filename
+    # 
+    #  @flag         - Set to true once we locate the data which begins with
+    #                - the line below the one with 'Data' in it.
+    #  @observations - Collection of lines (from the rows read) used to accumulate
+    #                - the file data in order to identify and average duplicates.
+    #                - When a duplicate ocurs the number of observations is incremented 
+    #                - by 1 and the values are simply summed up.  The averages are 
+    #                - computed after the data are read and before the qfile is written.
+    # qc             - Quandl Code for this DATABASE, this comes in from the .csv file.
+    # dir            - location of data files.  Defaults to 'DATA'.
+    # qfilename      - quandl file name that will be sent to them.
+    #
+    # example        - if file-in is DATA/_kidsTony.csv then out file is QREADY/_dataTony.txt
+    
+    @flag            = false
+    @observations    = {}
+    qc               = []
+    dir              = get_options.directory
+    qfilename        = get_ready_filename
 
 
     # Open the output file
@@ -177,8 +191,12 @@ class Q_kids < Q_FTP
         puts "\tInvalid date: #{dt}; skipped row."
         next
       end
-    
+
+      #
+      # In the _kids .csv file each question has multiple checkboxes
+      # and each box has a value.  First we map these values in line.
       # construct line as array joined with '|'
+      #
       line = [ 0, qc, dt ]
       # Shared Attention [1..4]
       line << 1       if row[5] == "Yes"
@@ -223,30 +241,55 @@ class Q_kids < Q_FTP
       line << 4       if row[33] == "Yes"
       line << 5       if row[34] == "Yes"
 
+      # Figure out if this date duplicates one we have and if it is
+      # retain the number of observations on this date and sum the 
+      # question values.  From these we can get average observations.
+      # The range values used here are HIGHLY DEPENDENT ON THE FORM USED.
       # dedup = { count, k==date, array of totals] }
       # dedup = { 2, 2015-6-15,  2, 4, 8, 6, 7, 5, 4  }
+      
       if @observations.has_key?(dt)
+
+        # A duplicate has occured
         puts "#{dt} key value exists, dedup them"
+        
+        # 1.  increment the number of duplicates
         @observations[dt][0] += 1
+      
+        # 2. sum the duplicate observations and hold in @observations
         (3..9).each_with_index do |ix| 
           @observations[dt][ix] += line[ix]
         end
+
       else
+        # Not a duplicate
         puts "#{dt} key does NOT exist, will be merged in."
+
+        # merge the new observation into @observations for now
         @observations.merge!( {dt => line } )
+
+        # count them
         @observations[dt][0] += 1
       end
       
-      #fl.puts (line).join('|') + "\n" #     if !qc.empty? and @flag and row[0] != 'Date'
-
     end #CSV
     
+    # Average the observation values and write them to fl
+    # iterate over them
     @observations.each do |obs|
       duplicates = obs[1][0].to_f
+
+      # drop the first two elements which are no longer needed
       o = obs.flatten.drop(2)
+
+      # calculate the averages
       (2..8).each_with_index {|ix| o[ix] /= duplicates }
+
+      # write to file
       fl.puts (o).join('|')
-    end
+      
+    end # iteration
+    
     fl.close
   end # compose
 
