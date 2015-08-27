@@ -65,7 +65,7 @@ class Q_metadata < Q_FTP
  
     CSV.foreach( fn ) do |row| 
       next if row.empty? or row[0].include?('#')  # Skip blank row or comments
-      puts "\t" + row.to_s if get_options[:verbose]
+      puts row.to_s if get_options[:verbose]
       fout.puts (row).join('|') + "\n"
      end #CSV
 

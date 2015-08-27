@@ -86,7 +86,7 @@ class Q_data < Q_FTP
     CSV.foreach(fn) do |row| 
 
       next if row.empty? or row.include?('#')   # Skip blank or comment row
-      puts "\t" + row.to_s if get_options[:verbose]
+      puts row.to_s if get_options[:verbose]
       # strip out double quote characters 
       row.each do |r|
         r.to_Qdl unless r.nil?
@@ -119,7 +119,7 @@ class Q_data < Q_FTP
       begin
         dt = row[0].gsub('/','-')
       rescue
-        puts "\tInvalid date: #{dt}; skipped row."
+        puts "Invalid date: #{dt}; skipped row."
         next
       end
     

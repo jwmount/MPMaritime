@@ -81,9 +81,9 @@ class Q_FTP
       # send to quandle.ftp.com, from_file, to_file
       ftps = get_ftps
       ftps.puttextfile( get_ready_filename, get_qfilename )  
-      puts "\tPushed: #{get_ready_filename} to #{get_qfilename}"
+      puts "Pushed: #{get_ready_filename} to #{get_qfilename}"
     rescue Exception => e
-      puts "\n\tFAILED to push #{get_ready_filename} to #{get_qfilename} on Quandl.\t\t\t#{$0}\n\n_____________________________________________________"
+      puts "\nFAILED to push #{get_ready_filename} to #{get_qfilename} on Quandl.\t\t\t#{$0}\n\n_____________________________________________________"
       puts e
     end
   end
@@ -97,7 +97,7 @@ class Q_FTP
   end
 
   def wrap_up
-    puts "\nDone. \n_______________________________________\n"
+    puts "\nDone. \n_________________________________________________\n"
     puts "(c) Copyright 2009 VenueSoftware Corp. All Rights Reserved. \n\n"
 
   end

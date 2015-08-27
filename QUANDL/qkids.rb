@@ -86,9 +86,9 @@ class Q_kids < Q_FTP
       # send to quandle.ftp.com, from_file, to_file
       ftps = get_ftps
       ftps.puttextfile( get_ready_filename, get_qfilename )  
-      puts "\tPushed: #{get_ready_filename} to #{get_qfilename}"
+      puts "Pushed: #{get_ready_filename} to #{get_qfilename}"
     rescue Exception => e
-      puts "\n\tFAILED to push #{get_ready_filename} to #{get_qfilename} on Quandl.\t\t\t#{$0}\n\n_____________________________________________________"
+      puts "\nFAILED to push #{get_ready_filename} to #{get_qfilename} on Quandl.\t\t\t#{$0}\n\n_____________________________________________________"
       puts e
     end
   end
@@ -153,8 +153,8 @@ class Q_kids < Q_FTP
         # Ensure column names are present and correct
         # Using _metadata does not create column_names      
         attributes = {
-          :source_code => 'MPM_04',
-          :code        => "#{qc}",
+          :source_code => (qc.split('/'))[0],
+          :code        => (qc.split('/'))[1],
           :name        => 'All School Wide Observations',
           :column_names=> ["Date", 
             "Shared Attention", "Engagement", 
@@ -172,9 +172,9 @@ class Q_kids < Q_FTP
         # Create the Quandl Dataset and save it
         d = Dataset.create(attributes)
         d.save
-        pp d
-        puts d.errors
-        puts d.error_messages
+        pp d                  if get_options.verbose
+        puts d.errors         if d.errors.any?
+        puts d.error_messages if d.error_messages.any?
 
         fl.puts ["Quandl Code", attributes[:column_names]].join('|')
 
@@ -251,7 +251,7 @@ class Q_kids < Q_FTP
       if @observations.has_key?(dt)
 
         # A duplicate has occured
-        puts "#{dt} key value exists, dedup them"
+        puts "#{dt} key value exists, dedup them" if get_options.verbose
         
         # 1.  increment the number of duplicates
         @observations[dt][0] += 1
@@ -263,7 +263,7 @@ class Q_kids < Q_FTP
 
       else
         # Not a duplicate
-        puts "#{dt} key does NOT exist, will be merged in."
+        puts "#{dt} key does NOT exist, will be merged in." if get_options.verbose
 
         # merge the new observation into @observations for now
         @observations.merge!( {dt => line } )
@@ -301,8 +301,8 @@ class Q_kids < Q_FTP
   # imagine, [1,3,6] are the ones we want
 
   def wrap_up
-    puts "Sent #{get_sent} _kids files."
-    super
+    puts "Sent #{get_sent}.\n\n"
+    super                           if get_options.verbose
   end
 
 end
