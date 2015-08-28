@@ -63,18 +63,14 @@ say 'Time'
   # Prepare a filespec and process each file it covers  
   # if the user has provided a spec to the command line, use that.
   #fspec = [@options.directory, '/*', fstem, '*.csv'].join : 
-  fspec = @options[:file].nil? ? [@options.directory, '/', fstem, '*.csv'].join : \
-          [@options.directory, '/', fstem, '*', @options[:file], '*.csv'].join
-
+  #fspec = @options[:file].nil? ? [@options.directory, '/', fstem, '*.csv'].join : \
+  #        [@options.directory, '/', fstem, '*', @options[:file], '*.csv'].join
   # show user if requested
-  pp fspec if @options[:verbose]
+  #pp fspec                        if @options[:verbose]
   
-  rbfiles = File.join("DATA/**", "*.csv")
-  Dir.glob(rbfiles).each do |f|
-    puts f
-  end
-
+  fspec = File.join("../SECTOR STATISTICS/**", "*.csv")
   Dir.glob(fspec).each do |f|
+    puts f                        if @options[:verbose]
 
     qftp = Q_FTP.new f
     

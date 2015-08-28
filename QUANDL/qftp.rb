@@ -70,6 +70,8 @@ class Q_FTP
     return Q_data.new(f)          if f.include?( '_data' )
     return Q_metadata.new(f)      if f.include?( '_metadata' )
     return Q_kids.new(f)          if f.include?( '_kids' )
+    # no stem, use default 
+    return Q_data.new(f)
     nil
   end
 
