@@ -37,7 +37,6 @@ class Q_FTP
     @ftps.connect('ftp.quandl.com')
     @ftps.login('mpm', 'LRvq2uncjce4Uw')
     @ftps.passive = true
-
   end
 
   def get_ftps
