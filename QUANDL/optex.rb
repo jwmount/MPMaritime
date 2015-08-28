@@ -56,7 +56,7 @@ class OptparseArguments
               options[:directory] = d
       end
 
-      # nosend: do not transmit to Quandl
+      # :file -- process single file -- NOT IMPLEMENTED BY ANY OBJECT
       opts.on("-f", "--file FILESPEC", 
               "File to send to Quandl; Required if -c is used.") do |f|
               options[:file] = f

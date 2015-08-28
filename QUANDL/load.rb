@@ -40,18 +40,32 @@ include Quandl::Client
 Quandl::Client.use 'https://www.quandl.com/api/'
 Quandl::Client.token = ENV['QUANDL_TOKEN']
 
+#
+# Ruby Debug class,  to use, uncomment say and have at it.  
+#
+def say(word)
+  require 'debug'
+  puts word + ' to begin debugging.'
+end
+say 'Time'
+
 # Remove embed dbl quotes, not allowed by Quandl
 
 @data_count = 0
 @meta_count = 0
-@options = OptparseArguments.parse(ARGV)
+@options    = OptparseArguments.parse(ARGV)
 
 # Handle the Quandl file name files, this processes _metadata before _data files.
 ["_data", "_kids","_metadata"].each do |fstem|
+
   puts "\n\n#{fstem} files"
 
-  # prepare a filespec and process each file it covers  
+  # Prepare a filespec and process each file it covers  
+  # if the user has provided a spec to the command line, use that.
   fspec = [@options.directory, '/*', fstem, '*.csv'].join
+  #fspec = @options[:file].nil? ? [@options.directory, '/*', fstem, '.csv'].join : \
+          [@options.directory, '/', fstem, @options[:file], '.csv'].join
+
   Dir.glob(fspec).each do |f|
 
     qftp = Q_FTP.new f

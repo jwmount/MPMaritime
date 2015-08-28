@@ -49,10 +49,6 @@ class Q_metadata < Q_FTP
     @options
   end
   
-  def push
-    super
-  end
-
   def compose( fn )
 
     @quandl_metadata_hdr = "Quandl Code|Name|Description"  

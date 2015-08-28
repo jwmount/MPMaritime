@@ -64,10 +64,6 @@ class Q_data < Q_FTP
     @options
   end
 
-  def push 
-    super
-  end
-
   # Composes the Quandle formated version of the DATA/*.csv file
   def compose( fn )
 
