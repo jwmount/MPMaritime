@@ -18,6 +18,7 @@
 #         5.  Load will always process contents of folder.  So o focus on a 
 #             specific file, put it alone in a target directory,
 #             Example:  $ load.rb -d SpecialData
+#             Example 2:$ load.rb -d PRODUCTION DATA -p 
 #         6.  To see other command line parameters, load.rb -h or load.rb --help
 # Features Needed:
 #         1.  Some sort of logging facility, currently just writes qfl to QREADY folder.

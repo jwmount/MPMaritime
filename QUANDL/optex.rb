@@ -8,13 +8,26 @@ require 'pp'
 class OptparseArguments
 
   def self.validate(options)
-    
+
     # Validations
     # File not specified
     #   use 'value' and column 2..count
     #   use header names and all columns
     #   use map, e.g. hash of selected columns
     # -names
+    puts "\n\t OPTIONS SET"
+    puts "\t   -c #{options[:columns]}"
+    puts "\t   -d #{options[:directory]}"
+    puts "\t   -f #{options[:file]}"
+    puts "\t   -p #{options[:production]}"
+    puts "\t   -s #{options[:send]}"
+    puts "\t   -v #{options[:verbose]}"
+
+    if options[:production] && options[:directory] == 'DATA'
+      puts "\t -p requires -d, please specify a directory and try again.\n"
+      exit
+    end
+
   end
 
 end
@@ -25,12 +38,13 @@ class OptparseArguments
 
   CODES        = %w[iso-2022-jp shift_jis euc-jp utf8 binary]
   CODE_ALIASES = { "jis" => "iso-2022-jp", "sjis" => "shift_jis" }
-  COLUMNS      = []
-  DIRECTORY    = 'DATA'
-  FILE         = nil
-  PRODUCTION   = false
-  SEND         = false
-  VERBOSE      = false
+
+  COLUMNS      = []             # -c ["Date", "$/bbl"]
+  DIRECTORY    = 'DATA'         # -d PRODUCTION DATA
+  FILE         = nil            # -f VLCC
+  PRODUCTION   = false          # -p
+  SEND         = false          # -s
+  VERBOSE      = false          # -v
 
 
   #
@@ -40,6 +54,7 @@ class OptparseArguments
     # The options specified on the command line will be collected in *options*.
     # We set default values here.
     options = OpenStruct.new
+    options.columns    = COLUMNS              # Force a specific name
     options.send       = SEND                 # No, do not send
     options.directory  = DIRECTORY            # Can be anywhere if overridden
     options.file       = FILE                 # Process all files in .directory
@@ -51,6 +66,12 @@ class OptparseArguments
 
       opts.separator ""
       opts.separator "Specific options:"
+
+      # column_names 
+      opts.on("-c", "--cols ARRAY",
+              "Column names, default: #{options.column_names}") do |d|
+              options[:column_names] = d
+      end
 
       # directory where files will be read from
       opts.on("-d", "--dir DIRECTORY",
