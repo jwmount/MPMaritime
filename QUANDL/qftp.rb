@@ -14,11 +14,6 @@ class String
     gsub /\"/,"'"
   end
 end
-def say(word)
-  require 'debug'
-  puts word + ' to begin debugging.'
-end
-#say 'Time'
 
 #
 # CLASS Q_FTP ===========================================
@@ -29,7 +24,6 @@ class Q_FTP
   @filename = ''
 
   def initialize( f )
-
     #puts "\n\n\nLoad Quandl Dataset\t\t\t#{$0}\n________________________________________________________"
     set_filename( f )
     @ftps = DoubleBagFTPS.new
@@ -71,8 +65,7 @@ class Q_FTP
     return Q_metadata.new(f)      if f.include?( '_metadata' )
     return Q_kids.new(f)          if f.include?( '_kids' )
     # no stem, use default 
-    return Q_data.new(f)
-    nil
+    return Q_prod.new(f)
   end
 
   # original file is @filename now, e.g. 
@@ -99,7 +92,7 @@ class Q_FTP
 
   def wrap_up
     puts "\nDone. \n_________________________________________________\n"
-    puts "(c) Copyright 2009 VenueSoftware Corp. All Rights Reserved. \n\n"
+    puts "(c) Copyright 2015 VenueSoftware Corp. All Rights Reserved. \n\n"
 
   end
 

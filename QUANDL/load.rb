@@ -35,6 +35,7 @@ require './qdata.rb'
 require './optex.rb'
 require './qkids.rb'
 require './qmeta.rb'
+require './qprod.rb'
 
 include Quandl::Client
 Quandl::Client.use 'https://www.quandl.com/api/'
@@ -47,16 +48,19 @@ def say(word)
   require 'debug'
   puts word + ' to begin debugging.'
 end
-say 'Time'
+#say 'Time'
 
 # Remove embed dbl quotes, not allowed by Quandl
 
 @data_count = 0
 @meta_count = 0
+@identified_sources = ["_data", "_kids","_metadata"]
+@prod_sources = ["prod"]
 @options    = OptparseArguments.parse(ARGV)
+@sources = @options["production"] ? @prod_sources : @identified_sources
 
 # Handle the Quandl file name files, this processes _metadata before _data files.
-["_data", "_kids","_metadata"].each do |fstem|
+@sources.each do |fstem|
 
   puts "\n\n#{fstem} files"
 
@@ -68,7 +72,17 @@ say 'Time'
   # show user if requested
   #pp fspec                        if @options[:verbose]
   
-  fspec = File.join("../SECTOR STATISTICS/**", "*.csv")
+  # if -p is set use .csv files in PRODUCTION DATA foler.
+  # Process everything as _data.  Fail on anything that does not conform.
+  if @options[:production]
+  #  fspec = File.join("/Users/John/DropBox/PRODUCTION DATA/", "*.csv")
+    fspec = File.join(@options[:directory], "*.csv")
+  # if -p is not set use files in /DATA and stems _data and _metadata.
+  else
+    fspec = @options[:file].nil? ? [@options.directory, '/', fstem, '*.csv'].join : \
+          [@options.directory, '/', fstem, '*', @options[:file], '*.csv'].join
+  end
+
   Dir.glob(fspec).each do |f|
     puts f                        if @options[:verbose]
 

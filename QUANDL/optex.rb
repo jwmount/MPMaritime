@@ -28,6 +28,7 @@ class OptparseArguments
   COLUMNS      = []
   DIRECTORY    = 'DATA'
   FILE         = nil
+  PRODUCTION   = false
   SEND         = false
   VERBOSE      = false
 
@@ -42,6 +43,7 @@ class OptparseArguments
     options.send       = SEND                 # No, do not send
     options.directory  = DIRECTORY            # Can be anywhere if overridden
     options.file       = FILE                 # Process all files in .directory
+    options.production = PRODUCTION           # Use .csv files in DropBox/PRODUCTION DATA
     options.verbose    = VERBOSE              # Say as little as necessary
 
     opt_parser = OptionParser.new do |opts|
@@ -80,6 +82,11 @@ class OptparseArguments
       opts.on("--type [TYPE]", [:text, :binary, :auto],
               "Select transfer type (text, binary, auto)") do |t|
         options.transfer_type = t
+      end
+
+      # Boolean switch.
+      opts.on("-p", "--[no-]production", "Use production csv files") do |p|
+        options.production = p
       end
 
       # Boolean switch.

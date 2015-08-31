@@ -80,9 +80,9 @@ d.assign_attributes(:source_code => 'OTKR_R',
                     :description => 'VLCC - Arabian Gulf to Japan (TD3) - Spot Freight Rate - as % of cargo value (PCF)',
 	                :private     => false
 	                )
-
-d = Dataset.find("OTKR_R/VLCC_TD3_DBBL")
-d.assign_attributes(:source_code => 'OTKR_R',
+=end
+d = Dataset.create(
+                    :source_code => 'OTKR_R',
 	                :code        => 'VLCC_TD3_DBBL',
                     :name        => 'VLCC - Arabian Gulf to Japan (TD3) - Spot Freight Rate - as $/bbl',
                     :column_names=> ["Date", "$/bbl"],
@@ -91,6 +91,7 @@ d.assign_attributes(:source_code => 'OTKR_R',
                     :description => 'VLCC - Arabian Gulf to Japan (TD3) - Spot Freight Rate - as %/bbl',
 	                :private     => false
 	                )
+=begin
 d = Dataset.find("OTKR_R/VLCC_TD3_TCE")
 d.assign_attributes(:source_code => 'OTKR_R',
 	                :code        => 'VLCC_TD3_TCE',
