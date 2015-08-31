@@ -75,8 +75,8 @@ end
   # if -p is set use .csv files in PRODUCTION DATA foler.
   # Process everything as _data.  Fail on anything that does not conform.
   if @options[:production]
-  #  fspec = File.join("/Users/John/DropBox/PRODUCTION DATA/", "*.csv")
     fspec = File.join(@options[:directory], "*.csv")
+
   # if -p is not set use files in /DATA and stems _data and _metadata.
   else
     fspec = @options[:file].nil? ? [@options.directory, '/', fstem, '*.csv'].join : \

@@ -152,7 +152,7 @@ class Q_prod < Q_FTP
   def get_remote_filename
     #f = @qfilename.gsub("/Users/John/DropBox/PRODUCTION DATA/", '')
     f = @qfilename.gsub(@options[:directory], '')
-    ["data/", f].join
+    ["data", f].join
   end
 
   # original file is @filename now, e.g. 
