@@ -18,7 +18,7 @@
 #         5.  Load will always process contents of folder.  So o focus on a 
 #             specific file, put it alone in a target directory,
 #             Example:  $ load.rb -d SpecialData
-#             Example 2:$ load.rb -d PRODUCTION DATA -p 
+#             Example 2:$ load.rb -d PRODUCTION -p 
 #         6.  To see other command line parameters, load.rb -h or load.rb --help
 # Features Needed:
 #         1.  Some sort of logging facility, currently just writes qfl to QREADY folder.
@@ -59,6 +59,9 @@ end
 @prod_sources = ["prod"]
 @options    = OptparseArguments.parse(ARGV)
 @sources = @options["production"] ? @prod_sources : @identified_sources
+puts "Sooo, ready?"
+answer = gets.chomp('Do you like milk?') 
+exit if answer != 'y'
 
 # Handle the Quandl file name files, this processes _metadata before _data files.
 @sources.each do |fstem|
@@ -73,7 +76,7 @@ end
   # show user if requested
   #pp fspec                        if @options[:verbose]
   
-  # if -p is set use .csv files in PRODUCTION DATA foler.
+  # if -p is set use .csv files in PRODUCTION foler.
   # Process everything as _data.  Fail on anything that does not conform.
   if @options[:production]
     fspec = File.join(@options[:directory], "*.csv")

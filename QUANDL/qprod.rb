@@ -1,8 +1,8 @@
-# qprod.rb -- Quandl Load .csv files found in DropBox/PRODUCTION DATA
+# qprod.rb -- Quandl Load .csv files found in DropBox/PRODUCTION
 # Look for Quandl: key, if present, use as Quandl Code, else drop file.
 # Only invoked if -p(rod) option is set.
 # QUANDL_TOKEN=Z_FgEe3SYywKzHT7myYr ruby load.rb
-# QUANDL_TOKEN=Z_FgEe3SYywKzHT7myYr ruby load.rb -v -s -p -d "/Users/John/DropBox/PRODUCTION DATA"
+# QUANDL_TOKEN=Z_FgEe3SYywKzHT7myYr ruby load.rb -v -s -p -d /Users/John/DropBox/PRODUCTION
 # http://ruby-doc.org/stdlib-2.2.2/libdoc/net/ftp/rdoc/Net/FTP.html#method-i-puttextfile
 
 require 'date'
@@ -147,10 +147,10 @@ class Q_prod < Q_FTP
   end
 
   # Find the file spec to push to on Quandl side, ie remote
-  # Remove overburden which here is: /Users/John/DropBox/PRODUCTION DATA/
+  # Remove overburden which here is: /Users/John/DropBox/PRODUCTION/
   # HACK:  breaks if @options[:directory is NOT SET]
   def get_remote_filename
-    #f = @qfilename.gsub("/Users/John/DropBox/PRODUCTION DATA/", '')
+    #f = @qfilename.gsub("/Users/John/DropBox/PRODUCTION/", '')
     f = @qfilename.gsub(@options[:directory], '')
     ["data", f].join
   end

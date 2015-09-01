@@ -15,7 +15,7 @@ class OptparseArguments
     #   use header names and all columns
     #   use map, e.g. hash of selected columns
     # -names
-    puts "\n\t OPTIONS SET"
+    puts "\n\t OPTION SETTINGS"
     puts "\t   -c #{options[:columns]}"
     puts "\t   -d #{options[:directory]}"
     puts "\t   -f #{options[:file]}"
@@ -40,7 +40,7 @@ class OptparseArguments
   CODE_ALIASES = { "jis" => "iso-2022-jp", "sjis" => "shift_jis" }
 
   COLUMNS      = []             # -c ["Date", "$/bbl"]
-  DIRECTORY    = 'DATA'         # -d PRODUCTION DATA
+  DIRECTORY    = 'DATA'         # -d PRODUCTION
   FILE         = nil            # -f VLCC
   PRODUCTION   = false          # -p
   SEND         = false          # -s
@@ -58,7 +58,7 @@ class OptparseArguments
     options.send       = SEND                 # No, do not send
     options.directory  = DIRECTORY            # Can be anywhere if overridden
     options.file       = FILE                 # Process all files in .directory
-    options.production = PRODUCTION           # Use .csv files in DropBox/PRODUCTION DATA
+    options.production = PRODUCTION           # Use .csv files in DropBox/PRODUCTION
     options.verbose    = VERBOSE              # Say as little as necessary
 
     opt_parser = OptionParser.new do |opts|
