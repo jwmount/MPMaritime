@@ -3,6 +3,7 @@
 # Purpose:  Create dataset for small gas carrier, semi-refrigerated fleet.
 # How to run this script:
 #         $ QUANDL_TOKEN=Z_FgEe3SYywKzHT7myYr ruby load.rb
+#         $ QUANDL_TOKEN=Z_FgEe3SYywKzHT7myYr ruby load.rb -p -d /Users/John/DropBox/PRODUCTION -s -v
 #         $ curl "https://www.quandl.com/api/v3/datasets/OTKR_R/VLCC_TD3_TCE.csv?api_key=Z_FgEe3SYywKzHT7myYr"
 # Refs:   https://github.com/quandl/quandl_client.git
 #         https://www.quandl.com/data/LPG_F
@@ -59,11 +60,12 @@ end
 @prod_sources = ["prod"]
 @options    = OptparseArguments.parse(ARGV)
 @sources = @options["production"] ? @prod_sources : @identified_sources
-puts "Sooo, ready?"
-answer = gets.chomp('Do you like milk?') 
-exit if answer != 'y'
 
-# Handle the Quandl file name files, this processes _metadata before _data files.
+# Ask user to confirm options are set correctly
+puts "Sooo, ready? (Yes|n)"
+answer = gets.chomp
+exit unless answer == "Yes"
+# Handle the Quandl file name files, this processes _metadata after _data files.
 @sources.each do |fstem|
 
   puts "\n\n#{fstem} files"

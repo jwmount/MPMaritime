@@ -15,7 +15,7 @@ def say(word)
   require 'debug'
   puts word + ' to begin debugging.'
 end
-#say 'Time'
+say 'Time'
 
 #
 # to_Qdt -- used to clean up date format produced by Adobe
@@ -256,9 +256,10 @@ class Q_kids < Q_FTP
         # 1.  increment the number of duplicates
         @observations[dt][0] += 1
       
-        # 2. sum the duplicate observations and hold in @observations
+        # 2. Sum the duplicate observations and hold in @observations
+        #    Some lines may be short, then don't sum them.  May cause averaging fails.
         (3..9).each_with_index do |ix| 
-          @observations[dt][ix] += line[ix]
+          @observations[dt][ix] += line[ix] unless line[ix].nil?
         end
 
       else

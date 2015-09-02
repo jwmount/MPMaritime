@@ -16,15 +16,15 @@ class OptparseArguments
     #   use map, e.g. hash of selected columns
     # -names
     puts "\n\t OPTION SETTINGS"
-    puts "\t   -c #{options[:columns]}"
-    puts "\t   -d #{options[:directory]}"
-    puts "\t   -f #{options[:file]}"
-    puts "\t   -p #{options[:production]}"
-    puts "\t   -s #{options[:send]}"
-    puts "\t   -v #{options[:verbose]}"
+    puts "\t   :column_names\t -c #{options[:columns]}"
+    puts "\t   :directory \t\t -d #{options[:directory]}"
+    puts "\t   :file      \t\t -f #{options[:file]}"
+    puts "\t   :production\t\t -p #{options[:production]}"
+    puts "\t   :send      \t\t -s #{options[:send]}"
+    puts "\t   :verbose   \t\t -v #{options[:verbose]}"
 
     if options[:production] && options[:directory] == 'DATA'
-      puts "\t -p requires -d, please specify a directory and try again.\n"
+      puts "\n\t WARNING:  -p requires -d, please specify a directory and try again.\n\n"
       exit
     end
 
