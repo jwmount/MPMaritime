@@ -3,6 +3,9 @@
 # QUANDL_TOKEN=Z_FgEe3SYywKzHT7myYr ruby load.rb
 # http://ruby-doc.org/stdlib-2.2.2/libdoc/net/ftp/rdoc/Net/FTP.html#method-i-puttextfile
 
+# Notes for _medatdata file handling
+#         1.  q_metadata class does not handle comments, just has @flag
+
 require 'date'
 require 'pry'
 
@@ -50,7 +53,7 @@ class Q_metadata < Q_FTP
   end
   
   def compose( fn )
-
+    #say 'Time'
     @quandl_metadata_hdr = "Quandl Code|Name|Description"  
 
     # filename to write
@@ -60,7 +63,8 @@ class Q_metadata < Q_FTP
     fout   = File.open( qrfn, 'w' )
  
     CSV.foreach( fn ) do |row| 
-      next if row.empty? or row[0].include?('#')  # Skip blank row or comments
+      # Skip blank row or comments
+      next if row.empty? or row[0].include?('#')  
       puts row.to_s if get_options[:verbose]
       fout.puts (row).join('|') + "\n"
      end #CSV

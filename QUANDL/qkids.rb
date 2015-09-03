@@ -15,7 +15,7 @@ def say(word)
   require 'debug'
   puts word + ' to begin debugging.'
 end
-say 'Time'
+#say 'Time'
 
 #
 # to_Qdt -- used to clean up date format produced by Adobe

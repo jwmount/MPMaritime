@@ -138,7 +138,13 @@ class Q_prod < Q_FTP
       #fl.puts [qc,row[0..row.count]].join('|')
 
     end #CSV
-    fl.close
+    # Housekeeping on fl 
+    begin
+      fl.close
+      fl.delete
+    rescue 
+      puts Exception => e
+    end
   end
 
   # What file are we pushing to Quandl?
@@ -155,6 +161,12 @@ class Q_prod < Q_FTP
     ["data", f].join
   end
 
+  # Log what happened when file was pushed
+  def addToLog flag
+    result = flag ? 'Succeeded' : 'Failed'
+    File.open("/Users/John/DropBox/datasets_processed.log", 'a') {|f| f.write("#{DateTime.now.strftime("%Y-%b-%d %H:%M:%S")}: #{get_local_filename}--#{result}\n") }
+  end
+
   # original file is @filename now, e.g. 
   # "VLCC_TD3_DBBL_data.txt"
   def push 
@@ -163,9 +175,11 @@ class Q_prod < Q_FTP
       ftps = get_ftps
       ftps.puttextfile( get_local_filename, get_remote_filename )  
       puts "Pushed: #{get_local_filename} to #{get_remote_filename}"
+      addToLog true
     rescue Exception => e
       puts "\nFAILED to push #{get_local_filename} to #{get_remote_filename} on Quandl.\t\t\t#{$0}\n\n_____________________________________________________"
       puts "Reason: #{e}"
+      addToLog false
     end
   end
 
@@ -200,12 +214,5 @@ class Q_prod < Q_FTP
     true                   # actually doesn't need it
   end
 
-  # If we have ARGV values, setup column selector array
-  # imagine, [1,3,6] are the ones we want
-
-  def wrap_up
-    puts "Sent #{get_sent} _data files."
-    super
-  end
 
 end
