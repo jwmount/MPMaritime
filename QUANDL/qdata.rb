@@ -72,11 +72,11 @@ class Q_data < Q_FTP
     qc = []
     dir = get_options.directory
   
-    qfilename = @filename.gsub( "#{dir}",'QREADY' )
-    qfilename = qfilename.gsub!( ".csv", ".txt" )
+    #qfilename = @filename.gsub( "#{dir}",'QREADY' )
+    #qfilename = qfilename.gsub!( ".csv", ".txt" )
 
     # Open the output file
-    fl = File.open(qfilename, 'w')
+    fl = File.open(get_qfilespec, 'w')
   
     # Read and handle each row of the file
     CSV.foreach(fn) do |row| 

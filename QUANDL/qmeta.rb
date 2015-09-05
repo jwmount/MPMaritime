@@ -57,10 +57,11 @@ class Q_metadata < Q_FTP
     @quandl_metadata_hdr = "Quandl Code|Name|Description"  
 
     # filename to write
-    qrfn   = fn.gsub(/DATA\//,'QREADY/')
-    qrfn   = qrfn.gsub!(/.csv/,'.txt')
+    #qrfn   = fn.gsub(/DATA\//,'QREADY/')
+    #qrfn   = qrfn.gsub!(/.csv/,'.txt')
+    
     # file to write
-    fout   = File.open( qrfn, 'w' )
+    fout   = File.open( get_qfilename, 'w' )
  
     CSV.foreach( fn ) do |row| 
       # Skip blank row or comments

@@ -138,13 +138,7 @@ class Q_prod < Q_FTP
       #fl.puts [qc,row[0..row.count]].join('|')
 
     end #CSV
-    # Housekeeping on fl 
-    begin
-      fl.close
-      fl.delete
-    rescue 
-      puts Exception => e
-    end
+
   end
 
   # What file are we pushing to Quandl?
@@ -152,36 +146,6 @@ class Q_prod < Q_FTP
     @qfilename
   end
 
-  # Find the file spec to push to on Quandl side, ie remote
-  # Remove overburden which here is: /Users/John/DropBox/PRODUCTION/
-  # HACK:  breaks if @options[:directory is NOT SET]
-  def get_remote_filename
-    #f = @qfilename.gsub("/Users/John/DropBox/PRODUCTION/", '')
-    f = @qfilename.gsub(@options[:directory], '')
-    ["data", f].join
-  end
-
-  # Log what happened when file was pushed
-  def addToLog flag
-    result = flag ? 'Succeeded' : 'Failed'
-    File.open("/Users/John/DropBox/datasets_processed.log", 'a') {|f| f.write("#{DateTime.now.strftime("%Y-%b-%d %H:%M:%S")}: #{get_local_filename}--#{result}\n") }
-  end
-
-  # original file is @filename now, e.g. 
-  # "VLCC_TD3_DBBL_data.txt"
-  def push 
-    begin
-      # send to quandle.ftp.com, from_file, to_file
-      ftps = get_ftps
-      ftps.puttextfile( get_local_filename, get_remote_filename )  
-      puts "Pushed: #{get_local_filename} to #{get_remote_filename}"
-      addToLog true
-    rescue Exception => e
-      puts "\nFAILED to push #{get_local_filename} to #{get_remote_filename} on Quandl.\t\t\t#{$0}\n\n_____________________________________________________"
-      puts "Reason: #{e}"
-      addToLog false
-    end
-  end
 
   # If necessary, create the dataset, once, by setting @existsDS
   def createDS qc

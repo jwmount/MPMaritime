@@ -56,18 +56,11 @@ class Q_kids < Q_FTP
     @sent
   end
 
+  # This is the file name, e.g. _dataSomeFile.txt
   def get_qfilename
-    f  = get_filename
-    fn = f.gsub(/DATA\//,'data/')
-    fn = fn.gsub!( "_kids", "_data")
-    fn = fn.gsub!(/.csv/,'.txt')
-  end
-  
-  def get_ready_filename
-    f  = get_filename
-    fn = f.gsub(/DATA\//,'QREADY/')
-    fn = fn.gsub!( "_kids", "_data")
-    fn = fn.gsub!(/.csv/,'.txt')
+    f = get_filename
+    f.gsub!( "_kids", "")
+    f.gsub!(/.csv/,'.txt')
   end
 
   # from load.rb @options for use here
@@ -77,20 +70,6 @@ class Q_kids < Q_FTP
 
   def get_options
     @options
-  end
-
-  # Push to Quandl ftp server
-  # Can not use super method as does not get grf right
-  def push
-    begin
-      # send to quandle.ftp.com, from_file, to_file
-      ftps = get_ftps
-      ftps.puttextfile( get_ready_filename, get_qfilename )  
-      puts "Pushed: #{get_ready_filename} to #{get_qfilename}"
-    rescue Exception => e
-      puts "\nFAILED to push #{get_ready_filename} to #{get_qfilename} on Quandl.\t\t\t#{$0}\n\n_____________________________________________________"
-      puts e
-    end
   end
   
   # Composes the Quandle formated version of the DATA/*.csv file
@@ -108,17 +87,16 @@ class Q_kids < Q_FTP
     # dir            - location of data files.  Defaults to 'DATA'.
     # qfilename      - quandl file name that will be sent to them.
     #
-    # example        - if file-in is DATA/_kidsTony.csv then out file is QREADY/_dataTony.txt
+    # example        - if file-in is _kidsTony.csv then out file is _dataTony.txt
     
     @flag            = false
     @observations    = {}
     qc               = []
     dir              = get_options.directory
-    qfilename        = get_ready_filename
 
 
     # Open the output file
-    fl = File.open(qfilename, 'w')
+    fl = File.open(get_qfilespec, 'w')
   
 
     # Read and handle each row of the file

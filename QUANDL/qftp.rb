@@ -42,25 +42,37 @@ class Q_FTP
     @filename = f
   end
 
+  # File being processed, any type but must end in .csv
   def get_filename
     @filename
   end
 
-  def get_qfilename
+  # File prepared for Quandl, contains either _data or _metadata, ends .txt
+  def get_qfilespec
     f  = get_filename
     fn = f.gsub(/DATA\//,'data/')
     fn = fn.gsub!(/.csv/,'.txt')
   end
 
-  def get_ready_filename
+  # File actually put to Quandl ftp server, is /data/<qfilename>
+  def Xget_ready_filename
     f  = get_filename
-    fn = f.gsub(/DATA\//,'QREADY/')
+    #fn = f.gsub(/DATA\//,'QREADY/')
     fn = fn.gsub!(/.csv/,'.txt')
+  end
+
+  # Find the file spec to push to on Quandl side, ie remote
+  # Remove overburden which here is: /Users/John/DropBox/PRODUCTION/
+  # HACK:  breaks if @options[:directory is NOT SET]
+  def get_rfilespec
+    #f = @qfilename.gsub("/Users/John/DropBox/PRODUCTION/", '')
+    f = get_qfilespec.gsub(@options[:directory], '')
+    ["data", f].join
   end
 
   def process
     f = get_filename
-    puts "\nProcess: #{f}\n"
+    puts "#{f}"
     return Q_data.new(f)          if f.include?( '_data' )
     return Q_metadata.new(f)      if f.include?( '_metadata' )
     return Q_kids.new(f)          if f.include?( '_kids' )
@@ -68,17 +80,33 @@ class Q_FTP
     return Q_prod.new(f)
   end
 
+  # Log what happened when file was pushed
+  # Extract the filename and make it a constant or something
+  def addToLog flag
+    result = flag ? 'Succeeded' : 'Failed'
+    File.open("/Users/John/DropBox/datasets_processed.log", 'a') do |f| 
+      dt = DateTime.now.strftime("%Y-%b-%d %H:%M:%S")
+      fn = get_filename.gsub!("/Users/John/DropBox/PRODUCTION", "")
+      result = flag ? 'Suceeded' : 'Failed'
+      line = [dt, fn, result].join(',')
+      f.write("#{line}\n") 
+    end
+  end
+
   # original file is @filename now, e.g. 
-  # "DATA/_dataETHGC Rates Master Sheet.csv"
+  # "VLCC_TD3_DBBL_data.txt"
   def push 
     begin
       # send to quandle.ftp.com, from_file, to_file
       ftps = get_ftps
-      ftps.puttextfile( get_ready_filename, get_qfilename )  
-      puts "Pushed: #{get_ready_filename} to #{get_qfilename}"
+      ftps.puttextfile( get_qfilespec, get_rfilespec )  
+      puts "Push From:\t #{get_qfilespec}"
+      puts "Push To:\t #{get_rfilespec}\n"
+      addToLog true
     rescue Exception => e
-      puts "\nFAILED to push #{get_ready_filename} to #{get_qfilename} on Quandl.\t\t\t#{$0}\n\n_____________________________________________________"
-      puts e
+      puts "\nFAILED to push #{get_qfilespec} to #{get_rfilespec} on Quandl.\t\t\t#{$0}\n\n_____________________________________________________"
+      puts "Reason: #{e}"
+      addToLog false
     end
   end
 

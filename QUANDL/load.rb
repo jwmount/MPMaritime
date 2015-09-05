@@ -9,7 +9,7 @@
 #         https://www.quandl.com/data/LPG_F
 #         https://www.quandl.com/documentation#!/api/DELETE-api--version-permissions---format-_delete_2
 # Usage:  Steps to load .csv files to Quandl
-#         1.  Put *_data*.csv and *_metadata*.csv files in /DATA folder.  
+#         1.  Put *_data*.csv and *_metadata*.csv files in collection folder.  
 #             -d to change the source folder
 #             -p put them in -d, and use -d /Users/John/DropBox/PRODUCTION in load command
 #         2.  Execute ruby load.rb (see model command above)
@@ -27,13 +27,14 @@
 #             Example 1:  $ load.rb -f VLCC
 #             Example 2:  $ load.rb -d /Users/John/DropBox/PRODUCTION -p -f VLCC 
 #         7.  To see other command line parameters, load.rb -h or load.rb --help
-#         8.  To sweep PRODUCTION every 10 minutes, -i 600
+#         8.  To sweep collection folder every 10 minutes, -i 600
 # Features Needed:
-#         1.  Some sort of logging facility, currently just writes qfl to QREADY folder.
-#         2.  Skip if date in future.
-#         4.  Delete files in PRODUCTION after sending to Quandl
-#         5.  Log activity in PRODUCTION/log.txt with file names, timestampts etc.
-#         6.  Add option to loop at some interval, e.g. -t 1 for 1 minute
+#         1.  Skip if date in future.
+# Definitions
+#         @filename            Name of file being processed, e.g. _dataSomeFile.csv
+#                              Class or Format identifiers, e.g. _kids, _data_kidsBill715.csv
+#         @qfilespec           Quandl formatted filespec, e.g. /Users/John/DropBox/_dataSomeFile.txt
+#         @rfilespec           Name delivered to Quandl, e.g. data/_dataSomeFile.txt
 #
 require 'quandl/client'
 require 'double_bag_ftps'
@@ -107,9 +108,6 @@ exit unless answer == "Yes"
   end
   pp fspec                        if @options[:verbose]
 
-  # META LOOP, repeats the sweep in :interval seconds
-  repeat_every(@options[:interval]) do
-    puts Time.now.strftime("Begin sweep at %H:%M:%S")
   
     # File loop
     Dir.glob(fspec).each do |f|
@@ -131,10 +129,15 @@ exit unless answer == "Yes"
       
         # push to quandl
         qfl.push  if @options[:send]
-        qfl.wrap_up
 
     end # File loop
   end # Qdl file name look
 
-end
+  # META LOOP, repeats the sweep in :interval seconds
+  repeat_every(@options[:interval]) do
+    puts Time.now.strftime("Sweep at %H:%M:%S")
+  end
 
+  wrapup
+
+  exit
