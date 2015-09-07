@@ -15,17 +15,22 @@ class String
   end
 end
 
+def say(word)
+  require 'debug'
+  puts word + ' to begin debugging.'
+end
+#say 'Time'
 #
 # CLASS Q_FTP ===========================================
 #
 class Q_FTP
-
-  # Input file being processed for any of the file type objects
-  @filename = ''
-
+    
+    # instance variables
+  
   def initialize( f )
     #puts "\n\n\nLoad Quandl Dataset\t\t\t#{$0}\n________________________________________________________"
-    set_filename( f )
+    @filename=( f )      # file being read, e.g. /<path>/_dataSomeFile.csv
+
     @ftps = DoubleBagFTPS.new
     @ftps.ssl_context = DoubleBagFTPS.create_ssl_context(:verify_mode => OpenSSL::SSL::VERIFY_NONE)
     @ftps.connect('ftp.quandl.com')
@@ -33,32 +38,16 @@ class Q_FTP
     @ftps.passive = true
   end
 
-  def get_ftps
-    @ftps
-  end
-
-  # local file name, resides in DATA and is .csv.
-  def set_filename( f )
+# File being processed, any type but must end in .csv
+  def filename=( f )
     @filename = f
   end
-
-  # File being processed, any type but must end in .csv
-  def get_filename
+  def filename
     @filename
   end
 
-  # File prepared for Quandl, contains either _data or _metadata, ends .txt
-  def get_qfilespec
-    f  = get_filename
-    fn = f.gsub(/DATA\//,'data/')
-    fn = fn.gsub!(/.csv/,'.txt')
-  end
-
-  # File actually put to Quandl ftp server, is /data/<qfilename>
-  def Xget_ready_filename
-    f  = get_filename
-    #fn = f.gsub(/DATA\//,'QREADY/')
-    fn = fn.gsub!(/.csv/,'.txt')
+  def get_ftps
+    @ftps
   end
 
   # Find the file spec to push to on Quandl side, ie remote
@@ -70,14 +59,13 @@ class Q_FTP
     ["data", f].join
   end
 
+  # SEQUENTIAL GLITCH HERE, must test for CSV type before qdl file type
   def process
-    f = get_filename
-    puts "#{f}"
-    return Q_data.new(f)          if f.include?( '_data' )
-    return Q_metadata.new(f)      if f.include?( '_metadata' )
-    return Q_kids.new(f)          if f.include?( '_kids' )
+    return Q_kids.new(@filename)          if @filename.include?( '_kids' )
+    return Q_data.new(@filename)          if @filename.include?( '_data' )
+    return Q_metadata.new(@filename)      if @filename.include?( '_metadata' )
     # no stem, use default 
-    return Q_prod.new(f)
+    return Q_prod.new(@filename)
   end
 
   # Log what happened when file was pushed
@@ -86,7 +74,7 @@ class Q_FTP
     result = flag ? 'Succeeded' : 'Failed'
     File.open("/Users/John/DropBox/datasets_processed.log", 'a') do |f| 
       dt = DateTime.now.strftime("%Y-%b-%d %H:%M:%S")
-      fn = get_filename.gsub!("/Users/John/DropBox/PRODUCTION", "")
+      fn = filename #.gsub!("/Users/John/DropBox/PRODUCTION", "")
       result = flag ? 'Suceeded' : 'Failed'
       line = [dt, fn, result].join(',')
       f.write("#{line}\n") 
@@ -95,24 +83,26 @@ class Q_FTP
 
   # original file is @filename now, e.g. 
   # "VLCC_TD3_DBBL_data.txt"
-  def push 
+  def push
+    qdl_ready_filespec = "data/_dataBill01.txt"
     begin
       # send to quandle.ftp.com, from_file, to_file
       ftps = get_ftps
-      ftps.puttextfile( get_qfilespec, get_rfilespec )  
-      puts "Push From:\t #{get_qfilespec}"
-      puts "Push To:\t #{get_rfilespec}\n"
+      ftps.puttextfile( @qdl_filespec, qdl_ready_filespec )  
+      puts "Push From:\t #{@qdl_filespec}"
+      puts "Push To:\t #{qdl_ready_filespec}\n"
       addToLog true
     rescue Exception => e
-      puts "\nFAILED to push #{get_qfilespec} to #{get_rfilespec} on Quandl.\t\t\t#{$0}\n\n_____________________________________________________"
+      puts "\nFAILED to push #{@qdl_filespec} to #{qdl_ready_filespec} on Quandl.\t\t\t#{$0}\n\n_____________________________________________________"
       puts "Reason: #{e}"
       addToLog false
     end
-  end
+
+  end #push
 
   # Verify that file contains a Quandl: key, FAIL & next if not.
   def has_quandl_key? f=get_filename
-    s = File.new( get_filename ).gets
+    s = File.new( @filename ).gets
     flag = s.include?('Quandl:')
     puts "\nFAIL, NO QUANDL KEY FOUND in #{f}.  Not processed.\n\n" unless flag
     flag

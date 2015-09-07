@@ -54,13 +54,13 @@ Quandl::Client.use 'https://www.quandl.com/api/'
 Quandl::Client.token = ENV['QUANDL_TOKEN']
 
 #
-# Ruby Debug class,  to use, uncomment say and have at it.  
+# Ruby Debug class,  to use, uncomment say() and have at it.  
 #
 def say(word)
   require 'debug'
   puts word + ' to begin debugging.'
 end
-#say 'Time'
+say 'Time'
 
 # Interval handler
 def repeat_every(interval)
@@ -108,15 +108,15 @@ exit unless answer == "Yes"
   end
   pp fspec                        if @options[:verbose]
 
-  
     # File loop
     Dir.glob(fspec).each do |f|
-      puts f                        if @options[:verbose]
+
+      puts f                      if @options[:verbose]
 
       qftp = Q_FTP.new f
-    
+      
       # next file in /DATA reservoir of _data and _metadata files
-      qftp.set_filename( f )
+      qftp.filename= f
 
         # Process file being prepared for Quandl, actual class will vary by file type
         qfl = qftp.process
@@ -125,7 +125,7 @@ exit unless answer == "Yes"
         next unless qfl.has_quandl_key?
       
         # compose the quandl file 
-        qfl.compose (qftp.get_filename)
+        qfl.compose f
       
         # push to quandl
         qfl.push  if @options[:send]

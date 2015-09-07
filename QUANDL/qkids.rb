@@ -8,14 +8,6 @@ require 'date'
 require 'pry'
 require 'csv'
 
-#
-# Ruby Debug class,  to use, uncomment say and have at it.  
-#
-def say(word)
-  require 'debug'
-  puts word + ' to begin debugging.'
-end
-#say 'Time'
 
 #
 # to_Qdt -- used to clean up date format produced by Adobe
@@ -42,10 +34,9 @@ class Q_kids < Q_FTP
   @sent = 0
   @observations = {}
 
-
   def initialize( f )
     inc_sent
-    super f
+    super( f )
   end
 
   def inc_sent
@@ -54,13 +45,6 @@ class Q_kids < Q_FTP
 
   def get_sent
     @sent
-  end
-
-  # This is the file name, e.g. _dataSomeFile.txt
-  def get_qfilename
-    f = get_filename
-    f.gsub!( "_kids", "")
-    f.gsub!(/.csv/,'.txt')
   end
 
   # from load.rb @options for use here
@@ -73,7 +57,7 @@ class Q_kids < Q_FTP
   end
   
   # Composes the Quandle formated version of the DATA/*.csv file
-  def compose( fn )
+  def compose f
 
     # 
     #  @flag         - Set to true once we locate the data which begins with
@@ -85,7 +69,6 @@ class Q_kids < Q_FTP
     #                - computed after the data are read and before the qfile is written.
     # qc             - Quandl Code for this DATABASE, this comes in from the .csv file.
     # dir            - location of data files.  Defaults to 'DATA'.
-    # qfilename      - quandl file name that will be sent to them.
     #
     # example        - if file-in is _kidsTony.csv then out file is _dataTony.txt
     
@@ -93,14 +76,14 @@ class Q_kids < Q_FTP
     @observations    = {}
     qc               = []
     dir              = get_options.directory
+    @qdl_filespec    = qdl_filespec= filename.gsub(".csv", ".txt").gsub("_kids","_data")
 
-
-    # Open the output file
-    fl = File.open(get_qfilespec, 'w')
-  
+    # Open the output file, MUST be <stem>/*{_data | _metadata}*.txt
+    # file is actually qdl_filename
+    fout = File.open(qdl_filespec, 'w')
 
     # Read and handle each row of the file
-    CSV.foreach(fn) do |row| 
+    CSV.foreach(f) do |row| 
 
       # Skip blank or comment row
       next if row.empty?
@@ -154,7 +137,7 @@ class Q_kids < Q_FTP
         puts d.errors         if d.errors.any?
         puts d.error_messages if d.error_messages.any?
 
-        fl.puts ["Quandl Code", attributes[:column_names]].join('|')
+        fout.puts ["Quandl Code", attributes[:column_names]].join('|')
 
         next
       end #if
@@ -265,11 +248,11 @@ class Q_kids < Q_FTP
       (2..8).each_with_index {|ix| o[ix] /= duplicates }
 
       # write to file
-      fl.puts (o).join('|')
+      fout.puts (o).join('|')
       
     end # iteration
     
-    fl.close
+    fout.close
   end # compose
 
   def has_quandl_key?

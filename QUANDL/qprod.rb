@@ -31,8 +31,6 @@ class Q_prod < Q_FTP
   @options = nil
   @sent = 0
   @existsDS = 0
-
-  #say 'Time'
   
   def initialize( f )
     set_filename f

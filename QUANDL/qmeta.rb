@@ -28,7 +28,6 @@ end #Array
 #
 class Q_metadata < Q_FTP
 
-  @filename = ''
   @options = nil
   @sent = 0
 
@@ -52,18 +51,14 @@ class Q_metadata < Q_FTP
     @options
   end
   
-  def compose( fn )
-    #say 'Time'
+  def compose f
+
     @quandl_metadata_hdr = "Quandl Code|Name|Description"  
 
-    # filename to write
-    #qrfn   = fn.gsub(/DATA\//,'QREADY/')
-    #qrfn   = qrfn.gsub!(/.csv/,'.txt')
-    
     # file to write
-    fout   = File.open( get_qfilename, 'w' )
+    fout   = File.open( @qdl_filespec, 'w' )
  
-    CSV.foreach( fn ) do |row| 
+    CSV.foreach( f ) do |row| 
       # Skip blank row or comments
       next if row.empty? or row[0].include?('#')  
       puts row.to_s if get_options[:verbose]

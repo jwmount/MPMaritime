@@ -1,4 +1,4 @@
-# qdata.rb -- Quandl Load _data files.
+@f# qdata.rb -- Quandl Load _data files.
 # If _data:  look for Quandl: key, if present, use as Quandl Code
 # QUANDL_TOKEN=Z_FgEe3SYywKzHT7myYr ruby load.rb
 # http://ruby-doc.org/stdlib-2.2.2/libdoc/net/ftp/rdoc/Net/FTP.html#method-i-puttextfile
@@ -25,7 +25,6 @@ end #Array
 class Q_data < Q_FTP
 
   # Instance variables
-  @filename = ''
   @options = nil
   @sent = 0
   
@@ -76,10 +75,10 @@ class Q_data < Q_FTP
     #qfilename = qfilename.gsub!( ".csv", ".txt" )
 
     # Open the output file
-    fl = File.open(get_qfilespec, 'w')
+    fl = File.open(@collection_location, 'w')
   
     # Read and handle each row of the file
-    CSV.foreach(fn) do |row| 
+    CSV.foreach(@current_location) do |row| 
 
       next if row.empty? or row.include?('#')   # Skip blank or comment row
       puts row.to_s if get_options[:verbose]

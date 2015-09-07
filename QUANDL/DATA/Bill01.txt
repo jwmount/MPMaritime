@@ -1,0 +1,5 @@
+Quandl Code|Date|Shared Attention|Engagement|Circles of Comm|Check Box|Elab. Ideas|Bridges|Ideas & Emotions
+MPM_04/Bill01|2015-04-12|3.0|1.0|1.0|0.0|1.0|1.0|1.0
+MPM_04/Bill01|2015-07-12|2.0|3.0|3.0|0.0|3.0|4.0|3.0
+MPM_04/Bill01|2015-06-12|1.0|3.0|2.0|0.0|2.0|3.0|2.0
+MPM_04/Bill01|2015-03-12|3.0|5.0|1.0|5.0|0.0|1.0|5.0
