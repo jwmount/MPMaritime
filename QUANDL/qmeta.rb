@@ -20,6 +20,7 @@ class Array
     compact!
   end
 end #Array
+
 #
 # Q_data =========================================
 # 
@@ -55,8 +56,10 @@ class Q_metadata < Q_FTP
 
     @quandl_metadata_hdr = "Quandl Code|Name|Description"  
 
+    
     # file to write
-    fout   = File.open( @qdl_filespec, 'w' )
+    @qdl_filespec = f.gsub(".csv", ".txt")
+    fout = File.open( @qdl_filespec, 'w' )
  
     CSV.foreach( f ) do |row| 
       # Skip blank row or comments

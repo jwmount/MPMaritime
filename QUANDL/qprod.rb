@@ -68,21 +68,19 @@ class Q_prod < Q_FTP
   end
 
   # Composes the Quandle formated version of the DATA/*.csv file
-  def compose( fn )
+  def compose( f )
 
     @flag = false
+    @qdl_filespec    = qdl_filespec= filename.gsub(".csv", ".txt")
 
     qc = []
     dir = get_options.directory
 
-    # @qfilename is the file going to Quandl, must contain '_data' and be .csv
-    @qfilename = fn.gsub( ".csv", "_data.txt" )
-
     # Open the output file
-    fl = File.open( @qfilename, 'w' )
+    fout = File.open( @qdl_filespec, 'w' )
   
     # Read and handle each row of the file
-    CSV.foreach(fn) do |row| 
+    CSV.foreach( f ) do |row| 
 
       next if row.empty? or row.include?('#')   # Skip blank or comment row
       puts row.to_s if get_options[:verbose]
@@ -108,7 +106,7 @@ class Q_prod < Q_FTP
         @flag = !@flag
         set_selection_list row
         row.compact!
-        fl.puts ["Quandl Code", "Date", row[1..row.count]].join('|')
+        fout.puts ["Quandl Code", "Date", row[1..row.count]].join('|')
         next
       end
 
@@ -135,6 +133,7 @@ class Q_prod < Q_FTP
       fl.puts [qc, @line].join("|")
       #fl.puts [qc,row[0..row.count]].join('|')
 
+      fout.close
     end #CSV
 
   end

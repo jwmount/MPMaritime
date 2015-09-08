@@ -80,7 +80,8 @@ class Q_kids < Q_FTP
 
     # Open the output file, MUST be <stem>/*{_data | _metadata}*.txt
     # file is actually qdl_filename
-    fout = File.open(qdl_filespec, 'w')
+    
+    fout = File.open(@qdl_filespec, 'w')
 
     # Read and handle each row of the file
     CSV.foreach(f) do |row| 

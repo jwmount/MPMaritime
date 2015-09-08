@@ -60,7 +60,7 @@ def say(word)
   require 'debug'
   puts word + ' to begin debugging.'
 end
-say 'Time'
+#say 'Time'
 
 # Interval handler
 def repeat_every(interval)
@@ -83,7 +83,7 @@ end
 @sources      = @options["production"] ? @prod_sources : @identified_sources
 
 # Ask user to confirm options are set correctly
-puts "\n\tReady? (Yes|n)"
+puts "\n\tReady? (Yes|n):"
 answer = gets.chomp
 exit unless answer == "Yes"
 # Handle the Quandl file name files, this processes _metadata after _data files.
@@ -139,5 +139,4 @@ exit unless answer == "Yes"
   end
 
   wrapup
-
   exit
