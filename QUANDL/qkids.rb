@@ -32,7 +32,7 @@ class Q_kids < Q_FTP
   # Instance variables
   @options = nil
   @sent = 0
-  @observations = {}
+  @observations = Hash.new(0.00)
 
   def initialize( f )
     inc_sent
@@ -110,7 +110,11 @@ class Q_kids < Q_FTP
         @flag = !@flag
 
         d = Dataset.find( qc )
-        d.destroy
+        begin
+          d.destroy
+        rescue
+          puts "Unable to destroy dataset for #{gc}."
+        end
 
         # Ensure column names are present and correct
         # Using _metadata does not create column_names      
@@ -182,7 +186,6 @@ class Q_kids < Q_FTP
       line << 5       if row[19] == "Yes"
 
       # Check Box
-      line << 0
       line << 1      if row[20] == "Yes"
       line << 2      if row[21] == "Yes"
       line << 3      if row[22] == "Yes"
@@ -213,16 +216,19 @@ class Q_kids < Q_FTP
       if @observations.has_key?(dt)
 
         # A duplicate has occured
-        puts "#{dt} key value exists, dedup them" if get_options.verbose
+        puts "#{dt} key value exists, dedup them" if get_options[:verbose]
         
         # 1.  increment the number of duplicates
-        @observations[dt][0] += 1
+        @observations[dt][0] += 1.00
       
         # 2. Sum the duplicate observations and hold in @observations
         #    Some lines may be short, then don't sum them.  May cause averaging fails.
-        (3..9).each_with_index do |ix| 
-          @observations[dt][ix] += line[ix] unless line[ix].nil?
+        begin
+          (3..9).each_with_index { |ix| @observations[dt][ix] += line[ix] }
+        rescue
+          puts "FAIL: #{line}"
         end
+
 
       else
         # Not a duplicate
@@ -245,8 +251,12 @@ class Q_kids < Q_FTP
       # drop the first two elements which are no longer needed
       o = obs.flatten.drop(2)
 
-      # calculate the averages
-      (2..8).each_with_index {|ix| o[ix] /= duplicates }
+      begin
+        # calculate the averages, each sum dived by number of duplicates
+        (2..8).each_with_index {|ix| o[ix] /= duplicates }
+      rescue
+        puts "FAIL: average"
+      end
 
       # write to file
       fout.puts (o).join('|')

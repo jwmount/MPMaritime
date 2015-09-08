@@ -84,7 +84,8 @@ class Q_FTP
   # original file is @filename now, e.g. 
   # "VLCC_TD3_DBBL_data.txt"
   def push
-    qdl_ready_filespec = @qdl_filespec.gsub("DATA","data").gsub(".csv",".txt")
+    #qdl_ready_filespec = @qdl_filespec.gsub("DATA","data").gsub(".csv",".txt")
+    qdl_ready_filespec = @qdl_filespec.gsub(@options[:directory],"data").gsub(".csv",".txt")
     begin
       # send to quandle.ftp.com, from_file, to_file
       ftps = get_ftps
