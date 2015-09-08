@@ -62,16 +62,7 @@ def say(word)
 end
 #say 'Time'
 
-# Interval handler
-def repeat_every(interval)
-  loop do
-    start_time = Time.now
-    yield
-    elapsed = Time.now - start_time
-    puts "#{elapsed.to_s} elapsed since #{start_time.strftime("%H:%M:%S")}"
-    sleep([interval - elapsed, 0].max)
-  end
-end
+
 
 # Remove embed dbl quotes, not allowed by Quandl
 
@@ -132,11 +123,6 @@ exit unless answer == "Yes"
 
     end # File loop
   end # Qdl file name look
-
-  # META LOOP, repeats the sweep in :interval seconds
-  repeat_every(@options[:interval]) do
-    puts Time.now.strftime("Sweep at %H:%M:%S")
-  end
 
   wrapup
   exit
