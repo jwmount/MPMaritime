@@ -43,7 +43,7 @@ require 'uri'
 require 'pry'
 
 require './qftp.rb'
-require './qdata.rb'
+#require './qdata.rb'
 require './optex.rb'
 require './qkids.rb'
 require './qmeta.rb'
@@ -124,5 +124,3 @@ exit unless answer == "Yes"
     end # File loop
   end # Qdl file name look
 
-  wrapup
-  exit

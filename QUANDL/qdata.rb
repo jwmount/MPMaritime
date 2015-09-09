@@ -1,4 +1,6 @@
-@f# qdata.rb -- Quandl Load _data files.
+
+# D E P R E C A T E D  09/09/15
+#qdata.rb -- Quandl Load _data files.
 # If _data:  look for Quandl: key, if present, use as Quandl Code
 # QUANDL_TOKEN=Z_FgEe3SYywKzHT7myYr ruby load.rb
 # http://ruby-doc.org/stdlib-2.2.2/libdoc/net/ftp/rdoc/Net/FTP.html#method-i-puttextfile

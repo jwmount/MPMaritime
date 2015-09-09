@@ -62,7 +62,7 @@ class Q_FTP
   # SEQUENTIAL GLITCH HERE, must test for CSV type before qdl file type
   def process
     return Q_kids.new(@filename)          if @filename.include?( '_kids' )
-    return Q_data.new(@filename)          if @filename.include?( '_data' )
+    #return Q_data.new(@filename)          if @filename.include?( '_data' )
     return Q_metadata.new(@filename)      if @filename.include?( '_metadata' )
     # no stem, use default 
     return Q_prod.new(@filename)

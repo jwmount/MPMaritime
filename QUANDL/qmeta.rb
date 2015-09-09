@@ -1,10 +1,9 @@
-# qdata.rb -- Quandl Load _data files.
-# If _data:  look for Quandl: key, if present, use as Quandl Code
+# qmeta.rb -- Quandl _metadata files.
+# If _metadata:  look for Quandl: key, if present, use as Quandl Code
 # QUANDL_TOKEN=Z_FgEe3SYywKzHT7myYr ruby load.rb
 # http://ruby-doc.org/stdlib-2.2.2/libdoc/net/ftp/rdoc/Net/FTP.html#method-i-puttextfile
 
 # Notes for _medatdata file handling
-#         1.  q_metadata class does not handle comments, just has @flag
 
 require 'date'
 require 'pry'

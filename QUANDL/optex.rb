@@ -19,16 +19,20 @@ class OptparseArguments
     puts "\t   :column_names\t -c #{options[:columns]}"
     puts "\t   :directory \t\t -d #{options[:directory]}"
     puts "\t   :file      \t\t -f #{options[:file]}"
-    puts "\t   :interval  \t\t -i #{options[:interval]}"
     puts "\t   :production\t\t -p #{options[:production]}"
     puts "\t   :send      \t\t -s #{options[:send]}"
     puts "\t   :verbose   \t\t -v #{options[:verbose]}"
 
     if options[:production] && options[:directory] == 'DATA'
-      puts "\n\t WARNING:  -p requires -d, please specify a directory and try again.\n\n"
+      puts "\n\t WARNING:  -p implies -d be a production folder, do you want to proceed with #{options[:directory]}?.\n"
+    end
+    if options[:directory].empty?
+      puts "\n\t WARNING: -d cannot be empty. It can be omitted.\n"
       exit
     end
-
+    puts "\n\tSummary"
+    puts "\t-p is #{options[:production]} so datasets will be taken from #{options[:directory]}."
+    puts "\t-s is #{options[:send]} so datasets will #{options[:send] ? '':'not '} be sent to Quandl."
   end
 
 end
@@ -44,7 +48,6 @@ class OptparseArguments
   COLUMNS      = []             # -c ["Date", "$/bbl"]
   DIRECTORY    = 'DATA'         # -d /Users/John/DropBox/PRODUCTION
   FILE         = nil            # -f VLCC
-  INTERVAL     = 60             # -i 1000*60*10 or every 10 minutes
   PRODUCTION   = false          # -p
   SEND         = false          # -s
   VERBOSE      = false          # -v
@@ -61,7 +64,6 @@ class OptparseArguments
     options.send       = SEND                 # No, do not send
     options.directory  = DIRECTORY            # Can be anywhere if overridden
     options.file       = FILE                 # Process all files matching *<fn>*.csv
-    options.interval   = INTERVAL             # Interval between sweeps, seconds
     options.production = PRODUCTION           # Use .csv files in DropBox/PRODUCTION
     options.verbose    = VERBOSE              # Say as little as necessary
 
@@ -82,13 +84,6 @@ class OptparseArguments
               "Directory where to find files to load, default: #{options.directory}") do |d|
               options[:directory] = d
       end
-
-      # directory where files will be read from
-      opts.on("-i", "--int INTEGER",
-              "Interval in seconds between sweeps, default: #{options[:interval]}") do |d|
-              options[:interval] = i
-      end
-
 
       # :file -- process single file -- NOT IMPLEMENTED BY ANY OBJECT
       opts.on("-f", "--file FILESPEC", 

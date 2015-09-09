@@ -130,11 +130,11 @@ class Q_prod < Q_FTP
 
       @line = []
       @selection.each_with_index { |i| @line << row[i] }
-      fl.puts [qc, @line].join("|")
+      fout.puts [qc, @line].join("|")
       #fl.puts [qc,row[0..row.count]].join('|')
 
-      fout.close
     end #CSV
+    fout.close
 
   end
 
