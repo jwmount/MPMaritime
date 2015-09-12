@@ -23,7 +23,7 @@ class String
     [yyyy,mm,dd].join('-')
   end
 end #String
-
+#say 'Time'
 #
 # Q_kids =========================================
 # 
@@ -77,6 +77,7 @@ class Q_kids < Q_FTP
     qc               = []
     dir              = get_options.directory
     @qdl_filespec    = qdl_filespec= filename.gsub(".csv", ".txt").gsub("_kids","_data")
+    @description     = "<h3>Notes</h3><p>Will be accumulated."
 
     # Open the output file, MUST be <stem>/*{_data | _metadata}*.txt
     # file is actually qdl_filename
@@ -121,7 +122,7 @@ class Q_kids < Q_FTP
         attributes = {
           :source_code => (qc.split('/'))[0],
           :code        => (qc.split('/'))[1],
-          :name        => 'All School Wide Observations',
+          :name        => (qc.split('/'))[1],
           :column_names=> ["Date", 
             "Shared Attention", "Engagement", 
             "Circles of Comm","Check Box", 
@@ -130,13 +131,14 @@ class Q_kids < Q_FTP
           :frequency   => "monthly",
           :from_date   => "2015-03-01",
           :to_date     => "2015-08-31",
-          :description => 't.b.a.',
+          :description => "t.b.a.",
           :private     => false,
           :premium     => true
           }
 
         # Create the Quandl Dataset and save it
         d = Dataset.create(attributes)
+        d.description = @description,
         d.save
         pp d                  if get_options.verbose
         puts d.errors         if d.errors.any?
@@ -206,6 +208,9 @@ class Q_kids < Q_FTP
       line << 4       if row[33] == "Yes"
       line << 5       if row[34] == "Yes"
 
+      # Description text from Notes
+      @description << "<p>#{dt}. "  << row[34] unless row[34].blank?
+
       # Figure out if this date duplicates one we have and if it is
       # retain the number of observations on this date and sum the 
       # question values.  From these we can get average observations.
@@ -262,7 +267,16 @@ class Q_kids < Q_FTP
       fout.puts (o).join('|')
       
     end # iteration
-    
+
+    # Put the accumulated descriptions into the Dataset
+    d = Dataset.find(qc)
+    d.description = @description
+    d.save
+    pp d                  if get_options.verbose
+    puts d.errors         if d.errors.any?
+    puts d.error_messages if d.error_messages.any?
+
+    # Close the file on this one.
     fout.close
   end # compose
 
