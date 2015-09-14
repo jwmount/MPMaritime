@@ -23,6 +23,10 @@ class OptparseArguments
     puts "\t   :send      \t\t -s #{options[:send]}"
     puts "\t   :verbose   \t\t -v #{options[:verbose]}"
 
+    if options[:file].empty?
+      puts "\n\t WARNING:  -f requires a string. Example:  VLCC\n"
+      exit
+    end
     if options[:production] && options[:directory] == 'DATA'
       puts "\n\t WARNING:  -p implies -d be a production folder, do you want to proceed with #{options[:directory]}?.\n"
     end
@@ -31,6 +35,8 @@ class OptparseArguments
       exit
     end
     puts "\n\tSummary"
+    puts "\t-c is set so these column names will be applied to #{options[:file]}(s)"
+    puts "\t-f is set so only files that contain #{options[:file]} will be processed."
     puts "\t-p is #{options[:production]} so datasets will be taken from #{options[:directory]}."
     puts "\t-s is #{options[:send]} so datasets will #{options[:send] ? '':'not '} be sent to Quandl."
   end
@@ -47,7 +53,7 @@ class OptparseArguments
 # name           default         tag example
   COLUMNS      = []             # -c ["Date", "$/bbl"]
   DIRECTORY    = 'DATA'         # -d /Users/John/DropBox/PRODUCTION
-  FILE         = nil            # -f VLCC
+  FILE         = '*'            # -f VLCC
   PRODUCTION   = false          # -p
   SEND         = false          # -s
   VERBOSE      = false          # -v
@@ -75,8 +81,8 @@ class OptparseArguments
 
       # column_names 
       opts.on("-c", "--cols ARRAY",
-              "Column names, default: #{options.column_names}") do |d|
-              options[:column_names] = d
+              "Column names, default: #{options.column_names}") do |c|
+              options[:column_names] = c
       end
 
       # directory where files will be read from
@@ -85,7 +91,7 @@ class OptparseArguments
               options[:directory] = d
       end
 
-      # :file -- process single file -- NOT IMPLEMENTED BY ANY OBJECT
+      # :file -- process single file, or all files with string, e.g. VLCC
       opts.on("-f", "--file FILESPEC", 
               "File to send to Quandl; Required if -c is used.") do |f|
               options[:file] = f

@@ -68,10 +68,17 @@ end
 
 @data_count   = 0
 @meta_count   = 0
-@identified_sources = ["_data", "_kids","_metadata"]
-@prod_sources = ["prod"]
 @options      = OptparseArguments.parse(ARGV)
-@sources      = @options["production"] ? @prod_sources : @identified_sources
+
+# DROPPING THE PRODUCTION distinction, all file types can be in same folder
+# -p flag simply says, yes, this is the real deal
+
+#@identified_sources = ["_data", "_kids","_metadata"]
+#@prod_sources = ["prod"]
+#@sources      = @options["production"] ? @prod_sources : @identified_sources
+
+# Control the order of processing by type of file (or object)
+@sources      = ["_data", "_kids","_metadata"]
 
 # Ask user to confirm options are set correctly
 puts "\n\tReady? (Yes|n):"
@@ -88,14 +95,14 @@ exit unless answer == "Yes"
   #fspec = [@options.directory, '/*', fstem, '*.csv'].join : 
   
   # if -p is set use .csv files in PRODUCTION folder.
-  # Process everything as _data.  Fail on anything that does not conform.
+  # Skip anything that does not conform.
   if @options[:production]
     fspec = File.join(@options[:directory], "*.csv")
 
   # if -p is not set use files in /DATA and stems _data and _metadata.
   else
     fspec = @options[:file].nil? ? [@options.directory, '/', fstem, '*.csv'].join : \
-          [@options.directory, '/', fstem, '*', @options[:file], '*.csv'].join
+          [@options.directory, '/', fstem,  @options[:file], 'cc.csv'].join
   end
   pp fspec                        if @options[:verbose]
 
