@@ -3,7 +3,7 @@
 # Purpose:  Create dataset for small gas carrier, semi-refrigerated fleet.
 # How to run this script:
 #         $ QUANDL_TOKEN=Z_FgEe3SYywKzHT7myYr ruby load.rb
-#         $ QUANDL_TOKEN=Z_FgEe3SYywKzHT7myYr ruby load.rb -p -d /Users/John/DropBox/PRODUCTION -s -v
+#         $ QUANDL_TOKEN=Z_FgEe3SYywKzHT7myYr ruby load.rb -d /Users/John/DropBox/PRODUCTION -s -v
 #         $ curl "https://www.quandl.com/api/v3/datasets/OTKR_R/VLCC_TD3_TCE.csv?api_key=Z_FgEe3SYywKzHT7myYr"
 # Refs:   https://github.com/quandl/quandl_client.git
 #         https://www.quandl.com/data/LPG_F
@@ -84,6 +84,7 @@ end
 puts "\n\tReady? (Yes|n):"
 answer = gets.chomp
 exit unless answer == "Yes"
+
 # Handle the Quandl file name files, this processes _metadata after _data files.
 
 @sources.each do |fstem|
@@ -102,7 +103,7 @@ exit unless answer == "Yes"
   # if -p is not set use files in /DATA and stems _data and _metadata.
   else
     fspec = @options[:file].nil? ? [@options.directory, '/', fstem, '*.csv'].join : \
-          [@options.directory, '/', fstem,  @options[:file], 'cc.csv'].join
+          [@options.directory, '/', fstem,  @options[:file], '.csv'].join
   end
   pp fspec                        if @options[:verbose]
 

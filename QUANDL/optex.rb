@@ -19,6 +19,7 @@ class OptparseArguments
     puts "\t   :column_names\t -c #{options[:columns]}"
     puts "\t   :directory \t\t -d #{options[:directory]}"
     puts "\t   :file      \t\t -f #{options[:file]}"
+    puts "\t   :interval  \t\t -i #{options[:interval]}"
     puts "\t   :production\t\t -p #{options[:production]}"
     puts "\t   :send      \t\t -s #{options[:send]}"
     puts "\t   :verbose   \t\t -v #{options[:verbose]}"
@@ -27,6 +28,7 @@ class OptparseArguments
       puts "\n\t WARNING:  -f requires a string. Example:  VLCC\n"
       exit
     end
+
     if options[:production] && options[:directory] == 'DATA'
       puts "\n\t WARNING:  -p implies -d be a production folder, do you want to proceed with #{options[:directory]}?.\n"
     end
@@ -37,6 +39,7 @@ class OptparseArguments
     puts "\n\tSummary"
     puts "\t-c is set so these column names will be applied to #{options[:file]}(s)"
     puts "\t-f is set so only files that contain #{options[:file]} will be processed."
+    puts "\t-i is repeat or sweep interval in seconds. BETA"
     puts "\t-p is #{options[:production]} so datasets will be taken from #{options[:directory]}."
     puts "\t-s is #{options[:send]} so datasets will #{options[:send] ? '':'not '} be sent to Quandl."
   end
@@ -54,6 +57,7 @@ class OptparseArguments
   COLUMNS      = []             # -c ["Date", "$/bbl"]
   DIRECTORY    = 'DATA'         # -d /Users/John/DropBox/PRODUCTION
   FILE         = '*'            # -f VLCC
+  INTERVAL     = 0              # -i 
   PRODUCTION   = false          # -p
   SEND         = false          # -s
   VERBOSE      = false          # -v
@@ -70,6 +74,7 @@ class OptparseArguments
     options.send       = SEND                 # No, do not send
     options.directory  = DIRECTORY            # Can be anywhere if overridden
     options.file       = FILE                 # Process all files matching *<fn>*.csv
+    options.interval   = INTERVAL             # Interval in seconds between sweeps.
     options.production = PRODUCTION           # Use .csv files in DropBox/PRODUCTION
     options.verbose    = VERBOSE              # Say as little as necessary
 
@@ -89,6 +94,11 @@ class OptparseArguments
       opts.on("-d", "--dir DIRECTORY",
               "Directory where to find files to load, default: #{options.directory}") do |d|
               options[:directory] = d
+      end
+      # directory where files will be read from
+      opts.on("-i", "--int INTEGER",
+              "Interval in seconds between sweeps, default: #{options.interval}") do |i|
+              options[:interval] = i
       end
 
       # :file -- process single file, or all files with string, e.g. VLCC

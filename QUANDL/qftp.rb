@@ -84,6 +84,7 @@ class Q_FTP
   # original file is @filename now, e.g. 
   # "VLCC_TD3_DBBL_data.txt"
   def push
+      puts "Push From:\t #{@qdl_filespec}"  if @options[:verbose]
     #qdl_ready_filespec = @qdl_filespec.gsub("DATA","data").gsub(".csv",".txt")
     qdl_ready_filespec = @qdl_filespec.gsub(@options[:directory],"data").gsub(".csv",".txt")
     begin
