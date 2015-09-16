@@ -65,7 +65,9 @@ class Q_FTP
     #return Q_data.new(@filename)          if @filename.include?( '_data' )
     return Q_metadata.new(@filename)      if @filename.include?( '_metadata' )
     # no stem, use default 
-    return Q_prod.new(@filename)
+    return Q_prod.new(@filename)          if @filename.include?( '_data' )
+    # none of the above
+    return nil
   end
 
   # Log what happened when file was pushed
@@ -91,7 +93,6 @@ class Q_FTP
       # send to quandle.ftp.com, from_file, to_file
       ftps = get_ftps
       ftps.puttextfile( @qdl_filespec, qdl_ready_filespec )  
-      puts "Push From:\t #{@qdl_filespec}"
       puts "Push To:\t #{qdl_ready_filespec}\n"
       addToLog true
     rescue Exception => e

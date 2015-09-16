@@ -35,7 +35,7 @@ end
 repeat_every(@interval) do
   puts Time.now.strftime("Sweep at %H:%M:%S")
   t = Time.new(10)
-  system("QUANDL_TOKEN=Z_FgEe3SYywKzHT7myYr ruby load.rb -i #{t} ")
+  system("QUANDL_TOKEN=Z_FgEe3SYywKzHT7myYr ruby load.rb -i")
 end
 
 =begin

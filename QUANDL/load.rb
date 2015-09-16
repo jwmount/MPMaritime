@@ -80,10 +80,13 @@ end
 # Control the order of processing by type of file (or object)
 @sources      = ["_data", "_kids","_metadata"]
 
-# Ask user to confirm options are set correctly
-puts "\n\tReady? (Yes|n):"
-answer = gets.chomp
-exit unless answer == "Yes"
+# Ask user to confirm options are set correctly, unless -i is set
+# This allows invocation by a scheduler running unattended.
+if @options[:ignore]
+  puts "\n\tReady? (Yes|n):"
+  answer = gets.chomp
+  exit unless answer == "Yes"
+end
 
 # Handle the Quandl file name files, this processes _metadata after _data files.
 
@@ -119,6 +122,8 @@ exit unless answer == "Yes"
 
         # Process file being prepared for Quandl, actual class will vary by file type
         qfl = qftp.process
+        next if qfl.nil?
+
         qfl.set_options(@options)
 
         next unless qfl.has_quandl_key?
