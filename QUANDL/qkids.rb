@@ -31,20 +31,10 @@ class Q_kids < Q_FTP
 
   # Instance variables
   @options = nil
-  @sent = 0
   @observations = Hash.new(0.00)
 
   def initialize( f )
-    inc_sent
     super( f )
-  end
-
-  def inc_sent
-    @sent ||= +1
-  end
-
-  def get_sent
-    @sent
   end
 
   # from load.rb @options for use here

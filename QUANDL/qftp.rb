@@ -76,9 +76,8 @@ class Q_FTP
     result = flag ? 'Succeeded' : 'Failed'
     File.open("/Users/John/DropBox/datasets_processed.log", 'a') do |f| 
       dt = DateTime.now.strftime("%Y-%b-%d %H:%M:%S")
-      fn = filename #.gsub!("/Users/John/DropBox/PRODUCTION", "")
-      result = flag ? 'Suceeded' : 'Failed'
-      line = [dt, fn, result].join(',')
+      result = flag ? 'Succeeded' : 'Failed'
+      line = [dt, filename, @qc, @rows, result].join(', ')
       f.write("#{line}\n") 
     end
   end
@@ -86,7 +85,7 @@ class Q_FTP
   # original file is @filename now, e.g. 
   # "VLCC_TD3_DBBL_data.txt"
   def push
-      puts "Push From:\t #{@qdl_filespec}"  if @options[:verbose]
+    puts "Push From:\t #{@qdl_filespec}"  if @options[:verbose]
     #qdl_ready_filespec = @qdl_filespec.gsub("DATA","data").gsub(".csv",".txt")
     qdl_ready_filespec = @qdl_filespec.gsub(@options[:directory],"data").gsub(".csv",".txt")
     begin

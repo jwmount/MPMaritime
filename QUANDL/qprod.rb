@@ -29,12 +29,10 @@ class Q_prod < Q_FTP
   # Instance variables
   @filename = ''
   @options = nil
-  @sent = 0
   @existsDS = 0
-  
+
   def initialize( f )
     set_filename f
-    inc_sent
     super f
   end
 
@@ -44,14 +42,6 @@ class Q_prod < Q_FTP
     r.each_with_index do |item, i|
       @selection << i unless item.nil?    
     end
-  end
-
-  def inc_sent
-    @sent ||= +1
-  end
-
-  def get_sent
-    @sent
   end
 
   def set_filename f
@@ -67,9 +57,10 @@ class Q_prod < Q_FTP
     @options
   end
 
+ 
   # Composes the Quandle formated version of the DATA/*.csv file
   def compose( f )
-
+    @rows = 0
     @flag = false
     @qdl_filespec    = qdl_filespec= filename.gsub(".csv", ".txt")
 
@@ -82,7 +73,15 @@ class Q_prod < Q_FTP
     # Read and handle each row of the file
     CSV.foreach( f ) do |row| 
 
-      next if row.empty? or row.include?('#')   # Skip blank or comment row
+      @rows = @rows + 1
+
+      # Comments, show if -v then next row if comment or blank
+      # Join items in row to make reading it easier
+      # Skip blank or comment row
+      next        if row.empty?
+      puts row[0] if row[0].include?('#') and get_options[:verbose]
+      next        if row[0].include?('#')
+
       puts row.to_s if get_options[:verbose]
       # strip out double quote characters 
       row.each do |r|
@@ -91,7 +90,8 @@ class Q_prod < Q_FTP
 
       # capture the Quandl code and skip line
       if row[0].is_a? String and row[0].include? "Quandl:"
-        qc << row[1]           
+        #@qc << row[1] 
+        @qc ||= row[1]  
         next
       end
       
@@ -130,8 +130,7 @@ class Q_prod < Q_FTP
 
       @line = []
       @selection.each_with_index { |i| @line << row[i] }
-      fout.puts [qc, @line].join("|")
-      #fl.puts [qc,row[0..row.count]].join('|')
+      fout.puts [@qc, @line].join("|")
 
     end #CSV
     fout.close

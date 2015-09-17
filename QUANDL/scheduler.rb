@@ -3,7 +3,7 @@
 # scheduler.rb -- load the dataset data
 # Purpose:  Schedule load.rb cycles
 # How to run this script:
-#         $ QUANDL_TOKEN=Z_FgEe3SYywKzHT7myYr ruby load.rb
+#   $ QUANDL_TOKEN=Z_FgEe3SYywKzHT7myYr ruby scheduler.rb -d /Users/John/DropBox/PRODUCTION
 
 require 'uri'
 require 'pry'
@@ -29,19 +29,12 @@ def repeat_every(interval)
   end
 end
 
-@options            = OptparseArguments.parse(ARGV)
+@options = OptparseArguments.parse(ARGV)
 
-# META LOOP, repeats the sweep in :interval seconds
-repeat_every(@interval) do
-  puts Time.now.strftime("Sweep at %H:%M:%S")
-  t = Time.new(10)
-  system("QUANDL_TOKEN=Z_FgEe3SYywKzHT7myYr ruby load.rb -i")
+# Start load.rb every nn seconds, pass in value of -d and default the others
+# Using -i causes load.rb to ignore user confirmation on options.
+repeat_every(60) do
+  puts Time.now.strftime("Invoked at %H:%M:%S")
+  system("QUANDL_TOKEN=Z_FgEe3SYywKzHT7myYr ruby load.rb -i -v -s -d #{@options[:directory]}")
 end
 
-=begin
-      # directory where files will be read from
-      opts.on("-i", "--int INTEGER",
-              "Interval in seconds between sweeps, default: #{options[:interval]}") do |d|
-              options[:interval] = i
-      end
-=end
