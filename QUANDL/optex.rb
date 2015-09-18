@@ -19,7 +19,7 @@ class OptparseArguments
     puts "\t   :column_names\t -c #{options[:columns]}"
     puts "\t   :directory \t\t -d #{options[:directory]}"
     puts "\t   :file      \t\t -f #{options[:file]}"
-    puts "\t   :ignore    \t\t -i #{options[:ignore]}"
+    puts "\t   :ignore    \t\t -i #{options[:ignore] ? 'No' : 'Yes'}"
     puts "\t   :production\t\t -p #{options[:production]}"
     puts "\t   :send      \t\t -s #{options[:send]}"
     puts "\t   :verbose   \t\t -v #{options[:verbose]}"

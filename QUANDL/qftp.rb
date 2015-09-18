@@ -13,6 +13,9 @@ class String
   def to_Qdl
     gsub /\"/,"'"
   end
+  def to_unspec
+    gsub "/Users/John", ""
+  end
 end
 
 def say(word)
@@ -42,6 +45,7 @@ class Q_FTP
   def filename=( f )
     @filename = f
   end
+
   def filename
     @filename
   end
@@ -77,7 +81,7 @@ class Q_FTP
     File.open("/Users/John/DropBox/datasets_processed.log", 'a') do |f| 
       dt = DateTime.now.strftime("%Y-%b-%d %H:%M:%S")
       result = flag ? 'Succeeded' : 'Failed'
-      line = [dt, filename, @qc, @rows, result].join(', ')
+      line = [dt, filename.to_unspec, @qc, @rows, result].join(', ')
       f.write("#{line}\n") 
     end
   end

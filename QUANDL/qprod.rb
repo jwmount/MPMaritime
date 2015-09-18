@@ -32,7 +32,6 @@ class Q_prod < Q_FTP
   @existsDS = 0
 
   def initialize( f )
-    set_filename f
     super f
   end
 
@@ -42,10 +41,6 @@ class Q_prod < Q_FTP
     r.each_with_index do |item, i|
       @selection << i unless item.nil?    
     end
-  end
-
-  def set_filename f
-    @filename = f
   end
 
   # from load.rb @options for use here
