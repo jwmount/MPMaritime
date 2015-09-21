@@ -43,7 +43,6 @@ require 'uri'
 require 'pry'
 
 require './qftp.rb'
-#require './qdata.rb'
 require './optex.rb'
 require './qkids.rb'
 require './qmeta.rb'
@@ -112,7 +111,7 @@ end
 
     # File loop
     Dir.glob(fspec).each do |f|
-
+      puts "name".to_nuts
       puts f                      if @options[:verbose]
 
       qftp = Q_FTP.new f

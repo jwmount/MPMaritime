@@ -24,7 +24,7 @@ def repeat_every(interval)
     start_time = Time.now
     yield
     elapsed = Time.now - start_time
-    puts "#{elapsed.to_s} elapsed since #{start_time.strftime("%H:%M:%S")}"
+    puts "#{elapsed.to_s} seconds, started at: #{start_time.strftime("%H:%M:%S")}"
     sleep([interval - elapsed, 0].max)
   end
 end
@@ -33,8 +33,8 @@ end
 
 # Start load.rb every nn seconds, pass in value of -d and default the others
 # Using -i causes load.rb to ignore user confirmation on options.
-repeat_every(60) do
-  puts Time.now.strftime("Invoked at %H:%M:%S")
+repeat_every(600) do
+  puts Time.now.strftime("Time is: %H:%M:%S")
   system("QUANDL_TOKEN=Z_FgEe3SYywKzHT7myYr ruby load.rb -i -v -s -d #{@options[:directory]}")
 end
 

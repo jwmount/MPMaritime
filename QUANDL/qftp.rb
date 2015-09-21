@@ -8,11 +8,18 @@
 require 'date'
 require 'pry'
 
-# Remove embed dbl quotes, not allowed by Quandl
+# Should do all the filenames this way!
 class String
+  
+  def to_nuts
+    '.nuts'
+  end
+
+  # Remove embed dbl quotes, not allowed by Quandl
   def to_Qdl
     gsub /\"/,"'"
   end
+  # Reduce length of filespec for logging
   def to_unspec
     gsub "/Users/John", ""
   end
