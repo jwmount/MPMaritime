@@ -20,7 +20,7 @@ class OptparseArguments
     puts "\t   :directory \t\t -d #{options[:directory]}"
     puts "\t   :file      \t\t -f #{options[:file]}"
     puts "\t   :ignore    \t\t -i #{options[:ignore] ? 'No' : 'Yes'}"
-    puts "\t   :production\t\t -p #{options[:production]}"
+    #puts "\t   :production\t\t -p #{options[:production]}"
     puts "\t   :send      \t\t -s #{options[:send]}"
     puts "\t   :verbose   \t\t -v #{options[:verbose]}"
 
@@ -31,9 +31,9 @@ class OptparseArguments
     unless options[:ignore]
       puts "\n\t Begin at:  #{Time.now.to_s}."
     end
-    if options[:production] && options[:directory] == 'DATA'
-      puts "\n\t WARNING:  -p implies -d be a production folder, do you want to proceed with #{options[:directory]}?.\n"
-    end
+    #if options[:production] && options[:directory] == 'DATA'
+    #  puts "\n\t WARNING:  -p implies -d be a production folder, do you want to proceed with #{options[:directory]}?.\n"
+    #end
     if options[:directory].empty?
       puts "\n\t WARNING: -d cannot be empty. It can be omitted.\n"
       exit
@@ -42,7 +42,7 @@ class OptparseArguments
     puts "\t-c is set so these column names will be applied to #{options[:file]}(s)"
     puts "\t-f is set so only files that contain #{options[:file]} will be processed."
     puts "\t-i is #{options[:ignore]} so request user confirmation. BETA"
-    puts "\t-p is #{options[:production]} so datasets will be taken from #{options[:directory]}."
+    #puts "\t-p is #{options[:production]} so datasets will be taken from #{options[:directory]}."
     puts "\t-s is #{options[:send]} so datasets will #{options[:send] ? '':'not '} be sent to Quandl."
   end
 
@@ -60,7 +60,7 @@ class OptparseArguments
   DIRECTORY    = 'DATA'         # -d /Users/John/DropBox/PRODUCTION
   FILE         = '*'            # -f VLCC
   IGNORE       = true           # -i request user conf if true
-  PRODUCTION   = false          # -p
+  #PRODUCTION   = false          # -p
   SEND         = false          # -s
   VERBOSE      = false          # -v
 
@@ -77,7 +77,7 @@ class OptparseArguments
     options.directory  = DIRECTORY            # Can be anywhere if overridden
     options.file       = FILE                 # Process all files matching *<fn>*.csv
     options.ignore     = IGNORE               # Ignore confirmation from user
-    options.production = PRODUCTION           # Use .csv files in DropBox/PRODUCTION
+  #  options.production = PRODUCTION           # Use .csv files in DropBox/PRODUCTION
     options.verbose    = VERBOSE              # Say as little as necessary
 
     opt_parser = OptionParser.new do |opts|

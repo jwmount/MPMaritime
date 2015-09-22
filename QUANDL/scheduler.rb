@@ -3,7 +3,8 @@
 # scheduler.rb -- load the dataset data
 # Purpose:  Schedule load.rb cycles
 # How to run this script:
-#   $ QUANDL_TOKEN=Z_FgEe3SYywKzHT7myYr ruby scheduler.rb -d /Users/John/DropBox/PRODUCTION
+#   $ QUANDL_TOKEN=Z_FgEe3SYywKzHT7myYr ruby scheduler.rb -s -i -d /Users/John/DropBox/PRODUCTION
+
 
 require 'uri'
 require 'pry'

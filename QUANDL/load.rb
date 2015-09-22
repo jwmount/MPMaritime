@@ -99,14 +99,14 @@ end
   
   # if -p is set use .csv files in PRODUCTION folder.
   # Skip anything that does not conform.
-  if @options[:production]
-    fspec = File.join(@options[:directory], "*.csv")
+  #if @options[:production]
+  #  fspec = File.join(@options[:directory], "*.csv")
 
   # if -p is not set use files in /DATA and stems _data and _metadata.
-  else
+  #else
     fspec = @options[:file].nil? ? [@options.directory, '/', fstem, '*.csv'].join : \
-          [@options.directory, '/', fstem,  @options[:file], '.csv'].join
-  end
+          [@options[:directory], '/', fstem,  @options[:file], '.csv'].join
+  #end
   pp fspec                        if @options[:verbose]
 
     # File loop
