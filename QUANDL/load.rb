@@ -3,7 +3,7 @@
 # Purpose:  Create dataset for small gas carrier, semi-refrigerated fleet.
 # How to run this script:
 #         $ QUANDL_TOKEN=Z_FgEe3SYywKzHT7myYr ruby load.rb
-#         $ QUANDL_TOKEN=Z_FgEe3SYywKzHT7myYr ruby load.rb -d /Users/John/DropBox/PRODUCTION -s -v
+#         $ QUANDL_TOKEN=Z_FgEe3SYywKzHT7myYr ruby load.rb -s -i -d /Users/John/DropBox/PRODUCTION
 #         $ curl "https://www.quandl.com/api/v3/datasets/OTKR_R/VLCC_TD3_TCE.csv?api_key=Z_FgEe3SYywKzHT7myYr"
 # Refs:   https://github.com/quandl/quandl_client.git
 #         https://www.quandl.com/data/LPG_F
@@ -91,7 +91,7 @@ end
 
 @sources.each do |fstem|
 
-  puts "\n\n#{fstem} files"
+  puts "\n\n\t#{fstem} files"
 
   # Prepare a filespec and process each file it covers  
   # if the user has provided a spec to the command line, use that.
@@ -111,7 +111,7 @@ end
 
     # File loop
     Dir.glob(fspec).each do |f|
-      puts "name".to_nuts
+
       puts f                      if @options[:verbose]
 
       qftp = Q_FTP.new f

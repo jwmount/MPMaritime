@@ -145,7 +145,7 @@ class Q_prod < Q_FTP
     attributes = {
       :source_code  => source_code,   # root of database name
       :code         => code,          # dataset modifier of database name
-      :column_names => ['Date', '$/BBL'],
+      :column_names => ['Date', 'Value'],
       :data         => [],
       :from_date    => "2000-01-04",
       :to_date      => "2015-06-04",

@@ -64,8 +64,7 @@ class Q_FTP
   # Find the file spec to push to on Quandl side, ie remote
   # Remove overburden which here is: /Users/John/DropBox/PRODUCTION/
   # HACK:  breaks if @options[:directory is NOT SET]
-  def get_rfilespec
-    #f = @qfilename.gsub("/Users/John/DropBox/PRODUCTION/", '')
+  def XXget_rfilespec
     f = get_qfilespec.gsub(@options[:directory], '')
     ["data", f].join
   end
@@ -103,11 +102,11 @@ class Q_FTP
       # send to quandle.ftp.com, from_file, to_file
       ftps = get_ftps
       ftps.puttextfile( @qdl_filespec, qdl_ready_filespec )  
-      puts "Push To:\t #{qdl_ready_filespec}\n"
+      puts "\tPush To:\t #{qdl_ready_filespec}\n"
       addToLog true
     rescue Exception => e
-      puts "\nFAILED to push #{@qdl_filespec} to #{qdl_ready_filespec} on Quandl.\t\t\t#{$0}\n\n_____________________________________________________"
-      puts "Reason: #{e}"
+      puts "\n\tFAILED to push #{@qdl_filespec} to #{qdl_ready_filespec} on Quandl.\t\t\t#{$0}\n\n_____________________________________________________"
+      puts "\tReason: #{e}"
       addToLog false
     end
 

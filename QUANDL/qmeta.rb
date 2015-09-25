@@ -58,6 +58,7 @@ class Q_metadata < Q_FTP
       next if row.empty? or row[0].include?('#')  
       puts row.to_s if get_options[:verbose]
       fout.puts (row).join('|') + "\n"
+
      end #CSV
 
     fout.close
