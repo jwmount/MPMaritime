@@ -91,7 +91,7 @@ class Q_prod < Q_FTP
       end
       
       # Safety Precaution:  make sure Dataset exists
-      @existsDS = createDS( qc ) unless @existsDS
+      @existsDS = createDS( @qc ) unless @existsDS
 
       # HDR row (MASK)
       # turn on flag if a string and value of first word is 'Date'
@@ -140,11 +140,15 @@ class Q_prod < Q_FTP
 
   # If necessary, create the dataset, once, by setting @existsDS
   def createDS qc
-    source_code = "OTKR_R"
-    code = "VLCC_TD3_DBBL"
+    begin
+      qca = qc.split('/')
+    rescue
+      puts "\nInvalid quandle code in CreateDS:  #{qc}"
+      return false
+    end
     attributes = {
-      :source_code  => source_code,   # root of database name
-      :code         => code,          # dataset modifier of database name
+      :source_code  => qca[0],        # root of database name
+      :code         => qca[1],        # dataset modifier of database name
       :column_names => ['Date', 'Value'],
       :data         => [],
       :from_date    => "2000-01-04",
@@ -155,7 +159,7 @@ class Q_prod < Q_FTP
       :description  => 't.b.s.'
     }
     # FIND OR CREATE DATASET AND PUSH IT UP TO QUANDL
-    d = Dataset.find("#{source_code}/#{code}")
+    d = Dataset.find(qc)
     if d.name.nil?
       d = Dataset.create(attributes) 
       pp d
