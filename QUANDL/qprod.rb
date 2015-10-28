@@ -140,24 +140,6 @@ class Q_prod < Q_FTP
 
   # If necessary, create the dataset, once, by setting @existsDS
   def createDS
-    begin
-      qca = @qc.split
-    rescue
-      puts "\nInvalid quandle code in CreateDS:  #{@qc}"
-      return false
-    end
-    attributes = {
-      :source_code  => qca[0],        # root of database name
-      :code         => qca[1],        # dataset modifier of database name
-      :column_names => ['Date', 'Value'],
-      :data         => [],
-      :from_date    => "2000-01-04",
-      :to_date      => "2015-06-04",
-      :frequency    => 'daily',
-      :name         => 't.b.s.',
-      :private      => false,         # true do not show | false make visible
-      :description  => 't.b.s.'
-    }
 
     # FIND OR CREATE DATASET AND PUSH IT UP TO QUANDL
 
@@ -168,27 +150,36 @@ class Q_prod < Q_FTP
     rescue
       # find didn't work, see if it can be created
       begin
+        qca = @qc.split
+
+        attributes = {
+          :source_code  => qca[0],        # root of database name
+          :code         => qca[1],        # dataset modifier of database name
+          :column_names => ['Date', 'Value'],
+          :data         => [],
+          :from_date    => "2000-01-04",
+          :to_date      => "2015-06-04",
+          :frequency    => 'daily',
+          :name         => 't.b.s.',
+          :private      => false,         # true do not show | false make visible
+          :description  => 't.b.s.'
+        }
+
         d = Dataset.create(attributes)
         puts "#{@qc} was not found so was created."
         return true
+
+      # Nope, didn't get it and could not create it.  Problem.
       rescue
-        puts "#{@qc} was not found and could not be created."
+        puts "#{@qc} was not found and could not create it."
         p d.errors
         p d.error_messages
         return false
       end
     end
 
-=begin
-    if d.name.nil?
-      d = Dataset.create(attributes) 
-      pp d
-      pp d.errors
-      pp d.error_messages
-    end
-    true
-=end
-  end
+  end #createDS
+
 
   def has_quandl_key?
     true                   # actually doesn't need it
