@@ -102,11 +102,11 @@ class Q_FTP
       # send to quandle.ftp.com, from_file, to_file
       ftps = get_ftps
       ftps.puttextfile( @qdl_filespec, qdl_ready_filespec )  
-      puts "\tPush To:\t #{qdl_ready_filespec}\n"
+      puts "Push To:\t #{qdl_ready_filespec}\n"
       addToLog true
     rescue Exception => e
-      puts "\n\tFAILED to push #{@qdl_filespec} to #{qdl_ready_filespec} on Quandl.\t\t\t#{$0}\n\n_____________________________________________________"
-      puts "\tReason: #{e}"
+      puts "\nFAILED to push #{@qdl_filespec} to #{qdl_ready_filespec} on Quandl.\t\t\t#{$0}\n\n_____________________________________________________"
+      puts "Reason: #{e}"
       addToLog false
     end
 

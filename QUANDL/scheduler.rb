@@ -25,10 +25,10 @@ def repeat_every(interval)
     start_time = Time.now
     yield
     elapsed = Time.now - start_time
-    puts "\n\tStarted: \t#{start_time.strftime("%H:%M:%S")}"
+    puts "\nStarted: \t#{start_time.strftime("%H:%M:%S")}"
     seconds = "%3d" % elapsed
-    puts "  \tElapsed: \t #{seconds} seconds"
-    puts "  \tNext:    \t #{(Time.now() + interval).strftime("%H:%M:%S")}"
+    puts "Elapsed: \t #{seconds} seconds"
+    puts "Next:    \t #{(Time.now() + interval).strftime("%H:%M:%S")}"
     sleep([interval - elapsed, 0].max)
   end
 end

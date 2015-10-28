@@ -104,8 +104,8 @@ d.assign_attributes(:source_code => 'OTKR_R',
 	                :private     => false
 	                )
 =end
-binding.pry
 d = Dataset.find('MPM_04/VLCC_TD3_TEST')
+binding.pry
 d.description = desc
 d.save
 if d.errors.any?

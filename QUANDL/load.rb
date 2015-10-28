@@ -91,7 +91,7 @@ end
 
 @sources.each do |fstem|
 
-  puts "\n\n\t#{fstem} files"
+  puts "\n\n#{fstem} files"
 
   # Prepare a filespec and process each file it covers  
   # if the user has provided a spec to the command line, use that.
@@ -112,7 +112,7 @@ end
     # File loop
     Dir.glob(fspec).each do |f|
 
-      puts f                      if @options[:verbose]
+      puts f              if @options[:verbose]
 
       qftp = Q_FTP.new f
       

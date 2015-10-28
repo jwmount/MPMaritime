@@ -91,7 +91,7 @@ class Q_prod < Q_FTP
       end
       
       # Safety Precaution:  make sure Dataset exists
-      @existsDS = createDS( @qc ) unless @existsDS
+      @existsDS = createDS unless @existsDS
 
       # HDR row (MASK)
       # turn on flag if a string and value of first word is 'Date'
@@ -139,11 +139,11 @@ class Q_prod < Q_FTP
 
 
   # If necessary, create the dataset, once, by setting @existsDS
-  def createDS qc
+  def createDS
     begin
-      qca = qc.split('/')
+      qca = @qc.split
     rescue
-      puts "\nInvalid quandle code in CreateDS:  #{qc}"
+      puts "\nInvalid quandle code in CreateDS:  #{@qc}"
       return false
     end
     attributes = {
@@ -158,8 +158,28 @@ class Q_prod < Q_FTP
       :private      => false,         # true do not show | false make visible
       :description  => 't.b.s.'
     }
+
     # FIND OR CREATE DATASET AND PUSH IT UP TO QUANDL
-    d = Dataset.find(qc)
+
+    begin
+      d = Dataset.find(@qc)
+      puts "#{@qc} was found."
+      return true
+    rescue
+      # find didn't work, see if it can be created
+      begin
+        d = Dataset.create(attributes)
+        puts "#{@qc} was not found so was created."
+        return true
+      rescue
+        puts "#{@qc} was not found and could not be created."
+        p d.errors
+        p d.error_messages
+        return false
+      end
+    end
+
+=begin
     if d.name.nil?
       d = Dataset.create(attributes) 
       pp d
@@ -167,6 +187,7 @@ class Q_prod < Q_FTP
       pp d.error_messages
     end
     true
+=end
   end
 
   def has_quandl_key?
